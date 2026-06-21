@@ -13,7 +13,7 @@ parts:
     chapters:
     - file: 01_text-embeddings/02_compute_embeddings.ipynb
     - file: 01_text-embeddings/03_plot.ipynb
-    - title: Behind the scenes
+    - caption: Behind the scenes
       sections:
       - file: 01_text-embeddings/01_generate.ipynb
     
@@ -25,11 +25,8 @@ parts:
 
   - caption: Retrieval-augmented Generation
     chapters:
-    - file: docs/03_rag/20-simple-rag.ipynb
-    - file: 
-    - title: Behind the scenes
-      sections:
-      - file: 04_rag_advanced/hpc-compendium-prepare-data.ipynb
+    - file: 03_rag/20-simple-rag.ipynb
+    - file: 04_rag_advanced/chat-with-hpc-compendium.ipynb
 
   - caption: Links
     chapters:
