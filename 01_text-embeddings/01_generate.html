@@ -1,0 +1,1199 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Behind the scenes: Generating texts &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '01_text-embeddings/01_generate';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Download Butterfly images" href="../02_vision-embeddings/download.html" />
+    <link rel="prev" title="Visualizing language embeddings" href="03_plot.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="02_compute_embeddings.html">
+                        Computing embeddings and dimensionality reduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="03_plot.html">
+                        Visualizing language embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="#">
+                        Behind the scenes: Generating texts
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../02_vision-embeddings/download.html">
+                        Download Butterfly images
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../02_vision-embeddings/vision_embeddings_umap.html">
+                        Image Embeddings and UMAP Generation
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../02_vision-embeddings/readme.html">
+                        Butterfly images
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../03_rag/20-simple-rag.html">
+                        Simple retrieval augmented generation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../04_rag_advanced/chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://doi.org/10.5281/zenodo.20639389">
+                        Slides
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="02_compute_embeddings.html">
+                        Computing embeddings and dimensionality reduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="03_plot.html">
+                        Visualizing language embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="#">
+                        Behind the scenes: Generating texts
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../02_vision-embeddings/download.html">
+                        Download Butterfly images
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../02_vision-embeddings/vision_embeddings_umap.html">
+                        Image Embeddings and UMAP Generation
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../02_vision-embeddings/readme.html">
+                        Butterfly images
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../03_rag/20-simple-rag.html">
+                        Simple retrieval augmented generation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../04_rag_advanced/chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://doi.org/10.5281/zenodo.20639389">
+                        Slides
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="02_compute_embeddings.html">Computing embeddings and dimensionality reduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_plot.html">Visualizing language embeddings</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Behind the scenes: Generating texts</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../02_vision-embeddings/download.html">Download Butterfly images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_vision-embeddings/vision_embeddings_umap.html">Image Embeddings and UMAP Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_vision-embeddings/readme.html">Butterfly images</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../03_rag/20-simple-rag.html">Simple retrieval augmented generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../04_rag_advanced/chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://doi.org/10.5281/zenodo.20639389">Slides</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+  </ul>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F01_text-embeddings/01_generate.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../_sources/01_text-embeddings/01_generate.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Behind the scenes: Generating texts</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="behind-the-scenes-generating-texts">
+<h1>Behind the scenes: Generating texts<a class="headerlink" href="#behind-the-scenes-generating-texts" title="Permalink to this heading">#</a></h1>
+<p>In this notebook we will generate texts using a large language model and store them in a CSV file. More precisely, we generate PhD thesis topics from subdomains of computer science using the <a class="reference external" href="https://ollama.com/library/gpt-oss">gpt-oss:20b model</a> and the <a class="reference external" href="https://ollama.com/">ollama software</a> for running LLMs locally.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>First, we test the connection to the LLM server.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">prompt</span><span class="p">(</span><span class="n">message</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-oss:20b&quot;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A prompt helper function that sends a message to ScaDS.AI LLM server at </span>
+<span class="sd">    ZIH TU Dresden and returns only the text response.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">openai</span>
+    
+    <span class="c1"># convert message in the right format if necessary</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">message</span><span class="p">}]</span>
+    
+    <span class="c1"># setup connection to the LLM</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">openai</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://localhost:11434/v1&quot;</span><span class="p">,</span>
+                           <span class="n">api_key</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+            <span class="c1">#base_url=&quot;https://chat-ai.academiccloud.de/v1&quot;,</span>
+            <span class="c1">#api_key = os.environ.get(&#39;KISSKI_API_KEY&#39;)</span>
+            <span class="c1">#base_url=&quot;https://llm.scads.ai/v1&quot;,</span>
+            <span class="c1">#api_key=os.environ.get(&#39;SCADSAI_API_KEY&#39;)</span>
+                           <span class="c1"># openai/gpt-oss-120b</span>
+    <span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">messages</span><span class="o">=</span><span class="n">message</span><span class="p">,</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span>
+    <span class="p">)</span>
+    
+    <span class="c1"># extract answer</span>
+    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
+
+<span class="n">prompt</span><span class="p">(</span><span class="s2">&quot;hello world&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;Hello! 👋 How can I assist you today?&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next, we define a couple of random first and lastnames. We also define a list of institutes.
+These will hint the LLM to generate PhD topics that are relevant to a given institute.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="c1"># Define separate lists for first names and last names</span>
+<span class="n">first_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Alex&quot;</span><span class="p">,</span> <span class="s2">&quot;Jordan&quot;</span><span class="p">,</span> <span class="s2">&quot;Morgan&quot;</span><span class="p">,</span> <span class="s2">&quot;Taylor&quot;</span><span class="p">,</span> <span class="s2">&quot;Avery&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;Sam&quot;</span><span class="p">,</span> <span class="s2">&quot;Casey&quot;</span><span class="p">,</span> <span class="s2">&quot;Riley&quot;</span><span class="p">,</span> <span class="s2">&quot;Jamie&quot;</span><span class="p">,</span> <span class="s2">&quot;Dakota&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;Bailey&quot;</span><span class="p">,</span> <span class="s2">&quot;Cameron&quot;</span><span class="p">,</span> <span class="s2">&quot;Sydney&quot;</span><span class="p">,</span> <span class="s2">&quot;Robin&quot;</span><span class="p">,</span> <span class="s2">&quot;Charlie&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;Dana&quot;</span><span class="p">,</span> <span class="s2">&quot;Kris&quot;</span><span class="p">,</span> <span class="s2">&quot;Skyler&quot;</span><span class="p">,</span> <span class="s2">&quot;Devon&quot;</span><span class="p">,</span> <span class="s2">&quot;Reese&quot;</span><span class="p">]</span>
+
+<span class="n">last_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Reed&quot;</span><span class="p">,</span> <span class="s2">&quot;Smith&quot;</span><span class="p">,</span> <span class="s2">&quot;Lee&quot;</span><span class="p">,</span> <span class="s2">&quot;Garcia&quot;</span><span class="p">,</span> <span class="s2">&quot;Patel&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;Chen&quot;</span><span class="p">,</span> <span class="s2">&quot;O&#39;Hara&quot;</span><span class="p">,</span> <span class="s2">&quot;Jain&quot;</span><span class="p">,</span> <span class="s2">&quot;Kumar&quot;</span><span class="p">,</span> <span class="s2">&quot;Singh&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;Liu&quot;</span><span class="p">,</span> <span class="s2">&quot;Davis&quot;</span><span class="p">,</span> <span class="s2">&quot;Clark&quot;</span><span class="p">,</span> <span class="s2">&quot;Thomas&quot;</span><span class="p">,</span> <span class="s2">&quot;Brooks&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;Flores&quot;</span><span class="p">,</span> <span class="s2">&quot;Rivera&quot;</span><span class="p">,</span> <span class="s2">&quot;Adams&quot;</span><span class="p">,</span> <span class="s2">&quot;Gonzalez&quot;</span><span class="p">,</span> <span class="s2">&quot;Campbell&quot;</span><span class="p">]</span>
+
+<span class="n">faculties</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Artificial Intelligence</span>
+<span class="s2">Machine Learning</span>
+<span class="s2">Computer Vision</span>
+<span class="s2">Natural Language Processing</span>
+<span class="s2">Robotics</span>
+<span class="s2">Algorithms and Data Structures</span>
+<span class="s2">Computational Complexity</span>
+<span class="s2">Programming Languages</span>
+<span class="s2">Software Engineering</span>
+<span class="s2">Operating Systems</span>
+<span class="s2">Computer Architecture</span>
+<span class="s2">Computer Networks</span>
+<span class="s2">Distributed Systems</span>
+<span class="s2">Database Systems</span>
+<span class="s2">Cybersecurity</span>
+<span class="s2">Human-Computer Interaction</span>
+<span class="s2">Computer Graphics</span>
+<span class="s2">Information Retrieval</span>
+<span class="s2">Quantum Computing</span>
+<span class="s2">Bioinformatics&quot;&quot;&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">faculties</span><span class="p">),</span> <span class="n">faculties</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(20,
+ [&#39;Artificial Intelligence&#39;,
+  &#39;Machine Learning&#39;,
+  &#39;Computer Vision&#39;,
+  &#39;Natural Language Processing&#39;,
+  &#39;Robotics&#39;,
+  &#39;Algorithms and Data Structures&#39;,
+  &#39;Computational Complexity&#39;,
+  &#39;Programming Languages&#39;,
+  &#39;Software Engineering&#39;,
+  &#39;Operating Systems&#39;])
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the following loop we select an institute name randomly and ask the LLM server to generate a PhD topic related to the chosen institute.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">research_fields</span> <span class="o">=</span> <span class="n">faculties</span>
+
+<span class="c1"># Set random seed for reproducibility</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">profiles</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1">#for field in faculties:</span>
+<span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">profiles</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">250</span><span class="p">:</span>    
+    <span class="c1"># Random name generation from first and last name</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">first_names</span><span class="p">)</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">last_names</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">field</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">research_fields</span><span class="p">)</span>
+
+    <span class="n">topic</span> <span class="o">=</span> <span class="n">prompt</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;Generate an English PhD thesis topic for someone working at a Computer Science Research Institute in group &#39;</span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2">&#39;. Reply with only the title of the research project and nothing else.&quot;&quot;&quot;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+    <span class="n">topic</span> <span class="o">=</span> <span class="n">topic</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&lt;/s&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">topic</span> <span class="ow">and</span> <span class="s2">&quot; &quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">topic</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="n">topic</span> <span class="o">=</span> <span class="n">topic</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s2">&quot;&lt;/thinking&gt;&quot;</span> <span class="ow">in</span> <span class="n">topic</span><span class="p">:</span>
+        <span class="n">topic</span> <span class="o">=</span> <span class="n">topic</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&lt;/thinking&gt;&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">topic</span><span class="p">),</span> <span class="n">topic</span><span class="p">)</span>
+    
+    <span class="n">profiles</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+        <span class="s2">&quot;research_field&quot;</span><span class="p">:</span> <span class="n">field</span><span class="p">,</span>
+        <span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="n">topic</span>
+    <span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>95 Runtime Verification of Adaptive Microservice Architectures Under Distributed Failure Scenarios
+93 Learning‑Based Resilient Coordination of Heterogeneous Robotic Swarms in Dynamic Environments
+112 Unsupervised Spatiotemporal Representation Learning Using Diffusion Models for Real‑Time Video Anomaly Detection
+126 Uncertainty‑Aware Reinforcement Learning for Automated Hyperparameter Optimization in Large‑Scale Distributed Machine Learning
+72 Fine‑Grained Complexity of Dynamic Subgraph Isomorphism in Sparse Graphs
+94 Scalable Graph Neural Networks for Pan‑Genomic Variant Calling with Uncertainty Quantification
+104 Parameterized Complexity and Kernelization Limits for the Edge‑Disjoint Paths Problem in Directed Graphs
+180 Design, Implementation and Formal Verification of a Hybrid Static‑Dynamic Type System for Safe Interoperability Between Statically Typed and Dynamically Typed Programming Paradigms
+103 Reinforcement Learning‑Guided Automatic Generation of Resilient Cloud‑Native Microservice Architectures
+90 Adaptive Snapshot Isolation for Low‑Latency Transactions in Distributed Columnar Databases
+134 Embodied Pragmatic Grounding for Natural Language Interaction with Collaborative Robots: A Multimodal Approach to Human-Robot Dialogue
+152 Integrating Multimodal Knowledge Graphs with Few-Shot Meta-Learning for Contextualized Commonsense Reasoning in Low‑Resource Natural Language Processing
+141 Multimodal Explainable Summarization: Leveraging Contrastive Alignment of Text and Visual Context for Factually Grounded Narrative Generation
+121 Hybrid Graph Neural Network Approach for Multi‑Omic Integration and Gene Regulatory Network Inference in Cancer Evolution
+133 Design and Evaluation of an AI‑Assisted Threat Intelligence Platform Leveraging Graph Neural Networks for Real‑Time Attack Prediction
+92 Energy‑Aware Byzantine‑Resilient Consensus for Heterogeneous Edge‑to‑Fog Distributed Systems
+94 Designing a Machine‑Learning–Assisted Adaptive Scheduler for Real‑Time Cloud Operating Systems
+161 Quantum‑Error‑Corrected Algorithms for Exponential Speedup in Practical Optimization Problems: Theory, Design, and Implementation on Fault‑Tolerant Architectures
+107 Adaptive Semi-Supervised Federated Learning with Privacy-Preserving Contrastive Representation Optimization
+111 Diffusion-Guided Multi-View Stereo for Robust, Real-Time 3D Reconstruction in Unstructured Outdoor Environments
+129 Designing Adaptive Consistency Models for Low‑Latency Blockchain‑Based Distributed Systems under Heterogeneous Network Conditions
+185 Self‑Healing Software‑Defined Networks: A Deep Reinforcement Learning Framework for Real‑time Failure Detection and Automated Recovery in Heterogeneous Telecommunication Infrastructures
+88 Adaptive Multicast Routing in Software‑Defined SD‑WANs Using Deep Reinforcement Learning
+115 Self‑Supervised Multi‑Modal Feature Fusion for Real‑Time Robust Autonomous Navigation in Adverse Weather Conditions
+159 Adaptive Conversational Retrieval via Hierarchical Transformer‑Based Contextual Semantics and Reinforcement‑Learning Fine‑Tuning for Real‑Time Document Ranking
+99 Quantum‑Resilient, Differentially Private Federated Deep‑Learning for Real‑Time Intrusion Detection
+120 Hybrid Graph‑Neural Architectures for Multi‑Modal Contextualized Information Retrieval with Explainable Decision Support
+136 Adaptive Semi‑Supervised Learning on Dynamic Graphs via Spatio‑Temporal Self‑Attention Techniques for Explainable Recommendation Systems
+125 Adaptive Sparse Matrix-Multiply Acceleration on Programmable Quantum Dot Arrays for Energy‑Efficient Neural Network Inference
+113 End-to-End Differentiable Rendering for Explainable 3D Shape Generation from Single Images using Diffusion Models
+112 Energy‑Efficient On‑Die Neural Inference Engines via Volatile Memory Integration and Voltage‑Domain Partitioning
+98 Reinforcement Learning‑Driven Adaptive Consistency in Heterogeneous Edge–Cloud Distributed Systems
+114 Towards Self‑Repairing Continuous Delivery Systems Using Probabilistic Program Analysis and Reinforcement Learning
+107 Privacy‑Aware Federated Information Retrieval: Trustworthy Ranking under Differentially Private Constraints
+107 Designing Adaptive Quantum Error Mitigation Schemes for Hybrid Classical–Quantum Machine Learning Workflows
+69 Latency‑Adaptative Consensus Protocols for Edge‑Distributed Databases
+103 Adaptive Decentralized Planning in Heterogeneous Robotic Swarms via Hierarchical Reinforcement Learning
+96 Neuro‑Symbolic Graph‑Transformer Models for Explainable Visual Reasoning and Scene Understanding
+86 Adaptive Multi‑Agent Cooperative Robot Swarms for Dynamic Search and Rescue Operations
+114 Integrating Graph Neural Networks with Multi‑Omics Data to Predict Gene Regulatory Interactions in Cancer Subtypes
+88 Adaptive, Low-Latency Consensus Protocols for Heterogeneous Edge-Cloud Federated Systems
+105 Learning-based Real-time Physically Based Rendering with Integrated Denoising for Interactive Ray Tracing
+96 Adaptive Federated Transfer Learning for Edge AI with Privacy‑Preserving Differential Guarantees
+145 Predictive Fault Mitigation in Continuous Delivery Pipelines Through Explainable, Reinforcement‑Learning Enhancements of Deployment Orchestration
+129 Designing Energy‑Aware Real‑Time Scheduling Algorithms for Distributed Edge Operating Systems on Heterogeneous Hardware Platforms
+89 Quantum‑Resistant Authentication Protocols for Decentralized Web of Things Infrastructure
+76 Real-Time Hybrid Physics–Neural Rendering for Immersive Virtual Environments
+99 Zero‑Shot Cross‑Lingual Named Entity Recognition Using Knowledge‑Enhanced Transformer Architectures
+136 Hybrid Graph Neural Networks and Explainable AI for Predicting Gene Regulatory Network Dynamics in Single‑Cell Transcriptomic Landscapes
+153 Resilient Network Slicing Strategies Against Faults and Attacks in NFV-Based 5G Environments: A Machine Learning Approach to Adaptive Traffic Engineering
+87 Real‑Time Neural Radiance Field Reconstruction for Immersive Mixed‑Reality Environments
+109 Design and Evaluation of Energy-Aware, Heterogeneous Multi‑Processor Architectures for Low‑Power AI Inference
+106 Federated Learning for Privacy‑Preserving Natural Language Processing on Resource‑Constrained Edge Devices
+128 Composing Effectful Computations: A Dependent-Typed, Algebraic-Effects Framework for Incremental and Safe Concurrent Programming
+95 Scalable Quantum Error Correction Codes Optimized for Fault‑Tolerant Surface Code Architectures
+96 Designing Emotionally Intelligent User Interfaces for Inclusive Collaborative Virtual Workspaces
+86 Hierarchical Bayesian Planning for Context-Aware Obstacle Avoidance in Legged Robotics
+129 Dynamic Knowledge Graph-based Hybrid Retrieval: Balancing Efficiency, Explainability, and Fairness in Large-scale Document Search
+99 Perceptually Optimized Neural Radiance Fields for Low‑Bandwidth Real‑Time Virtual Reality Streaming
+107 Investigating Fine-Grained Lower Bounds for Approximate Counting in Sparse Constraint Satisfaction Problems
+106 Formal Verification of Non‑Volatile Memory Ordering Guarantees in Next‑Generation Operating System Kernels
+141 Securing Next‑Generation IoT: Designing Adaptive, Privacy‑Preserving Intrusion Detection via Federated Deep Learning and Differential Privacy
+114 Multimodal Retrieval-augmented Transformer Architectures for Cross‑Lingual Few‑Shot Natural Language Understanding
+118 End-to-End Joint Learning of Neural Radiance Fields and 3D Scene Geometry for High-Resolution Drone-Based Surveillance
+143 Noise-Resilient Quantum Error Correction Codes for Near-Term Fault-Tolerant Architectures: Design, Analysis, and Implementation on NISQ Devices
+131 Efficient Quantum Error Mitigation Techniques for Near‑Term Noisy Intermediate‑Scale Quantum Devices Using Adaptive Tensor Networks
+128 Self‑Supervised Multi‑View Depth Estimation with Diffusion‑Based Geometry Priors for Low‑Light and Unreliable Imaging Conditions
+135 Zero‑Shot Object Detection via Prompted Vision‑Language Models and Adaptive Knowledge Distillation for Large‑Scale Real‑World Scenarios
+117 Hierarchical Graph Neural Networks for Robust 3D Reconstruction from Sparse RGB‑Depth Streams in Dynamic Environments
+113 Human‑In‑The‑Loop AI for Real‑Time Bug Detection, Diagnosis, and Automated Repair in Large-Scale Software Systems
+116 Deep Reinforcement‑Learning Driven Adaptive Indexing for Federated, Privacy‑Preserving Information Retrieval Systems
+114 Hybrid Quantum–Classical Co-optimization for Resource-Efficient Variational Algorithms on Fault‑Tolerant Platforms
+132 Emotion‑Aware Adaptive Interfaces for Collaborative Immersive Virtual Environments: Design, Evaluation, and Impact on Team Cognition
+118 Cross‑Lingual Transferability of Multimodal Language Models for Zero‑Shot Sentiment Analysis in Low‑Resource Languages
+101 Hybrid Quantum-Classical Routing Algorithms for Low-Latency 5G Millimeter-Wave Mesh Backhaul Networks
+107 Adversarially Robust Federated Learning for Privacy‑Preserving Anomaly Detection in Industrial IoT Networks
+90 Towards Robust Causality-Aware Federated Learning for Privacy-Preserving Edge Intelligence
+126 Towards Universal Prompt Engineering for Low‑Resource Languages via Cross‑Lingual Meta‑Learning and Adaptive Data Augmentation
+86 Fine‑Grained Complexity of Sparse Max‑Cut under the Strong Exponential Time Hypothesis
+103 Hybrid Vision–LiDAR SLAM with Graph Neural Networks for Autonomous Drone Swarms in Dynamic Environments
+111 Conflict‑Aware Automated Refactoring Chains for Evolutionary Maintenance in Large‑Scale Object‑Oriented Systems
+97 Self‑Supervised Multi‑Modal Fusion for Robust 3D Object Recognition in Adverse Weather Conditions
+117 Explainable Neural Commonsense Reasoning for Cross‑Lingual Question Answering Using Structured Knowledge Distillation
+90 Adaptive Federated Learning for Privacy-Preserving Edge Intelligence in Smart IoT Networks
+97 Cache‑Oblivious Parallel Data Structures for Scalable Graph Analytics on Multi‑Core Architectures
+114 Designing Adaptive Multimodal Interfaces for Inclusive Digital Environments Through Context‑Aware Machine Learning
+93 Causal Discovery in Large‑Scale Heterogeneous Graphs via Semi‑Supervised Contrastive Learning
+99 Scalable Federated Multi‑Modal Knowledge Graph Embedding for Privacy‑Preserving Intelligent Systems
+105 Zero‑Trust Orchestration of Decentralized IoT Devices Using Homomorphic Encryption and Federated Learning
+96 Neural Retrieval of Multi‑Modal Documents with Adaptive Contrastive Learning and Query Expansion
+145 Fine‑Grained Complexity and Time Lower Bounds for Counting Solutions to Boolean Constraint Satisfaction Problems with Bounded Variable Occurrence
+109 Integrative Multi‑Modal Representation Learning for Real‑Time Autonomous Driving in Unstructured Environments
+158 Design and Analysis of Federated Multi‑Task Learning Algorithms with Provable Privacy and Generalization Guarantees for Resource‑Constrained Edge Environments
+80 Scalable Federated Learning with Differential Privacy Guarantees on Edge Devices
+63 Neural‑Enhanced Real‑Time Ray Tracing for Immersive Simulations
+83 Integrating Causality and Contrastive Learning for Explainable AI in Dynamic Graphs
+105 Cache‑Aware Hierarchical Decomposition for Sublinear‑Time Dynamic Shortest Path Queries in Massive Graphs
+113 Self‑Supervised Multi‑Modal Fusion Networks for Robust Zero‑Shot Action Recognition in Adverse Weather Conditions
+104 Hybrid Symbolic–Neural Architectures for Context‑Aware Sentiment Analysis Across Multimodal Text Streams
+129 Designing Adaptive Machine‑Learning driven Error Mitigation Protocols for Noise‑Resilient Near‑Term Quantum Supremacy Experiments
+125 Graph-Based Deep Generative Modeling for Predicting Protein–Protein Interaction Interfaces in Human Immune Signaling Pathways
+90 Entanglement-Enhanced Quantum Error Correction for Near-Term Superconducting Architectures
+97 Designing Energy‑Efficient Heterogeneous Multi‑Core Architectures for Real‑Time Edge AI Inference
+109 Co-Design of Photonic Interconnects and 3D-Integrated Logic for Ultra‑High Bandwidth, Low‑Latency Computation
+113 Machine-Learning Guided Adaptive Consistency Protocols for Heterogeneous Edge‑Cloud Federated Distributed Systems
+124 Quantum‑Resilient Federated Learning Frameworks for Secure Multi‑Party Collaboration across Heterogeneous Cloud Environments
+130 Unifying Probabilistic Reasoning and Deep Representation Learning for Robust Few-Shot Generalization in Dynamic Autonomous Systems
+101 Hybrid Variational Algorithms for Decoherence-Resilient Quantum Machine Learning on Near-Term Devices
+93 Self-supervised Continual Learning for Adaptive Document Retrieval in Dynamic Knowledge Bases
+123 “Toward a Formal, Machine‑Learning–Assisted Framework for Runtime Verification of Self-Adaptive Microservice Architectures”
+116 Neural Scene Graphs for Joint Object Detection, Tracking, and Interaction Reasoning in Realistic Indoor Environments
+70 Self-Adaptive Scheduling for Heterogeneous Multicore Real‑Time Systems
+123 Contrastive Learning of Joint Text–Image Representations for Scalable Cross‑Modal Information Retrieval in Knowledge Graphs
+67 Real-time Neural Radiance Fields for Immersive Virtual Environments
+88 Learning‑Based Dynamic Memory Allocation for Energy‑Efficient Embedded Operating Systems
+133 Graph Neural Network‑Enabled Detection and Automated Refactoring of Architectural Anti‑Patterns in Legacy Enterprise Software Systems
+133 Enhancing Contextualized Information Retrieval in Low‑Resource Languages through Contrastive Learning and Knowledge Graph Integration
+99 Self‑Adaptive Scheduling for Heterogeneous Real‑Time Operating Systems Using Reinforcement Learning
+146 Designing Adaptive Cache Hierarchies for Energy‑Efficient High‑Performance Computing Using Machine–Learning Driven Placement and Eviction Policies
+90 Unified Differentiable Rendering for Real-Time Photorealistic Virtual Reality Applications
+85 Federated Learning with Adaptive Differential Privacy for Secure Healthcare Analytics
+99 Hybrid Formal and Machine‑Learning Techniques for Runtime Verification of Adaptive Software Systems
+75 Hybrid Non‑Volatile Memory Architectures for Low‑Power Edge AI Accelerators
+58 Hybrid Succinct Indexing Schemes for Massive Graph Streams
+83 Scalable Graph Query Processing over Federated, Multi‑Cluster Distributed Databases
+92 Zero-Shot Cross-Lingual Narrative Generation via Hierarchical Graph Neural Language Modeling
+120 Federated Learning of Private Retrieval Models: Balancing Accuracy and Differential Privacy Across Heterogeneous Devices
+120 Hybrid Variational Quantum‑Classical Algorithms for Efficient Solving of Large‑Scale Combinatorial Optimization Problems
+104 Hybrid Approximation and Exact Query Execution for Real‑Time Analytics in Distributed Columnar Databases
+109 Adaptive, Self‑Optimizing I/O Scheduling in Cloud‑Based Virtualized Environments Using Reinforcement Learning
+154 Adaptive Cross-Layer Optimization of 5G Ultra-Reliable Low‑Latency Communications Using Reinforcement Learning in Software‑Defined Networking Environments
+126 Advancing Explainable Transfer Learning in Low‑Resource Multilingual Dialogue Systems through Structured Knowledge Integration
+103 Learning-Driven Adaptive Index Selection for Cost-Efficient OLAP Queries in Cloud-Based Data Warehouses
+79 Designing a Linear Type System for Concurrency Safety in Functional Programming
+86 Privacy‑Preserving Federated Query Processing over Heterogeneous Multi‑Cloud Databases
+88 Scalable Cache-Coherence Mechanisms for Nonvolatile Memory-Based Many‐Core Architectures
+83 Automated Quality Assurance Governance for Microservices-Driven Software Ecosystems
+96 Design and Analysis of Hybrid Consensus Protocols for Ultra‑Low Latency Geo‑Distributed Networks
+137 Formal Foundations and Implementation Strategies for Incremental Type Inference in Large‑Scale Statically Typed Domain‑Specific Languages
+113 Hierarchical Software‑Defined Control for Scalable, Secure Service Function Chaining in Multi‑Domain NFV Networks
+100 Composable Effect Systems for Concurrent Functional Programming: Syntax, Semantics, and Verification
+82 Towards Energy‑Aware Fault‑Tolerant Consistency in Decentralized IoT Mesh Networks
+131 Deep Self‑Supervised Alignment of Cross‑Domain Visual Representations for Robust Zero‑Shot Object Detection in Dynamic Environments
+114 Real‑Time Neural Rendering of Complex Scenes Using Diffusion‑Driven Radiance Fields on Heterogeneous Architectures
+73 Energy‑Efficient 3D‑Integrated Cache Hierarchies for Edge AI Accelerators
+132 Hybrid Formal‑Statistical Runtime Verification of Serverless Microservice Architectures for Early Failure Detection and Self-Healing
+113 Adaptive AI-Driven Test Prioritization in Continuous Integration Pipelines for Complex Microservice Architectures
+91 Integrative Graph Neural Networks for Multi‑Omics Disease Subtyping and Biomarker Discovery
+86 Adaptive Memory Hierarchy Design for Low‑Power AI Workloads Using Near‑Data Processing
+106 Hybrid Neural–Physical Modeling for Real‑Time Photorealistic Rendering in Interactive Virtual Environments
+112 Adaptive Variational Quantum Algorithms with Resource‑Aware Circuit Compression for Noise‑Resilient NISQ Devices
+106 Self‑Supervised Discovery of Causal Structures in Large‑Scale Time‑Series Data Using Graph Neural Networks
+168 Dynamic, Real-Time Ray-Tracing for Large-Scale Virtual Environments Using Adaptive Volumetric Neural Radiance Fields and GPU-Accelerated Hierarchical Scene Partitioning
+170 Optimizing Multi‑Layer Software‑Defined Networking for Low‑Latency Edge IoT Systems: A Machine Learning‑Driven Approach to Adaptive Path Selection and Resource Allocation
+84 Adaptive Energy‑Aware Cache Hierarchies for Heterogeneous Deep Learning Accelerators
+98 Symbolic‑Augmented Neural Architectures for Explainable Multi‑Task Few‑Shot Language Understanding
+119 Energy‑Proportional Data‑Center Operating Systems via Predictive, Fine‑Grained Power Management and Adaptive Scheduling
+100 Hybrid Sharding and State Machine Replication for Ultra‑Low Latency in Cross‑Cloud Federated Systems
+125 Hybrid Deep Reinforcement Learning with Model Predictive Control for Real‑Time Obstacle Avoidance in Autonomous Mobile Robots
+97 Decentralized Consensus Protocols with Adaptive Latency Guarantees for Multi‑Cloud Edge Computing
+86 Hybrid Quantum-Classical Optimization for Large-Scale NP-Hard Problems on NISQ Devices
+94 **Federated Knowledge Distillation for Privacy‑Preserving Cross‑Device Information Retrieval**
+111 Designing Adaptive, Energy-Aware Real‑Time Scheduling Algorithms for Heterogeneous Multi‑Core Operating Systems
+146 Design and Evaluation of Adaptive Hybrid Quantum-Classical Algorithms for Solving Large-Scale Combinatorial Optimization Problems on NISQ Hardware
+123 An Explainable Graph Neural Network Framework for Real‑Time Anomaly Detection and Attribution in Industrial Control Systems
+100 Fine‑Grained Reductions and Kernelization Lower Bounds for Subgraph Isomorphism in Minor‑Free Graphs
+89 Hybrid External‑Memory and Succinct Data Structures for Ultra‑Large‑Scale Graph Analytics
+132 Real‑Time Neural Radiance Field Rendering via Adaptive Sampling and Edge‑Aware Temporal Filtering for Immersive Virtual Environments
+116 Hybrid Diffusion-Graph Neural Networks for Unsupervised 3D Scene Reconstruction from Sparse Multi‑View Video Streams
+99 Composable Formal Semantics for Concurrent Functional Programming Languages with Weak Memory Models
+125 Designing Adaptive Multi‑Agent Reinforcement Learning Systems for Decentralized Autonomous Control Under Resource Constraints
+132 Multimodal Interaction Strategies for Enhancing User Understanding of Explainable Machine Learning Models in High‑Stake Environments
+130 Adaptive Zero‑Trust Architectures Leveraging Federated Machine Learning for Real‑Time Threat Detection in Multi‑Cloud Environments
+88 Fine-Grained Complexity of Sparse Graph Isomorphism via Matrix Multiplication Reductions
+84 Toward Energy‑Efficient Byzantine Consensus for Heterogeneous Edge–Cloud Federations
+98 Hybrid Symbolic‑Neural Architectures for Interpretable Autonomous Planning in Dynamic Environments
+84 A Dependent Type System for Safe Concurrent Programming via Linear Logic Integration
+147 Designing a Privacy‑Preserving Federated Blockchain for Secure IoT Device Authentication and Anomaly Detection in Industrial Cyber‑Physical Systems
+117 Formalizing and Optimizing Gradual Typing in a Multi‑Paradigm, Domain‑Specific Language for Cloud‑Native Applications
+135 Hybrid Deep-Learning and Model-Based Control for Real-Time Autonomous Navigation of Legged Robots in Unstructured, Dynamic Environments
+84 Federated Learning‑Enhanced Retrieval Ranking under Differential Privacy Constraints
+115 Adaptive AI‑Driven Intrusion Detection and Response in Multi‑Cloud Infrastructure Using Federated Transfer Learning
+99 Scalable Multi‑Granularity Index Structures for Real‑Time Analytics on Highly Volatile Data Streams
+113 Energy‑Aware Parallel Graph Algorithms with Adaptive Data Structures for Real‑Time Edge‑Weighted Network Analysis
+127 Integrating Machine‑Learning–Based Predictive Risk Assessment into Agile Development Workflows for Enhanced Continuous Delivery
+91 Real‑Time Differentiable Rendering for Physics‑Based Animation in Immersive Virtual Reality
+126 Predictively Guided Continuous Integration and Delivery Using Reinforcement Learning for Complex, Distributed Software Systems
+106 Designing Adaptive, Heterogeneous-Aware Hybrid OS Kernels for Secure, Multi-tenant Cloud Edge Environments
+92 A Fault‑Tolerant, Energy‑Elastic Hybrid Reconfigurable Architecture for Edge AI Accelerators
+93 Neural Rendering of Dynamic Scenes Using Implicit Representations and Learned Temporal Priors
+105 Formal Verification and Automation for Dependently Typed Programming Languages Using Homotopy Type Theory
+105 Fine-Grained Complexity and Hardness Separations for Randomized SAT Variants with Sublinear Preprocessing
+98 Adaptive Consistency Models for Distributed Columnar Database Systems Using Reinforcement Learning
+106 Graph Neural Network-Based Probabilistic Attribution of Advanced Persistent Threats in Enterprise Networks
+123 Fine‑Grained Complexity of Subgraph Isomorphism in Bounded‑Degree Graphs and Its Implications for Database Query Evaluation
+106 Adaptive Pulse Optimization for Quantum Gate Fidelity via Reinforcement Learning on Superconducting Qubits
+106 Adaptive Consistency Models for Heterogeneous Edge‑Cloud Distributed Storage under Partial Network Failure
+108 Reinforcement‑Learning–Driven Software‑Defined Multi‑Path Routing for Ultra‑Low‑Latency 5G Backhaul Networks
+107 Machine Learning-Driven Automatic Index Selection for Real-Time Analytics in Columnar Distributed Databases
+158 Developing Graph Neural Networks for Multi‑Omic Integration: Predicting Disease‑Relevance of Genetic Variants from Genomic, Transcriptomic and Epigenomic Data
+94 Composable Verification of Dynamic Software Updates in Dependently‑Typed Programming Languages
+123 Evaluating the Efficacy and Inclusivity of Multimodal Interaction Interfaces for Individuals with Autism Spectrum Disorders
+106 Energy‑Optimal Co‑Design of Hybrid CPU‑Reconfigurable Accelerator Platforms for Machine Learning Workloads
+90 Privacy‑Preserving Federated Learning for Real‑Time Malware Classification on Edge Devices
+78 Explainable Hybrid Neural‑Graph Retrieval for Cross‑Lingual Information Search
+118 Scalable Hybrid Quantum–Classical Algorithms for Solving Large-Scale Combinatorial Optimization Under NISQ Constraints
+72 Zero‑Shot Cross‑Domain Object Detection via Unified Contrastive Learning
+105 Secure and Scalable Anomaly Detection in Distributed IoT Ecosystems Using Federated Graph Neural Networks
+84 Adaptive Model‑Driven Development for Self‑Optimizing Enterprise Software Ecosystems
+129 Fine‑Grained Complexity of Subgraph Isomorphism Parameterized by Treewidth: Conditional Lower Bounds and Algorithmic Upper Limits
+119 Energy‑Efficient Data‑Path Scheduling for Heterogeneous Many‑Core Architectures Under Speculative Execution Constraints
+89 Reinforcement‑Learning Driven Adaptive Indexing for Real‑Time Analytics on Streaming Data
+110 Designing Emotionally Adaptive Interfaces to Reduce Cognitive Load in Collaborative Virtual Reality Workspaces
+92 Differentially Private Federated Graph Neural Networks for Scalable Social Network Analytics
+119 Hybrid Vision Transformers with Diffusion-Based Priors for Zero‑Shot 3D Scene Reconstruction and Novel Object Discovery
+79 Composable Verification of Parametric Polymorphism via Dependent Type Embedding
+161 Deep Integrative Prediction of Tumor Microenvironment Heterogeneity through Multi‑Modal Omics and Spatial Transcriptomics Data Fusion using Explainable AI Models
+94 Adaptive Multi-Modal Sensor Fusion for Real-Time Autonomy in Unstructured Robotic Environments
+98 Quantum‑Enhanced Fault‑Tolerant Algorithms for Secure Multi‑Party Computation on Near‑Term Devices
+114 Hybrid AI‑Assisted Refactoring: Combining Static Analysis with Reinforcement Learning to Optimize Legacy Codebases
+108 Integrating Multi-Omics Data for Predictive Modeling of Gene Regulatory Networks Using Graph Neural Networks
+105 Cache-Conscious Parallel Breadth-First Search for Billion‑Node Graphs on Heterogeneous Multi-Core Systems
+106 Scalable Variational Quantum Algorithms with Adaptive Circuit Depth for Large‑Scale Machine Learning Tasks
+116 Hybrid Quantum‑Classical Algorithms for Efficient Optimization on Near‑Term Noisy Intermediate‑Scale Quantum Devices
+116 Quantum Hardness of Approximation for Sparse Graph Partitioning via Fine-Grained Complexity and ETH-Based Reductions
+111 Formal Verification of Session-Type-Based Interoperability between Distributed Functional Programming Languages
+122 Scalable Graph Neural Networks for Reconstruction of Pan‑Cancer Gene Regulatory Networks from Single‑Cell Multi‑Omics Data
+74 Scalable Federated Multi‑Task Learning via Adaptive Sparse Representations
+99 Adaptive, Machine‑Learning‑Guided Autonomic Indexing for Scalable Cloud‑Native Relational Databases
+132 Physically‑Based Metamaterial Rendering Using Differentiable Ray Tracing and Neural Material Priors for Real‑Time Virtual Production
+111 Neural‑Guided Adaptive Query Planning for High‑Performance Analytical Workloads in Distributed Database Systems
+136 Hybrid Query Optimization: Integrating Machine‑Learning Models with Rule‑Based Engines for Efficient Multi‑Tenant Cloud Database Systems
+93 Learning Robust End‑to‑End Navigation Policies for Mobile Robots in Unstructured Environments
+72 Neuro-Enhanced Global Illumination via Learned Light Transport Operators
+96 Privacy‑Aware Federated Information Retrieval Using Differentially Private Neural Ranking Models
+129 Adaptive, Conflict-Aware Optimistic Concurrency Control for Large-Scale Multi-Tenant SQL Engines in Serverless Cloud Environments
+141 Design and Evaluation of an Adaptive Coherent Cache Architecture for Heterogeneous Multi-Core Systems Targeting Energy-Efficient AI Workloads
+111 Exploring Self‑Adapting DevOps Pipelines for Real‑Time Microservice Health Prediction and Automated Remediation
+89 Towards Robust Quantum‑Resistant Public‑Key Cryptography for Secure Mobile Communications
+104 Adaptive Consistency Management in Hybrid Edge‑Cloud Distributed Datastores Using Reinforcement Learning
+92 Emotion-Aware Adaptive Interaction Systems for Inclusive Accessibility in Smart Environments
+126 **Emotion-Aware Multimodal Interfaces for Inclusive Telepresence: Balancing Autonomy, Transparency, and Human‑Centric Design**
+153 AI‑Enabled Architectural Decision Support for Microservice Systems: Predicting Long‑Term Maintainability with Machine Learning and Runtime Feedback Loops
+133 Integrative Deep Learning Frameworks for Predictive Modeling and Interpretation of Multi‑Omics Genomic Landscapes in Complex Diseases
+134 Toward Adaptive Multi‑Modal Generative AI: Unified Representation Learning for Vision, Language, and Audio in Self‑Supervised Settings
+84 Self-Supervised Transformers for 3D Scene Reconstruction from Sparse RGB-D Sequences
+119 Emotion‑Adaptive Conversational Interfaces via Multimodal Physiological Sensing for Enhanced Human–Computer Interaction
+80 Adaptive Multimodal Interaction Models for Emotion‑Responsive Virtual Assistants
+115 Hybrid Neural–Symbolic Architectures for End‑to‑End Program Synthesis with Human‑in‑the‑Loop Interpretable Guidance
+92 Design and Verification of an Algebraic Effect‑Based DSL for Safe Concurrent Data Structures
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, we store the names, institutes and PhD topics to a csv file.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create DataFrame and save CSV</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">profiles</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;phd_topics.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>research_field</th>
+      <th>topic</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Taylor Reed</td>
+      <td>Software Engineering</td>
+      <td>Runtime Verification of Adaptive Microservice ...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Riley Jain</td>
+      <td>Robotics</td>
+      <td>Learning‑Based Resilient Coordination of Heter...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Taylor Adams</td>
+      <td>Computer Vision</td>
+      <td>Unsupervised Spatiotemporal Representation Lea...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Devon Thomas</td>
+      <td>Machine Learning</td>
+      <td>Uncertainty‑Aware Reinforcement Learning for A...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Alex Lee</td>
+      <td>Computational Complexity</td>
+      <td>Fine‑Grained Complexity of Dynamic Subgraph Is...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./01_text-embeddings"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="03_plot.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">Visualizing language embeddings</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="../02_vision-embeddings/download.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">Download Butterfly images</p>
+  </div>
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-21.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>
