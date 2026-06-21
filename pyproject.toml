@@ -1,0 +1,22 @@
+[project]
+name = "rag-2026"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "jupyterlab>=4.6.0",
+    "kagglehub>=1.0.2",
+    "llama-index>=0.14.22",
+    "llama-index-embeddings-huggingface>=0.7.0",
+    "llama-index-llms-ollama>=0.10.1",
+    "llama-index-llms-openai-like>=0.7.2",
+    "openai>=2.43.0",
+    "pandas>=3.0.3",
+    "scikit-learn>=1.9.0",
+    "stackview>=0.19.1",
+    "transformers>=5.12.1",
+    "umap-learn>=0.5.12",
+    "vision-embedding-space-travelling>=0.2.2",
+    "voila>=0.5.12",
+]
