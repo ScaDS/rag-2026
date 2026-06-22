@@ -1,6 +1,6 @@
 # Navigating in Latent Space and Retrieval-Augmented Generation
 
-This page contains training materials for exploring vector embeddings and using them for enrichting prompts with additional information. 
+This page contains training materials for exploring vector embeddings and using them for enrichting prompts with additional information. This training session is part of the [ScaDS.AI summer school on Neuro-Symbolic AI 2026](https://scads.ai/event/summer-schools/summer-school-2026/).
 
 ## Target audience and teaching goal
 

@@ -618,10 +618,15 @@ title="Print to PDF"
 <p>This example uses a dataset of <a class="reference external" href="https://www.kaggle.com/datasets/phucthaiv02/butterfly-image-classification">butterfly images</a> published on kaggle by DePie.</p>
 <p>Go through the <a class="reference internal" href="download.html"><span class="doc std std-doc">download notebook</span></a> to download the data.
 Optionally, you can re-generate the embeddings using <a class="reference internal" href="vision_embeddings_umap.html"><span class="doc std std-doc">vision_embeddings_umap.ipynb</span></a>, but they are also given in <a class="reference download internal" download="" href="../_downloads/59ab4f254bed82425d41737ebbb93253/data.csv"><span class="xref download myst">data.csv</span></a>.</p>
-<p>Afterwards, you can navigate to this folder using the terminal and run this command:</p>
+<p>Afterwards, you can navigate to this folder using the terminal and run this command from the current directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uv</span> <span class="n">run</span> <span class="n">vest</span> <span class="n">data</span><span class="o">.</span><span class="n">csv</span> <span class="o">--</span><span class="n">image</span><span class="o">-</span><span class="n">path</span> <span class="o">./</span><span class="n">images</span>
+</pre></div>
+</div>
+<p>or</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vest</span> <span class="n">data</span><span class="o">.</span><span class="n">csv</span> <span class="o">--</span><span class="n">image</span><span class="o">-</span><span class="n">path</span> <span class="o">./</span><span class="n">images</span>
 </pre></div>
 </div>
+<p><img alt="" src="https://github.com/ScaDS/vest/raw/main/docs/images/vest-butterflies-small.gif?raw=true" /></p>
 </section>
 
     <script type="text/x-thebe-config">
@@ -694,7 +699,7 @@ By Robert Haase
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on 2026-06-21.<br>
+Last updated on 2026-06-22.<br>
 </p>
   </div>
   

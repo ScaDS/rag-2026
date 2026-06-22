@@ -625,11 +625,10 @@ title="Print to PDF"
               
   <section class="tex2jax_ignore mathjax_ignore" id="visualizing-language-embeddings">
 <h1>Visualizing language embeddings<a class="headerlink" href="#visualizing-language-embeddings" title="Permalink to this heading">#</a></h1>
-<p>In this notebook we will visualize UMAP representations of language embeddings together with word clouds generated from the underlying text data. This is a game: You can draw outlines around point clouds and the wordcloud will update. From the wordcloud of PhD topics you can guess at which institute the researchers might work. You can test if your guess is right by clicking the <code class="docutils literal notranslate"><span class="pre">Show</span> <span class="pre">solution</span></code> button at the bottom.</p>
+<p>In this notebook we will visualize UMAP representations of language embeddings together with word clouds generated from the underlying text data. This is a game: You can draw outlines around point clouds and the wordcloud will update. From the wordcloud of PhD topics you can guess in which domain the researchers might work. You can test if your guess is right by clicking the <code class="docutils literal notranslate"><span class="pre">Show</span> <span class="pre">solution</span></code> button at the bottom.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="c1">#import umap</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">stackview</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
@@ -679,63 +678,63 @@ title="Print to PDF"
   <tbody>
     <tr>
       <th>0</th>
-      <td>-24.977535</td>
-      <td>-0.853152</td>
-      <td>0.522525</td>
-      <td>8.064949</td>
-      <td>[-0.010754222050309181, -0.00575306685641408, ...</td>
+      <td>8.754914</td>
+      <td>-1.009572</td>
+      <td>0.189567</td>
+      <td>5.986521</td>
+      <td>[-0.0015439987182617188, 0.027496337890625, -0...</td>
       <td>Taylor Reed</td>
-      <td>Chemicals in the Environment / Ecotoxicology</td>
+      <td>Software Engineering</td>
       <td>1</td>
-      <td>Microplastic-Associated Persistent Organic Pol...</td>
+      <td>Runtime Verification of Adaptive Microservice ...</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-10.760478</td>
-      <td>8.616426</td>
-      <td>1.470769</td>
-      <td>3.908189</td>
-      <td>[0.00467681884765625, 0.0035836827009916306, -...</td>
+      <td>16.514956</td>
+      <td>3.362960</td>
+      <td>5.358452</td>
+      <td>3.607615</td>
+      <td>[0.0090789794921875, 0.0286865234375, -0.01675...</td>
       <td>Riley Jain</td>
-      <td>Water Resources and Environment / Aquatic Ecos...</td>
+      <td>Robotics</td>
       <td>1</td>
-      <td>Microbial Community Resilience to Agricultural...</td>
+      <td>Learning‑Based Resilient Coordination of Heter...</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>14.342352</td>
-      <td>-7.349468</td>
-      <td>6.670248</td>
-      <td>-0.525505</td>
-      <td>[0.0015734180342406034, 0.01460769772529602, -...</td>
+      <td>-11.673421</td>
+      <td>-10.422121</td>
+      <td>6.589048</td>
+      <td>2.619181</td>
+      <td>[-0.00688934326171875, 0.01209259033203125, -0...</td>
       <td>Taylor Adams</td>
-      <td>Ecosystems of the Future / Conservation Biolog...</td>
+      <td>Computer Vision</td>
       <td>1</td>
-      <td>Resilience and Relocation: Social-Ecological P...</td>
+      <td>Unsupervised Spatiotemporal Representation Lea...</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>4.714762</td>
-      <td>-1.994494</td>
-      <td>2.443010</td>
-      <td>3.408841</td>
-      <td>[-0.0008501994889229536, 0.01444125734269619, ...</td>
+      <td>9.186632</td>
+      <td>5.306041</td>
+      <td>1.885538</td>
+      <td>6.961151</td>
+      <td>[-0.0050506591796875, 0.0226898193359375, -0.0...</td>
       <td>Devon Thomas</td>
-      <td>Ecosystems of the Future / Ecology of Agroecos...</td>
+      <td>Machine Learning</td>
       <td>1</td>
-      <td>Resilience and Adaptive Capacity: Integrating ...</td>
+      <td>Uncertainty‑Aware Reinforcement Learning for A...</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-14.277933</td>
-      <td>-3.898955</td>
-      <td>4.178447</td>
-      <td>6.685272</td>
-      <td>[-0.0032572217751294374, 0.002003519097343087,...</td>
+      <td>-7.950841</td>
+      <td>5.450587</td>
+      <td>0.186753</td>
+      <td>9.818762</td>
+      <td>[0.03546142578125, 0.03033447265625, -0.026321...</td>
       <td>Alex Lee</td>
-      <td>Chemicals in the Environment / Computational B...</td>
+      <td>Computational Complexity</td>
       <td>1</td>
-      <td>Predicting Persistent Organic Pollutant Bioacc...</td>
+      <td>Fine‑Grained Complexity of Dynamic Subgraph Is...</td>
     </tr>
   </tbody>
 </table>
@@ -786,7 +785,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a1f03aef5518443594bd04a44c1eb6d0", "version_major": 2, "version_minor": 0}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "025975c8ca87455fbbe370f547e937ce", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 </section>
 
@@ -860,7 +859,7 @@ By Robert Haase
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on 2026-06-21.<br>
+Last updated on 2026-06-22.<br>
 </p>
   </div>
   
