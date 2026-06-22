@@ -5,9 +5,9 @@ format: jb-book
 root: intro
 
 parts:
-#  - caption: Course Preparation
-#    chapters:
-#    - file: 01_preparation/readme
+  - caption: Preparation
+    chapters:
+    - file: 01_preparation/readme
 
   - caption: Text embeddings
     chapters:
