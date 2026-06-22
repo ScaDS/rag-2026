@@ -7,7 +7,7 @@ root: intro
 parts:
   - caption: Preparation
     chapters:
-    - file: 01_preparation/readme
+    - file: 00_preparation/readme.md
 
   - caption: Text embeddings
     chapters:
