@@ -19,4 +19,5 @@ dependencies = [
     "umap-learn>=0.5.12",
     "vision-embedding-space-travelling>=0.2.2",
     "voila>=0.5.12",
+    "python-dotenv",
 ]

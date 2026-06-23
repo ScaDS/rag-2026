@@ -1,0 +1,11 @@
+| HPC System | Partition | # Nodes | Cores per Node | Threads per Core | Memory per Node [in MB] | Memory per (SMT) Core [in MB] | GPUs per Node | Cores per GPU | Job Max Time [in days] |
+|:-----------|:----------|--------:|---------------:|-----------------:|------------------------:|------------------------------:|--------------:|--------------:|-------------:|
+| [`Capella`](hardware_overview.md#capella) | capella | 142 | 56 | 1 | 752,520 | 13,437 | 4 | 14 | 7 |
+| [`Capella`](hardware_overview.md#capella) | capella | 12 | 56 | 1 | 1,526,520 | 27,259 | 4 | 14 | 7 |
+| [`Capella`](hardware_overview.md#capella) | capella-interactive | 2 | 32 | 1 | 452,520 | 14,141 | 28 | 1 | 12:00:00 |
+| [`Barnard`](hardware_overview.md#barnard) | barnard | 630 | 104 | 2 | 500,000 | 2,403 | - | - | 7 |
+| [`Barnard`](hardware_overview.md#barnard) | barnard | 90 | 104 | 2 | 985,000 | 4,735 | - | - | 7 |
+| [`Alpha`](hardware_overview.md#alpha-centauri) | alpha | 35 | 48 | 2 | 990,000 | 10,312 | 8 | 6 | 7 |
+| [`Alpha`](hardware_overview.md#alpha-centauri) | alpha-interactive | 2 | 16 | 2 | 330,000 | 10,312 | 16 | 1 | 12:00:00 |
+| [`Julia`](hardware_overview.md#julia) | julia | 1 | 420 | 1 | 22,858,674 | 54,425 | - | - | 7 |
+| [`Romeo`](hardware_overview.md#romeo) | romeo | 185 | 128 | 2 | 505,000 | 1,972 | - | - | 7 |

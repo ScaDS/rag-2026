@@ -1,0 +1,2 @@
+[commands]
+anaconda3_module_load = "marie@compute$ module load Anaconda3"

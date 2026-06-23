@@ -1,0 +1,8 @@
+| Key Type | Fingerprint                                           |
+|:---------|:------------------------------------------------------|
+| RSA      | `SHA256:lVQOvnci07jkxmFnX58pQf3cD7lz1mf4K4b9jZrAlVU`  |
+| RSA      | `MD5:5b:39:ae:03:3a:60:15:21:4b:e8:ba:72:52:b8:a1:ad` |
+| ED25519  | `SHA256:Gn4n5IX9eEvkpOGrtZzs9T9yAfJUB200bgRchchiKAQ`  |
+| ED25519  | `MD5:e8:10:96:67:e8:4c:fd:87:f0:c6:4e:e8:1f:53:a9:be` |
+| ECDSA    | `SHA256:Xan2MYazewT0V5agNazaQfWzLKBD3P48zRwR6reoXhI`  |
+| ECDSA    | `MD5:02:fd:ab:c8:39:f9:94:cc:3f:e0:7e:78:5f:76:b8:4c` |

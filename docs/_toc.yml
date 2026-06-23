@@ -24,7 +24,7 @@ parts:
 
   - caption: Retrieval-augmented Generation
     chapters:
-    - file: 03_rag/20-simple-rag.ipynb
+    #- file: 03_rag/20-simple-rag.ipynb
     - file: 04_rag_advanced/chat-with-hpc-compendium.ipynb
 
   - caption: Links

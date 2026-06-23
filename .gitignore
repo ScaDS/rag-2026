@@ -25,3 +25,5 @@ scripts/newsletters/*.pdf
 Untitled*
 notebooks/generate_link_lists.py
 dist/
+
+.env
