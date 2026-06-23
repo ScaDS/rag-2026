@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Butterfly images &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+    <title>Vision Embedding Space Travelling &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
   
   
   
@@ -61,8 +61,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = '02_vision-embeddings/readme';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Simple retrieval augmented generation" href="../03_rag/20-simple-rag.html" />
-    <link rel="prev" title="Image Embeddings and UMAP Generation" href="vision_embeddings_umap.html" />
+    <link rel="next" title="Interactive slicing throug sub-sets of embedded image data" href="../02_vision-embeddings-slides/sliceplot.html" />
+    <link rel="prev" title="Visualizing text embeddings" href="../01_text-embeddings/03_plot.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en">
   </head>
@@ -144,48 +144,22 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../01_text-embeddings/02_compute_embeddings.html">
-                        Computing embeddings and dimensionality reduction
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../01_text-embeddings/03_plot.html">
-                        Visualizing language embeddings
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../01_text-embeddings/01_generate.html">
-                        Behind the scenes: Generating texts
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="download.html">
-                        Download Butterfly images
-                      </a>
-                    </li>
-                
-            <div class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    More
-                </button>
-                <div class="dropdown-menu">
-                    
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="vision_embeddings_umap.html">
-                        Image Embeddings and UMAP Generation
+                        Visualizing text embeddings
                       </a>
                     </li>
                 
 
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="#">
-                        Butterfly images
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
                       </a>
                     </li>
                 
@@ -196,7 +170,12 @@ const thebe_selector_output = ".output, .cell_output"
                       </a>
                     </li>
                 
-
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../04_rag_advanced/chat-with-hpc-compendium.html">
                         Ask about the HPC compendium
@@ -263,6 +242,10 @@ const thebe_selector_output = ".output, .cell_output"
   
 
   
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
 
 </div>
   </nav>
@@ -294,48 +277,22 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../01_text-embeddings/02_compute_embeddings.html">
-                        Computing embeddings and dimensionality reduction
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../01_text-embeddings/03_plot.html">
-                        Visualizing language embeddings
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../01_text-embeddings/01_generate.html">
-                        Behind the scenes: Generating texts
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="download.html">
-                        Download Butterfly images
-                      </a>
-                    </li>
-                
-            <div class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    More
-                </button>
-                <div class="dropdown-menu">
-                    
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="vision_embeddings_umap.html">
-                        Image Embeddings and UMAP Generation
+                        Visualizing text embeddings
                       </a>
                     </li>
                 
 
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="#">
-                        Butterfly images
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
                       </a>
                     </li>
                 
@@ -346,7 +303,12 @@ const thebe_selector_output = ".output, .cell_output"
                       </a>
                     </li>
                 
-
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../04_rag_advanced/chat-with-hpc-compendium.html">
                         Ask about the HPC compendium
@@ -444,15 +406,12 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../01_text-embeddings/02_compute_embeddings.html">Computing embeddings and dimensionality reduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../01_text-embeddings/03_plot.html">Visualizing language embeddings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../01_text-embeddings/01_generate.html">Behind the scenes: Generating texts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="download.html">Download Butterfly images</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vision_embeddings_umap.html">Image Embeddings and UMAP Generation</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Butterfly images</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
 <ul class="nav bd-sidenav">
@@ -597,7 +556,9 @@ title="Print to PDF"
       
   </ul>
 </div>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
     </div>
 </div>
             </div>
@@ -605,23 +566,34 @@ title="Print to PDF"
             
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Butterfly images</h1>
+    <h1>Vision Embedding Space Travelling</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#behind-the-scenes">
+   Behind the scenes
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
 
             <article class="bd-article" role="main">
               
-  <section class="tex2jax_ignore mathjax_ignore" id="butterfly-images">
-<h1>Butterfly images<a class="headerlink" href="#butterfly-images" title="Permalink to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="vision-embedding-space-travelling">
+<h1>Vision Embedding Space Travelling<a class="headerlink" href="#vision-embedding-space-travelling" title="Permalink to this heading">#</a></h1>
 <p>This example uses a dataset of <a class="reference external" href="https://www.kaggle.com/datasets/phucthaiv02/butterfly-image-classification">butterfly images</a> published on kaggle by DePie.</p>
-<p>Go through the <a class="reference internal" href="download.html"><span class="doc std std-doc">download notebook</span></a> to download the data.
-Optionally, you can re-generate the embeddings using <a class="reference internal" href="vision_embeddings_umap.html"><span class="doc std std-doc">vision_embeddings_umap.ipynb</span></a>, but they are also given in <a class="reference download internal" download="" href="../_downloads/59ab4f254bed82425d41737ebbb93253/data.csv"><span class="xref download myst">data.csv</span></a>.</p>
-<p>Afterwards, you can navigate to this folder using the terminal and run this command from the current directory:</p>
+<p>You can navigate to this folder using the terminal and run this command from the current directory:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uv</span> <span class="n">run</span> <span class="n">vest</span> <span class="n">data</span><span class="o">.</span><span class="n">csv</span> <span class="o">--</span><span class="n">image</span><span class="o">-</span><span class="n">path</span> <span class="o">./</span><span class="n">images</span>
 </pre></div>
 </div>
@@ -630,6 +602,10 @@ Optionally, you can re-generate the embeddings using <a class="reference interna
 </pre></div>
 </div>
 <p><img alt="" src="https://github.com/ScaDS/vest/raw/main/docs/images/vest-butterflies-small.gif?raw=true" /></p>
+<section id="behind-the-scenes">
+<h2>Behind the scenes<a class="headerlink" href="#behind-the-scenes" title="Permalink to this heading">#</a></h2>
+<p>If you want to build such an embedding for your own image data, you can modify the <a class="reference internal" href="vision_embeddings_umap.html"><span class="doc std std-doc">vision_embeddings_umap.ipynb</span></a> notebook. For downloading data from kaggle, feel free to reuse the <a class="reference internal" href="download.html"><span class="doc std std-doc">download notebook</span></a>.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -660,17 +636,17 @@ Optionally, you can re-generate the embeddings using <a class="reference interna
             <footer class="bd-footer-article">
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-  <a class='left-prev' id="prev-link" href="vision_embeddings_umap.html" title="previous page">
+  <a class='left-prev' id="prev-link" href="../01_text-embeddings/03_plot.html" title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
           <p class="prev-next-subtitle">previous</p>
-          <p class="prev-next-title">Image Embeddings and UMAP Generation</p>
+          <p class="prev-next-title">Visualizing text embeddings</p>
       </div>
   </a>
-  <a class='right-next' id="next-link" href="../03_rag/20-simple-rag.html" title="next page">
+  <a class='right-next' id="next-link" href="../02_vision-embeddings-slides/sliceplot.html" title="next page">
   <div class="prev-next-info">
       <p class="prev-next-subtitle">next</p>
-      <p class="prev-next-title">Simple retrieval augmented generation</p>
+      <p class="prev-next-title">Interactive slicing throug sub-sets of embedded image data</p>
   </div>
   <i class="fa-solid fa-angle-right"></i>
   </a>
@@ -680,6 +656,27 @@ Optionally, you can re-generate the embeddings using <a class="reference interna
           </div>
           
           
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#behind-the-scenes">
+   Behind the scenes
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
           
           
         </div>
@@ -702,7 +699,7 @@ By Robert Haase
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on 2026-06-22.<br>
+Last updated on 2026-06-23.<br>
 </p>
   </div>
   
