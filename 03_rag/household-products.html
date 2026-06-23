@@ -1,0 +1,778 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>&lt;no title&gt; &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '03_rag/household-products';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../04_rag_advanced/chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../04_rag_advanced/chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Preparation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_preparation/readme.html">Preparation of the session</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../04_rag_advanced/chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F03_rag/household-products.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../_sources/03_rag/household-products.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1><no title></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <ul class="simple">
+<li><p>Frostmancer - A freezer that keeps food frozen with steady cold storage. Good for bulk meals, ice cream, and leftovers.</p></li>
+<li><p>Chillwyrm - A refrigerator that keeps groceries fresh and drinks cold. It has room for everyday staples.</p></li>
+<li><p>Dustbane - A vacuum cleaner for carpets, rugs, and hard floors. It pulls up crumbs, dust, and pet hair.</p></li>
+<li><p>Brushwick - An electric toothbrush that helps clean teeth with powered bristles. It makes daily brushing easier.</p></li>
+<li><p>Zapoven - A microwave oven for reheating meals and drinks quickly. Useful for leftovers and quick snacks.</p></li>
+<li><p>Toastling - A toaster that browns bread, bagels, and waffles. It is small enough for most counters.</p></li>
+<li><p>Blendalf - A blender for smoothies, sauces, and soups. It turns soft ingredients into smooth mixes.</p></li>
+<li><p>Brewbloom - A coffee maker that brews hot coffee at home. It is handy for morning routines.</p></li>
+<li><p>Kettlekob - An electric kettle that boils water quickly. Use it for tea, coffee, noodles, and oatmeal.</p></li>
+<li><p>Dishsprite - A dishwasher that cleans plates, cups, and utensils. It saves time after meals.</p></li>
+<li><p>Sudsquire - A washing machine that cleans clothes, towels, and bedding. It handles regular household laundry.</p></li>
+<li><p>Tumbletoad - A clothes dryer that dries wet laundry with warm air. It helps clothes get ready faster.</p></li>
+<li><p>Breezard - An air conditioner that cools rooms during hot weather. It helps keep indoor air comfortable.</p></li>
+<li><p>Warmuncle - A space heater for warming a small room or corner. It is useful on chilly days.</p></li>
+<li><p>Fanthrax - A ceiling fan that circulates air from above. It helps rooms feel cooler and fresher.</p></li>
+<li><p>Whirlbert - A table fan that provides portable airflow. Move it wherever a breeze is needed.</p></li>
+<li><p>Purepixie - An air purifier that filters dust and particles from indoor air. It helps freshen living spaces.</p></li>
+<li><p>Mistbeard - A humidifier that adds moisture to dry air. It can make bedrooms feel more comfortable.</p></li>
+<li><p>Dripdrain - A dehumidifier that removes extra moisture from the air. It helps reduce dampness in rooms.</p></li>
+<li><p>Pressicorn - An iron that smooths wrinkles from clothing. It works well for shirts, pants, and linens.</p></li>
+<li><p>Steamlet - A steam iron that uses heat and steam to remove creases. It is helpful for tougher wrinkles.</p></li>
+<li><p>Wrinklo - A garment steamer that relaxes fabric with hot steam. It is good for hanging clothes.</p></li>
+<li><p>Fluffire - A hair dryer that dries hair with warm airflow. It also helps shape basic hairstyles.</p></li>
+<li><p>Sleekimp - A hair straightener that smooths and flattens hair. It heats up for quick styling.</p></li>
+<li><p>Curlgob - A curling iron that creates curls and waves. It is useful for simple hair styling.</p></li>
+<li><p>Shavlor - An electric shaver for trimming or removing facial hair. It is convenient for quick grooming.</p></li>
+<li><p>Beardle - A beard trimmer that shapes facial hair. It keeps beards and mustaches neat.</p></li>
+<li><p>Chopkin - A food processor that chops, slices, and mixes ingredients. It speeds up meal prep.</p></li>
+<li><p>Miximus - A stand mixer for dough, batter, and whipped toppings. It mixes without needing much hand effort.</p></li>
+<li><p>Whiskwick - A hand mixer for batters, eggs, and cream. It is easy to store and use.</p></li>
+<li><p>Riceling - A rice cooker that cooks rice with minimal attention. It can also keep rice warm.</p></li>
+<li><p>Stewpuff - A slow cooker that cooks meals over several hours. It is good for soups, stews, and roasts.</p></li>
+<li><p>Quickpot - A pressure cooker that cooks food quickly under pressure. It is useful for beans, meats, and grains.</p></li>
+<li><p>Crispix - An air fryer that cooks food with hot circulating air. It makes snacks and sides crispy with less oil.</p></li>
+<li><p>Grillgrim - An electric grill for indoor grilling. It cooks vegetables, sandwiches, and meats.</p></li>
+<li><p>Meltwich - A sandwich maker that presses and toasts sandwiches. It is great for quick lunches.</p></li>
+<li><p>Waffloon - A waffle maker that turns batter into waffles. It gives breakfast a crisp pattern.</p></li>
+<li><p>Juiceling - A juicer that extracts juice from fruits and vegetables. It separates liquid from pulp.</p></li>
+<li><p>Fizzfang - A soda maker that carbonates water. It helps make sparkling drinks at home.</p></li>
+<li><p>Pourlock - A water dispenser for hot or cold drinking water. It makes filling cups and bottles easy.</p></li>
+<li><p>Filterfin - A water filter pitcher that improves tap water taste. It fits in many refrigerators.</p></li>
+<li><p>Grindigo - A garbage disposal that grinds small food scraps in the sink. It helps reduce kitchen waste.</p></li>
+<li><p>Smokewisp - A range hood that pulls smoke, steam, and cooking smells away. It helps keep the kitchen clearer.</p></li>
+<li><p>Magnetoast - An induction cooktop that heats compatible pans quickly. It uses magnetic energy for cooking.</p></li>
+<li><p>Bakebeast - An electric oven for baking and roasting. It handles cakes, casseroles, and sheet-pan meals.</p></li>
+<li><p>Burnerbop - A stove that provides cooking burners. It is used for boiling, frying, and simmering.</p></li>
+<li><p>Frydrake - A deep fryer that cooks food in hot oil. It makes fries, nuggets, and other crispy foods.</p></li>
+<li><p>Popkern - A popcorn maker that pops corn kernels into popcorn. It is handy for movie nights.</p></li>
+<li><p>Iciclex - An ice maker that produces ice cubes automatically. It keeps drinks cold without tray refills.</p></li>
+<li><p>Vintneroo - A wine cooler that chills bottles at steady temperatures. It gives wine its own storage space.</p></li>
+<li><p>Boxfrost - A chest freezer that adds extra frozen storage. It works well for bulk foods.</p></li>
+<li><p>Minichill - A mini fridge for small cold storage needs. It fits dorms, offices, and bedrooms.</p></li>
+<li><p>Roambroom - A robot vacuum that cleans floors automatically. It moves around rooms and collects dust.</p></li>
+<li><p>Stickwick - A stick vacuum for quick floor cleaning. It is lightweight and easy to grab.</p></li>
+<li><p>Crumbsnare - A handheld vacuum for small messes. It works well on furniture, cars, and corners.</p></li>
+<li><p>Rugmancer - A carpet cleaner that washes carpets with water and suction. It helps lift deeper dirt.</p></li>
+<li><p>Steammop - A steam mop that cleans hard floors with hot steam. It uses washable pads or cloths.</p></li>
+<li><p>Scrubnub - An electric mop that scrubs floors with powered movement. It helps with sticky spots.</p></li>
+<li><p>Spraylord - A pressure washer that cleans outdoor surfaces with strong water jets. It is useful for patios and driveways.</p></li>
+<li><p>Leafwhoosh - A leaf blower that moves leaves and yard debris. It helps clear paths and lawns.</p></li>
+<li><p>Grassgoblet - A lawn mower that cuts grass evenly. It keeps yards tidy.</p></li>
+<li><p>Hedgehex - A hedge trimmer that shapes bushes and shrubs. It makes trimming faster than hand shears.</p></li>
+<li><p>Drillbert - An electric drill for making holes and driving screws. It is useful for repairs and projects.</p></li>
+<li><p>Screwlore - A screwdriver set for tightening and loosening screws. It covers common household fixes.</p></li>
+<li><p>Gluestickus - A glue gun that melts glue sticks for crafts and repairs. It bonds many light materials.</p></li>
+<li><p>Stitchmage - A sewing machine that stitches fabric together. It helps mend clothes and make simple projects.</p></li>
+<li><p>Speakle - A smart speaker that plays music and answers voice commands. It can control compatible smart devices.</p></li>
+<li><p>Visionorb - A television for watching shows, movies, and games. It is a main entertainment device.</p></li>
+<li><p>Streamling - A streaming device that connects a TV to online services. It makes apps and shows easy to access.</p></li>
+<li><p>WiFizard - A Wi-Fi router that shares wireless internet around the home. It connects phones, laptops, and smart devices.</p></li>
+<li><p>Modemancer - A modem that connects home internet service to a network. It works with a router for online access.</p></li>
+<li><p>Lapdragon - A laptop for portable computing. It handles work, browsing, video calls, and entertainment.</p></li>
+<li><p>Deskbeast - A desktop computer for home tasks and heavier workloads. It stays in one place and connects to a monitor.</p></li>
+<li><p>Taplet - A tablet for touchscreen browsing, reading, and apps. It is light enough to carry around the home.</p></li>
+<li><p>Printpixie - A printer that makes paper copies of documents and photos. It is useful for school, work, and forms.</p></li>
+<li><p>Scansprite - A scanner that turns paper documents into digital files. It helps save receipts, photos, and paperwork.</p></li>
+<li><p>Watchward - A security camera that records or streams home video. It helps monitor doors, rooms, or outdoor areas.</p></li>
+<li><p>Doorseer - A video doorbell that shows who is at the door. It can send alerts when visitors arrive.</p></li>
+<li><p>Thermomage - A smart thermostat that controls heating and cooling. It can adjust schedules and save energy.</p></li>
+<li><p>Smokeshout - A smoke detector that warns when smoke is present. It is an important home safety device.</p></li>
+<li><p>Fumefright - A carbon monoxide detector that alerts to dangerous gas. It helps protect against invisible hazards.</p></li>
+<li><p>Glowbean - A smart light bulb controlled by an app or voice command. It can change brightness or color.</p></li>
+<li><p>Lampkin - A desk lamp that lights a work surface. It is useful for reading, writing, and crafts.</p></li>
+<li><p>Nightnub - A night light that gives soft light in dark rooms. It helps with hallways, bathrooms, and kids’ rooms.</p></li>
+<li><p>Cordelia - An extension cord that brings power farther from an outlet. It is useful when plugs are out of reach.</p></li>
+<li><p>Stripzilla - A power strip that adds extra outlets. It helps organize several devices in one place.</p></li>
+<li><p>Surgewarden - A surge protector that helps shield electronics from power spikes. It is good for computers and TVs.</p></li>
+<li><p>Chargeling - A battery charger that recharges reusable batteries. It reduces the need for disposable batteries.</p></li>
+<li><p>Flashflare - A flashlight that provides portable light. It is helpful during power outages and repairs.</p></li>
+<li><p>Wakeywand - An alarm clock that wakes you at a set time. It keeps mornings on schedule.</p></li>
+<li><p>Scalegrim - A bathroom scale that measures body weight. It is simple and quick to use.</p></li>
+<li><p>Snugglevolt - An electric blanket that warms bedding. It is cozy during cold nights.</p></li>
+<li><p>Mattressmirth - A heated mattress pad that warms the bed from below. It adds comfort before sleep.</p></li>
+<li><p>Babyscry - A baby monitor that lets caregivers hear or see a baby. It helps keep watch from another room.</p></li>
+<li><p>Cancrank - An electric can opener that opens cans automatically. It helps reduce hand strain.</p></li>
+<li><p>Sharpfang - A knife sharpener that restores kitchen blade edges. It helps knives cut more safely and cleanly.</p></li>
+<li><p>Corkwhiz - An electric wine opener that removes corks from bottles. It makes opening wine easier.</p></li>
+<li><p>Pestpoof - A pest repeller that discourages pests with sound or light. It is used in rooms, garages, or basements.</p></li>
+<li><p>Lockrune - A keypad door lock that opens with a code. It reduces the need for physical keys.</p></li>
+<li><p>Garagora - A garage door opener that raises and lowers garage doors automatically. It works with remotes or wall controls.</p></li>
+<li><p>SugarBrush - A toothbrush made of pure sugar, for the extra sweet smile.</p></li>
+</ul>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./03_rag"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-23.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

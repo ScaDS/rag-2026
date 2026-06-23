@@ -585,8 +585,8 @@ title="Print to PDF"
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#prompting-openai">
-   Prompting OpenAI
+  <a class="reference internal nav-link" href="#prompting-an-llm">
+   Prompting an LLM
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -621,6 +621,9 @@ title="Print to PDF"
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">openai</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">Markdown</span><span class="p">,</span> <span class="n">display</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">llama_index.embeddings.huggingface</span><span class="w"> </span><span class="kn">import</span> <span class="n">HuggingFaceEmbedding</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+<span class="n">load_dotenv</span><span class="p">()</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
     <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
@@ -631,15 +634,15 @@ title="Print to PDF"
 <p>We aim to answer this question:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">question</span> <span class="o">=</span> <span class="s2">&quot;How can I label objects in an image?&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">question</span> <span class="o">=</span> <span class="s2">&quot;What product can I buy for brushing teeth?&quot;</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>… using these code snippets (and more):</p>
+<p>… using these product descriptions (and more):</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;code_snippets.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;household-products.md&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
     <span class="n">all_code_snippets</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -647,30 +650,42 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">splits</span> <span class="o">=</span> <span class="n">all_code_snippets</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="p">[</span><span class="n">show</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">splits</span><span class="p">[:</span><span class="mi">3</span><span class="p">]];</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">splits</span> <span class="o">=</span> <span class="n">all_code_snippets</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="p">[</span><span class="n">show</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">splits</span><span class="p">[:</span><span class="mi">10</span><span class="p">]];</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <ul class="simple">
-<li><p>Displays an image with a slider and label showing mouse position and intensity.</p></li>
+<li><p>Frostmancer - A freezer that keeps food frozen with steady cold storage. Good for bulk meals, ice cream, and leftovers.</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stackview</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
-</pre></div>
-</div>
 <ul class="simple">
-<li><p>Allows cropping an image along all axes.</p></li>
+<li><p>Chillwyrm - A refrigerator that keeps groceries fresh and drinks cold. It has room for everyday staples.</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stackview</span><span class="o">.</span><span class="n">crop</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-</pre></div>
-</div>
 <ul class="simple">
-<li><p>Showing an image stored in variable <code class="docutils literal notranslate"><span class="pre">image</span></code> and a segmented image stored in variable <code class="docutils literal notranslate"><span class="pre">labels</span></code> on top. Also works with two images or two label images.</p></li>
+<li><p>Dustbane - A vacuum cleaner for carpets, rugs, and hard floors. It pulls up crumbs, dust, and pet hair.</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stackview</span><span class="o">.</span><span class="n">curtain</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
-</pre></div>
-</div>
+<ul class="simple">
+<li><p>Brushwick - An electric toothbrush that helps clean teeth with powered bristles. It makes daily brushing easier.</p></li>
+</ul>
+<ul class="simple">
+<li><p>Zapoven - A microwave oven for reheating meals and drinks quickly. Useful for leftovers and quick snacks.</p></li>
+</ul>
+<ul class="simple">
+<li><p>Toastling - A toaster that browns bread, bagels, and waffles. It is small enough for most counters.</p></li>
+</ul>
+<ul class="simple">
+<li><p>Blendalf - A blender for smoothies, sauces, and soups. It turns soft ingredients into smooth mixes.</p></li>
+</ul>
+<ul class="simple">
+<li><p>Brewbloom - A coffee maker that brews hot coffee at home. It is handy for morning routines.</p></li>
+</ul>
+<ul class="simple">
+<li><p>Kettlekob - An electric kettle that boils water quickly. Use it for tea, coffee, noodles, and oatmeal.</p></li>
+</ul>
+<ul class="simple">
+<li><p>Dishsprite - A dishwasher that cleans plates, cups, and utensils. It saves time after meals.</p></li>
+</ul>
 </div>
 </div>
 <section id="vector-embeddings">
@@ -678,25 +693,13 @@ title="Print to PDF"
 <p>To make our code snippets searchable, we need to created vector embedding form them, we need to turn them into vectors.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">embed</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
-    <span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">()</span>
-
-    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">embeddings</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-        <span class="nb">input</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
-        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;text-embedding-3-small&quot;</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">embedding</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">e</span> <span class="o">=</span> <span class="n">HuggingFaceEmbedding</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;intfloat/multilingual-e5-large-instruct&quot;</span><span class="p">)</span>
+<span class="n">vector</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">get_text_embedding</span><span class="p">(</span><span class="s2">&quot;Hello world&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vector</span> <span class="o">=</span> <span class="n">embed</span><span class="p">(</span><span class="s2">&quot;Hello world&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "cb72108a26af46679e92ed4e2b4355ca", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -705,7 +708,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1536
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1024
 </pre></div>
 </div>
 </div>
@@ -717,7 +720,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[-0.002119065960869193, -0.04909009113907814, 0.02101006731390953]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.00521087646484375, 0.0252685546875, 0.007358551025390625]
 </pre></div>
 </div>
 </div>
@@ -733,10 +736,10 @@ title="Print to PDF"
         <span class="bp">self</span><span class="o">.</span><span class="n">_store</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="n">texts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">texts</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_store</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">embed</span><span class="p">(</span><span class="n">text</span><span class="p">))]</span> <span class="o">=</span> <span class="n">text</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_store</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">get_text_embedding</span><span class="p">(</span><span class="n">text</span><span class="p">))]</span> <span class="o">=</span> <span class="n">text</span>
     
     <span class="k">def</span><span class="w"> </span><span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">n_best_results</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
-        <span class="n">single_vector</span> <span class="o">=</span> <span class="n">embed</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="n">single_vector</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">get_text_embedding</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
         
         <span class="c1"># Step 1: Compute Euclidean distances</span>
         <span class="n">distances</span> <span class="o">=</span> <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">single_vector</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">vector</span><span class="p">)),</span> <span class="n">vector</span><span class="p">)</span> <span class="k">for</span> <span class="n">vector</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_store</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
@@ -773,20 +776,20 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;How can I label objects in an image?&#39;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;What product can I buy for brushing teeth?&#39;
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vector</span> <span class="o">=</span> <span class="n">embed</span><span class="p">(</span><span class="n">question</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vector</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">get_text_embedding</span><span class="p">(</span><span class="n">question</span><span class="p">)</span>
 <span class="n">vector</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[-0.004170199856162071, 0.03236572816967964, -0.0011563869193196297]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[-0.00042939186096191406, 0.03106689453125, -0.056121826171875]
 </pre></div>
 </div>
 </div>
@@ -800,33 +803,20 @@ title="Print to PDF"
 </div>
 <div class="cell_output docutils container">
 <ul class="simple">
-<li><p>Labels objects in grey-value images using Gaussian blurs, spot detection, Otsu-thresholding, and Voronoi-labeling from isotropic input images.</p></li>
+<li><p>Brushwick - An electric toothbrush that helps clean teeth with powered bristles. It makes daily brushing easier.</p></li>
+<li><p>SugarBrush - A toothbrush made of pure sugar, for the extra sweet smile.</p></li>
+<li><p>Purepixie - An air purifier that filters dust and particles from indoor air. It helps freshen living spaces.</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cle</span><span class="o">.</span><span class="n">voronoi_otsu_labeling</span><span class="p">(</span><span class="n">source</span><span class="p">:</span> <span class="n">ndarray</span><span class="p">,</span> <span class="n">label_image_destination</span><span class="p">:</span> <span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">spot_sigma</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">outline_sigma</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ndarray</span>
-</pre></div>
-</div>
-<ul class="simple">
-<li><p>Draw a mesh between close-by objects in a label image:</p></li>
-</ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span> <span class="o">=</span> <span class="n">cle</span><span class="o">.</span><span class="n">draw_mesh_between_proximal_labels</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">maximum_distance</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span>
-</pre></div>
-</div>
-<ul class="simple">
-<li><p>Apply morphological opening operation, fill label gaps with voronoi-labeling, and mask background pixels in label image.</p></li>
-</ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cle</span><span class="o">.</span><span class="n">smooth_labels</span><span class="p">(</span><span class="n">labels_input</span><span class="p">:</span> <span class="n">ndarray</span><span class="p">,</span> <span class="n">labels_destination</span><span class="p">:</span> <span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ndarray</span>
-</pre></div>
-</div>
 </div>
 </div>
 </section>
-<section id="prompting-openai">
-<h2>Prompting OpenAI<a class="headerlink" href="#prompting-openai" title="Permalink to this heading">#</a></h2>
+<section id="prompting-an-llm">
+<h2>Prompting an LLM<a class="headerlink" href="#prompting-an-llm" title="Permalink to this heading">#</a></h2>
 <p>We will also need access to a large language model (LLM) to combine the code snippets and the question to retrieve an answer to our question that involves the code snippets.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">prompt_chatGPT</span><span class="p">(</span><span class="n">message</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A prompt helper function that sends a message to openAI</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">prompt_llm_server</span><span class="p">(</span><span class="n">message</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;meta-llama/Llama-3.3-70B-Instruct&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A prompt helper function that sends a message to an LLM-server</span>
 <span class="sd">    and returns only the text response.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
@@ -836,9 +826,9 @@ title="Print to PDF"
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">message</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">message</span><span class="p">}]</span>
         
-    <span class="c1"># setup connection to the LLM</span>
-    <span class="c1"># todo: enter your API key here:</span>
-    <span class="n">client</span> <span class="o">=</span> <span class="n">openai</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">(</span><span class="n">api_key</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;OPENAI_API_KEY&#39;</span><span class="p">))</span>
+    <span class="c1"># setup connection to the LLM-server</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">openai</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://llm.scads.ai/v1&quot;</span><span class="p">,</span> 
+                          <span class="n">api_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SCADSAI_API_KEY&#39;</span><span class="p">))</span>
     
     <span class="c1"># submit prompt</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
@@ -848,19 +838,25 @@ title="Print to PDF"
     
     <span class="c1"># extract answer</span>
     <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
+
+<span class="n">prompt_llm_server</span><span class="p">(</span><span class="s2">&quot;Hello world&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&quot;Hello! It&#39;s nice to meet you. Is there something I can help you with or would you like to chat?&quot;
 </pre></div>
 </div>
 </div>
 </div>
-<p>We can then assemble code snippets and question to a prompt.</p>
+<p>We can then assemble selected product descriptions and question to a prompt.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">context</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">related_code_snippets</span><span class="p">)</span>
 
 <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">Answer the question by the very end and consider given code snippets. </span>
-<span class="s2">Choose at least one of the code-snippets.</span>
-<span class="s2">Only write Python code that answers the question.</span>
+<span class="s2">Answer the question by the very end and consider given product descriptions. </span>
+<span class="s2">Choose at least one of the listed products to answer the question.</span>
 
 <span class="s2">## Code snippets</span>
 <span class="si">{</span><span class="n">context</span><span class="si">}</span>
@@ -874,29 +870,18 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Answer the question by the very end and consider given code snippets. 
-Choose at least one of the code-snippets.
-Only write Python code that answers the question.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Answer the question by the very end and consider given product descriptions. 
+Choose at least one of the listed products to answer the question.
 
 ## Code snippets
-* Labels objects in grey-value images using Gaussian blurs, spot detection, Otsu-thresholding, and Voronoi-labeling from isotropic input images.
-```python
-cle.voronoi_otsu_labeling(source: ndarray, label_image_destination: ndarray = None, spot_sigma: float = 2, outline_sigma: float = 2) -&gt; ndarray
-```
+* Brushwick - An electric toothbrush that helps clean teeth with powered bristles. It makes daily brushing easier.
 
-* Draw a mesh between close-by objects in a label image:
-```python
-mesh = cle.draw_mesh_between_proximal_labels(labels, maximum_distance:int)
-```
+* SugarBrush - A toothbrush made of pure sugar, for the extra sweet smile.
 
-
-* Apply morphological opening operation, fill label gaps with voronoi-labeling, and mask background pixels in label image.
-```python
-cle.smooth_labels(labels_input: ndarray, labels_destination: ndarray = None, radius: int = 0) -&gt; ndarray
-```
+* Purepixie - An air purifier that filters dust and particles from indoor air. It helps freshen living spaces.
 
 ## Question
-How can I label objects in an image?
+What product can I buy for brushing teeth?
 </pre></div>
 </div>
 </div>
@@ -907,32 +892,17 @@ How can I label objects in an image?
 <p>Eventually we can answer our question</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">answer</span> <span class="o">=</span> <span class="n">prompt_chatGPT</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">answer</span> <span class="o">=</span> <span class="n">prompt_llm_server</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
 
 <span class="n">show</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<p>You can label objects in an image using the <code class="docutils literal notranslate"><span class="pre">voronoi_otsu_labeling</span></code> function from the first code snippet. Here is an example code snippet:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pyclesperanto_prototype</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cle</span>
-
-<span class="c1"># Load your image data</span>
-<span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-                   <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-                   <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-                   <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-                   <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
-
-<span class="c1"># Label objects in the image</span>
-<span class="n">labels</span> <span class="o">=</span> <span class="n">cle</span><span class="o">.</span><span class="n">voronoi_otsu_labeling</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-
-<span class="c1"># Display the labeled image</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>This code snippet uses the <code class="docutils literal notranslate"><span class="pre">voronoi_otsu_labeling</span></code> function to label objects in the input image.</p>
+<p>Based on the given product descriptions, there are two products related to brushing teeth: Brushwick and SugarBrush.</p>
+<p>Brushwick is an electric toothbrush that helps clean teeth with powered bristles, making daily brushing easier. On the other hand, SugarBrush is a toothbrush made of pure sugar, which may not be a practical or hygienic option for brushing teeth.</p>
+<p>Considering the functionality and purpose of brushing teeth, Brushwick is the more suitable option.</p>
+<p>You can buy Brushwick for brushing teeth.</p>
 </div>
 </div>
 </section>
@@ -941,8 +911,8 @@ How can I label objects in an image?
 <p>In comparison, we send the same question together with minimal instructions to ChatGPT without out additional code-snippets.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">answer</span> <span class="o">=</span> <span class="n">prompt_chatGPT</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">Write Python code to answer this question:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">answer</span> <span class="o">=</span> <span class="n">prompt_llm_server</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Answer this question:</span>
 <span class="si">{</span><span class="n">question</span><span class="si">}</span>
 <span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
 
@@ -951,39 +921,29 @@ How can I label objects in an image?
 </div>
 </div>
 <div class="cell_output docutils container">
-<p>You can label objects in an image using image processing techniques such as contour detection and bounding box drawing. Here is an example code using OpenCV library in Python:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">cv2</span>
-
-<span class="c1"># Load the image</span>
-<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;image.jpg&#39;</span><span class="p">)</span>
-
-<span class="c1"># Convert the image to grayscale</span>
-<span class="n">gray</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2GRAY</span><span class="p">)</span>
-
-<span class="c1"># Apply thresholding to get binary image</span>
-<span class="n">ret</span><span class="p">,</span> <span class="n">thresh</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">threshold</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-
-<span class="c1"># Find contours of objects in the image</span>
-<span class="n">contours</span><span class="p">,</span> <span class="n">hierarchy</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">findContours</span><span class="p">(</span><span class="n">thresh</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">RETR_TREE</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CHAIN_APPROX_SIMPLE</span><span class="p">)</span>
-
-<span class="c1"># Draw bounding boxes around objects</span>
-<span class="k">for</span> <span class="n">contour</span> <span class="ow">in</span> <span class="n">contours</span><span class="p">:</span>
-    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">boundingRect</span><span class="p">(</span><span class="n">contour</span><span class="p">)</span>
-    <span class="n">cv2</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">w</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">h</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
-
-<span class="c1"># Display the image</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">&#39;Labeled Image&#39;</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>This code will find the objects in the image, draw bounding boxes around them, and display the labeled image. Make sure to replace ‘image.jpg’ with the path to your image file.</p>
+<p>There are several products you can buy for brushing teeth, including:</p>
+<ol class="arabic simple">
+<li><p><strong>Toothbrush</strong>: You can choose from manual or electric toothbrushes. Manual toothbrushes are inexpensive and easy to use, while electric toothbrushes can be more effective at removing plaque and improving gum health.</p></li>
+<li><p><strong>Toothpaste</strong>: There are many types of toothpaste available, including:</p>
+<ul class="simple">
+<li><p>Fluoride toothpaste: helps prevent tooth decay and strengthen tooth enamel.</p></li>
+<li><p>Whitening toothpaste: contains mild abrasives to help remove surface stains and whiten teeth.</p></li>
+<li><p>Sensitive toothpaste: designed for people with sensitive teeth and gums.</p></li>
+<li><p>Natural toothpaste: made with natural ingredients and free from artificial additives.</p></li>
+</ul>
+</li>
+<li><p><strong>Toothbrush heads</strong> (for electric toothbrushes): You can buy replacement heads for your electric toothbrush, which come in different sizes and types (e.g., soft, medium, or hard bristles).</p></li>
+<li><p><strong>Interdental brushes</strong>: These small brushes are designed to clean between teeth and around bridges, implants, and orthodontic appliances.</p></li>
+<li><p><strong>Dental floss</strong>: A thread or tape used to remove food particles and plaque from between teeth and under the gumline.</p></li>
+<li><p><strong>Mouthwash</strong>: An optional product that can help kill bacteria, freshen breath, and reduce plaque and gingivitis.</p></li>
+</ol>
+<p>When choosing a product, consider your oral health needs, preferences, and any recommendations from your dentist or hygienist.</p>
 </div>
 </div>
 </section>
 <section id="exercise">
 <h2>Exercise<a class="headerlink" href="#exercise" title="Permalink to this heading">#</a></h2>
-<p>Modify the question and ask for drawing a mesh between near neighbors. Prompt chatGPT with and without the RAG-approach.</p>
+<p>Modify the question and ask for other household products. Compare the reponse by both approaches, with and without RAG.</p>
 </section>
 </section>
 
@@ -1047,8 +1007,8 @@ How can I label objects in an image?
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#prompting-openai">
-   Prompting OpenAI
+  <a class="reference internal nav-link" href="#prompting-an-llm">
+   Prompting an LLM
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
