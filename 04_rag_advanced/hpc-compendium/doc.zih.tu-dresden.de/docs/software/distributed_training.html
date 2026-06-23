@@ -1,0 +1,1070 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Distributed Training &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/distributed_training';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Preparation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../00_preparation/readme.html">Preparation of the session</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/distributed_training.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../../../../_sources/04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/distributed_training.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Distributed Training</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#internal-distribution">
+   Internal Distribution
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#distributed-tensorflow">
+     Distributed TensorFlow
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#distributed-pytorch">
+     Distributed PyTorch
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#model-parallel-training-in-pytorch">
+       Model-Parallel Training in PyTorch
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#distributed-data-parallel">
+       Distributed Data-Parallel
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#job-and-resource-allocation">
+         Job and Resource Allocation
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#launching-distributed-pytorch-application">
+         Launching Distributed PyTorch Application
+        </a>
+       </li>
+      </ul>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="distributed-training">
+<h1>Distributed Training<a class="headerlink" href="#distributed-training" title="Permalink to this heading">#</a></h1>
+<section id="internal-distribution">
+<h2>Internal Distribution<a class="headerlink" href="#internal-distribution" title="Permalink to this heading">#</a></h2>
+<p>Training a machine learning model can be a very time-consuming task.
+Distributed training allows scaling up deep learning tasks,
+so we can train very large models and speed up training time.</p>
+<p>There are two paradigms for distributed training:</p>
+<ol class="arabic simple">
+<li><p>data parallelism:
+each device has a replica of the model and computes over different parts of the data.</p></li>
+<li><p>model parallelism:
+models are distributed over multiple devices.</p></li>
+</ol>
+<p>In the following, we will stick to the concept of data parallelism because it is a widely-used
+technique.
+There are basically two strategies to train the scattered data throughout the devices:</p>
+<ol class="arabic simple">
+<li><p>synchronous training: devices (workers) are trained over different slices of the data and at the
+end of each step gradients are aggregated.</p></li>
+<li><p>asynchronous training:
+all devices are independently trained over the data and update variables asynchronously.</p></li>
+</ol>
+<section id="distributed-tensorflow">
+<h3>Distributed TensorFlow<a class="headerlink" href="#distributed-tensorflow" title="Permalink to this heading">#</a></h3>
+<p><a class="reference external" href="https://www.tensorflow.org/guide/distributed_training">TensorFlow</a> provides a high-end API to
+train your model and distribute the training on multiple GPUs or machines with minimal code changes.</p>
+<p>The primary distributed training method in TensorFlow is <code class="docutils literal notranslate"><span class="pre">tf.distribute.Strategy</span></code>.
+There are multiple strategies that distribute the training depending on the specific use case,
+the data and the model.</p>
+<p>TensorFlow refers to the synchronous training as mirrored strategy.
+There are two mirrored strategies available whose principles are the same:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tf.distribute.MirroredStrategy</span></code> supports the training on multiple GPUs on one machine.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tf.distribute.MultiWorkerMirroredStrategy</span></code> for multiple machines, each with multiple GPUs.</p></li>
+</ul>
+<p>The Central Storage Strategy applies to environments where the GPUs might not be able to store
+the entire model:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tf.distribute.experimental.CentralStorageStrategy</span></code> supports the case of a single machine
+with multiple GPUs.</p></li>
+</ul>
+<p>The CPU holds the global state of the model and GPUs perform the training.</p>
+<p>In some cases asynchronous training might be the better choice, for example, if workers differ on
+capability, are down for maintenance, or have different priorities.
+The Parameter Server Strategy is capable of applying asynchronous training:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tf.distribute.experimental.ParameterServerStrategy</span></code> requires several Parameter Servers and workers.</p></li>
+</ul>
+<p>The Parameter Server holds the parameters and is responsible for updating
+the global state of the models.
+Each worker runs the training loop independently.</p>
+<p>??? example “Multi Worker Mirrored Strategy”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>In this case, we will go through an example with Multi Worker Mirrored Strategy.
+Multi-node training requires a `TF_CONFIG` environment variable to be set which will
+be different on each node.
+
+```console
+marie@compute$ TF_CONFIG=&#39;{&quot;cluster&quot;: {&quot;worker&quot;: [&quot;10.1.10.58:12345&quot;, &quot;10.1.10.250:12345&quot;]}, &quot;task&quot;: {&quot;index&quot;: 0, &quot;type&quot;: &quot;worker&quot;}}&#39; python main.py
+```
+
+The `cluster` field describes how the cluster is set up (same on each node).
+Here, the cluster has two nodes referred to as workers.
+The `IP:port` information is listed in the `worker` array.
+The `task` field varies from node to node.
+It specifies the type and index of the node.
+In this case, the training job runs on worker 0, which is `10.1.10.58:12345`.
+We need to adapt this snippet for each node.
+The second node will have `&#39;task&#39;: {&#39;index&#39;: 1, &#39;type&#39;: &#39;worker&#39;}`.
+
+With two modifications, we can parallelize the serial code:
+We need to initialize the distributed strategy:
+
+```python
+strategy = tf.distribute.experimental.MultiWorkerMirroredStrategy()
+```
+
+And define the model under the strategy scope:
+
+```python
+with strategy.scope():
+    model = resnet.resnet56(img_input=img_input, classes=NUM_CLASSES)
+    model.compile(
+        optimizer=opt,
+        loss=&#39;sparse_categorical_crossentropy&#39;,
+        metrics=[&#39;sparse_categorical_accuracy&#39;])
+model.fit(train_dataset,
+    epochs=NUM_EPOCHS)
+```
+
+To run distributed training, the training script needs to be copied to all nodes,
+in this case on two nodes.
+TensorFlow is available as a module.
+Check for the version.
+The `TF_CONFIG` environment variable can be set as a prefix to the command.
+Now, run the script on the cluster `alpha` simultaneously on both nodes:
+
+```bash
+#!/bin/bash
+
+#SBATCH --job-name=distr
+#SBATCH --output=%j.out
+#SBATCH --error=%j.err
+#SBATCH --mem=64000
+#SBATCH --nodes=2
+#SBATCH --ntasks=2
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=14
+#SBATCH --gres=gpu:1
+#SBATCH --time=01:00:00
+
+function print_nodelist {
+    scontrol show hostname $SLURM_NODELIST
+}
+NODE_1=$(print_nodelist | awk &#39;{print $1}&#39; | sort -u | head -n 1)
+NODE_2=$(print_nodelist | awk &#39;{print $1}&#39; | sort -u | tail -n 1)
+IP_1=$(dig +short ${NODE_1}.alpha.hpc.tu-dresden.de)
+IP_2=$(dig +short ${NODE_2}.alpha.hpc.tu-dresden.de)
+
+module load release/23.04 GCC/10.2.0 CUDA/11.1.1 OpenMPI/4.0.5 TensorFlow/2.4.1
+
+# On the first node
+TF_CONFIG=&#39;{&quot;cluster&quot;: {&quot;worker&quot;: [&quot;&#39;&quot;${NODE_1}&quot;&#39;:33562&quot;, &quot;&#39;&quot;${NODE_2}&quot;&#39;:33561&quot;]}, &quot;task&quot;: {&quot;index&quot;: 0, &quot;type&quot;: &quot;worker&quot;}}&#39; srun --nodelist=${NODE_1} --nodes=1 --ntasks=1 --gres=gpu:1 python main_ddl.py &amp;
+
+# On the second node
+TF_CONFIG=&#39;{&quot;cluster&quot;: {&quot;worker&quot;: [&quot;&#39;&quot;${NODE_1}&quot;&#39;:33562&quot;, &quot;&#39;&quot;${NODE_2}&quot;&#39;:33561&quot;]}, &quot;task&quot;: {&quot;index&quot;: 1, &quot;type&quot;: &quot;worker&quot;}}&#39; srun --nodelist=${NODE_2} --nodes=1 --ntasks=1 --gres=gpu:1 python main_ddl.py &amp;
+
+wait
+```
+</pre></div>
+</div>
+</section>
+<section id="distributed-pytorch">
+<h3>Distributed PyTorch<a class="headerlink" href="#distributed-pytorch" title="Permalink to this heading">#</a></h3>
+<p>PyTorch provides multiple ways to achieve data parallelism to train the deep learning models
+efficiently. These models are part of the <code class="docutils literal notranslate"><span class="pre">torch.distributed</span></code> sub-package that ships with the main
+deep learning package.</p>
+<p>The easiest method to quickly prototype if the model is trainable in a multi-GPU setting is to wrap
+the existing model with the <code class="docutils literal notranslate"><span class="pre">torch.nn.DataParallel</span></code> class as shown below,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">DataParalell</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Adding this single line of code to the existing application will let PyTorch know that the model
+needs to be parallelized. But since this method uses threading to achieve parallelism, it fails to
+achieve true parallelism due to the well known issue of Global Interpreter Lock that exists in
+Python. To work around this issue and gain performance benefits of parallelism, the use of
+<code class="docutils literal notranslate"><span class="pre">torch.nn.DistributedDataParallel</span></code> is recommended. This involves little more code changes to set up,
+but further increases the performance of model training. The starting step is to initialize the
+process group by calling the <code class="docutils literal notranslate"><span class="pre">torch.distributed.init_process_group()</span></code> using the appropriate back end
+such as NCCL, MPI or Gloo. The use of NCCL as back end is recommended as it is currently the fastest
+back end when using GPUs.</p>
+<section id="model-parallel-training-in-pytorch">
+<h4>Model-Parallel Training in PyTorch<a class="headerlink" href="#model-parallel-training-in-pytorch" title="Permalink to this heading">#</a></h4>
+<p>The example below shows how to solve that problem by using model parallelism, which in contrast to
+data parallelism splits a single model onto different GPUs, rather than replicating the entire
+model on each GPU.
+The high-level idea of model parallelism is to place different sub-networks of a model onto
+different devices.
+As only one part of a model operates on any individual device a set of devices can collectively
+serve a larger model.</p>
+<p>??? example “Parallel Model”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The main aim of this model is to show the way how to effectively implement your neural network
+on multiple GPUs. It includes a comparison of different kinds of models and tips to improve the
+performance of your model.
+**Necessary** parameters for running this model are **2 GPUs** and 14 cores.
+
+Download: [example_PyTorch_parallel.zip (4.2 KB)](misc/example_PyTorch_parallel.zip)
+
+Remember that for using [JupyterHub service](../access/jupyterhub.md) for PyTorch, you need to
+create and activate a virtual environment (kernel) with loaded essential modules.
+
+Run the example in the same way as the previous examples.
+</pre></div>
+</div>
+</section>
+<section id="distributed-data-parallel">
+<h4>Distributed Data-Parallel<a class="headerlink" href="#distributed-data-parallel" title="Permalink to this heading">#</a></h4>
+<p>The high-level idea of data-parallel training is to run multiple instances of the same model, each
+only working on a fraction of the total dataset.
+After each batch is processed, all instances will be synchronized.
+This approach increases the effective batch size. Hyperparameters, such as learning rates, may
+need to be adjusted.</p>
+<p>It is recommended to use
+<a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.parallel.DistributedDataParallel.html">DistributedDataParallel</a>,
+to do multi-GPU training, even if you train using a single node.
+For further references, please see
+<a class="reference external" href="https://pytorch.org/docs/stable/notes/cuda.html#cuda-nn-ddp-instead"><code class="docutils literal notranslate"><span class="pre">nn.parallel.DistributedDataParallel</span></code> instead of multiprocessing or <code class="docutils literal notranslate"><span class="pre">nn.DataParallel</span></code></a>
+and <a class="reference external" href="https://pytorch.org/docs/stable/notes/ddp.html#ddp">Distributed Data Parallel</a>.</p>
+<p><a class="reference external" href="https://pytorch.org/docs/stable/nn.html#torch.nn.parallel.DistributedDataParallel">DistributedDataParallel</a>
+(DDP) implements data parallelism at the module level which can run across multiple machines.
+Applications using DDP should spawn multiple processes and create a single DDP instance per process.
+DDP uses collective communications in the
+<a class="reference external" href="https://pytorch.org/tutorials/intermediate/dist_tuto.html">torch.distributed</a> package to
+synchronize gradients and buffers.</p>
+<p>Please also look at the <a class="reference external" href="https://pytorch.org/tutorials/intermediate/ddp_tutorial.html">official tutorial</a>
+to get a good starting point.</p>
+<section id="job-and-resource-allocation">
+<h5>Job and Resource Allocation<a class="headerlink" href="#job-and-resource-allocation" title="Permalink to this heading">#</a></h5>
+<p>To use distributed data parallelism on ZIH systems, make sure that the value of the
+<code class="docutils literal notranslate"><span class="pre">--ntasks-per-node=&lt;N&gt;</span></code> parameter is equal to the number of GPUs you are using per node.
+If you are running larger models, it might be necessary to increase the amount of memory requested
+per CPU, e.g. by using the Slurm option <code class="docutils literal notranslate"><span class="pre">--mem-per-cpu=&lt;M&gt;</span></code> or by using <code class="docutils literal notranslate"><span class="pre">--mem=&lt;M&gt;</span></code> for the memory
+per node.
+Information about resources per node can be found in the
+<span class="xref myst">Slurm Resource Limits Table</span>.</p>
+<p>=== “Generic command example”
+<code class="docutils literal notranslate"><span class="pre">console</span>&#160;&#160;&#160;&#160; <span class="pre">--gres=gpu:&lt;N&gt;</span> <span class="pre">--ntasks-per-node=&lt;N&gt;</span> <span class="pre">--memory=&lt;M&gt;</span> <span class="pre">--cpus-per-task=&lt;L&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">or</span> <span class="pre">as</span> <span class="pre">an</span> <span class="pre">alternative</span>&#160;&#160;&#160;&#160; <span class="pre">--gres=gpu:&lt;N&gt;</span> <span class="pre">--ntasks-per-node=&lt;N&gt;</span> <span class="pre">--mem-per-cpu=&lt;M&gt;</span> <span class="pre">--cpus-per-task=&lt;L&gt;</span>&#160;&#160;&#160; </code></p>
+<p>=== “Example for the <code class="docutils literal notranslate"><span class="pre">Alpha</span> <span class="pre">Centauri</span></code> cluster”
+<code class="docutils literal notranslate"><span class="pre">console</span>&#160;&#160;&#160;&#160; <span class="pre">--gres=gpu:8</span> <span class="pre">--ntasks-per-node=8</span> <span class="pre">--memory=900G</span> <span class="pre">--cpus-per-task=6</span>&#160;&#160;&#160; </code></p>
+<p>=== “Example for the <code class="docutils literal notranslate"><span class="pre">Capella</span></code> cluster”
+<code class="docutils literal notranslate"><span class="pre">console</span>&#160;&#160;&#160;&#160; <span class="pre">--gres=gpu:4</span> <span class="pre">--ntasks-per-node=4</span> <span class="pre">--memory=750G</span> <span class="pre">--cpus-per-task=14</span>&#160;&#160;&#160; </code></p>
+</section>
+<section id="launching-distributed-pytorch-application">
+<h5>Launching Distributed PyTorch Application<a class="headerlink" href="#launching-distributed-pytorch-application" title="Permalink to this heading">#</a></h5>
+<p>To launch a distributed PyTorch application on the clusters, you can use only <code class="docutils literal notranslate"><span class="pre">srun</span></code> or use
+<code class="docutils literal notranslate"><span class="pre">torchrun</span></code> which is already included in the PyTorch packages.
+If you only use <code class="docutils literal notranslate"><span class="pre">srun</span></code>, all process management is done by Slurm.
+The <code class="docutils literal notranslate"><span class="pre">--ntasks</span></code> parameter has to be equal to the number of PyTorch instances and <code class="docutils literal notranslate"><span class="pre">--cpu-per-task</span></code>
+equal to the number of CPUs each instance should get.
+Using <code class="docutils literal notranslate"><span class="pre">torchrun</span></code> is slightly different.
+<code class="docutils literal notranslate"><span class="pre">srun</span></code> starts only one <code class="docutils literal notranslate"><span class="pre">torchrun</span></code> process per node and <code class="docutils literal notranslate"><span class="pre">torchrun</span></code> manages the spawning of the
+actual PyTorch processes on each node.</p>
+<p>The two examples below show the different ways of setting up the same functionality.
+Please, run your setups in <a class="reference internal" href="../data_lifecycle/workspaces.html"><span class="doc std std-doc">workspaces</span></a> and not in your home.</p>
+<p>???+ example “Start DDP using <code class="docutils literal notranslate"><span class="pre">srun</span></code>”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>To set up the necessary environment information to be automatically evaluated by PyTorch, we
+recommend the following code as a starting point.
+Add these variables to into a separate shell script, not into your job script, before starting
+your Python process, or use Python&#39;s `os.environ` function to set them up.
+Note that the environment variables have to be evaluated within the job step, not within your
+job file.
+This example corresponds to the
+[`Capella` cluster](../jobs_and_resources/hardware_overview.md#capella).
+In contrast to the second example (using `torchrun`), Slurm starts 8 processes and not just 2
+using `srun`.
+
+``` bash title=&quot;jobfile.sbatch&quot;
+#!/bin/bash
+#SBATCH --ntasks=8
+#SBATCH --nodes=2
+#SBATCH --gres=gpu:4
+#SBATCH --ntasks-per-node=4
+#SBATCH --cpus-per-task=14
+#SBATCH --mem=750G
+
+# run the separate shell script
+srun train.sh
+```
+
+By using this separate shell script, we ensure that these variables are evaluated after `srun`
+has created the processes.
+If the variables are evaluated correctly after the processes have been  created, then each
+process will get a unique number in `RANK` in the range of `[0-7]`.
+Otherwise, if you would set this in your job file, all processes and therefore all PyTorch
+instances would get `RANK` equal to 0.
+
+``` bash title=&quot;train.sh&quot;
+#!/bin/bash
+
+# Load your Python environment (Module, Virtualenv, ...) e.g.
+# module load release/24.04  GCC/12.3.0  OpenMPI/4.1.5 PyTorch/2.1.2-CUDA-12.1.1
+
+# variables automatically evaluated by PyTorch&#39;s DDP module
+export RANK=$SLURM_PROCID
+export LOCAL_RANK=$SLURM_LOCALID
+export WORLD_SIZE=$SLURM_NTASKS
+export MASTER_PORT=$(expr 10000 + $(echo -n $SLURM_JOBID | tail -c 4))
+master_addr=$(scontrol show hostnames &quot;$SLURM_JOB_NODELIST&quot; | head -n 1)
+export MASTER_ADDR=$master_addr
+
+python train.py
+```
+</pre></div>
+</div>
+<p>???+ example “Start DDP using <code class="docutils literal notranslate"><span class="pre">torchrun</span></code>”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>This example starts one `torchrun` process on each allocated node. `
+torchrun` starts 4 training processes per node.
+This setup corresponds to the
+[`Capella` cluster](../jobs_and_resources/hardware_overview.md#capella).
+In contrast to the first example (just using `srun` and not `torchrun`), Slurm only starts
+2 processes and not 8 using `srun`.
+
+``` bash
+#!/bin/bash
+#SBATCH --ntasks=2
+#SBATCH --nodes=2
+#SBATCH --gres=gpu:4
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=56
+#SBATCH --mem=750G
+
+# this can be done in the job file since the information should be the same in all processes
+MASTER_ADDR=&quot;$(scontrol show hostnames &quot;$SLURM_JOB_NODELIST&quot; | head -n 1)&quot;
+MASTER_PORT=13245
+
+# Load your Python environment (Module, Virtualenv, ...) e.g.
+# module load release/24.04  GCC/12.3.0  OpenMPI/4.1.5 PyTorch/2.1.2-CUDA-12.1.1
+
+srun torchrun \
+    --nnodes=$SLURM_NNODES \
+    --nproc-per-node=4 \
+    --rdzv-id=$SLURM_JOB_ID \
+    --rdzv-backend=c10d \
+    --rdzv-endpoint=&quot;${MASTER_ADDR}&quot;:&quot;${MASTER_PORT}&quot; \
+    train.py
+```
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#internal-distribution">
+   Internal Distribution
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#distributed-tensorflow">
+     Distributed TensorFlow
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#distributed-pytorch">
+     Distributed PyTorch
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#model-parallel-training-in-pytorch">
+       Model-Parallel Training in PyTorch
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#distributed-data-parallel">
+       Distributed Data-Parallel
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#job-and-resource-allocation">
+         Job and Resource Allocation
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#launching-distributed-pytorch-application">
+         Launching Distributed PyTorch Application
+        </a>
+       </li>
+      </ul>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-23.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

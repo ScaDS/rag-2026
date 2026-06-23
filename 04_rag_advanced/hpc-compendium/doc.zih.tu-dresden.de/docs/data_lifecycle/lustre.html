@@ -1,0 +1,1150 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Lustre &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/data_lifecycle/lustre';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Preparation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../00_preparation/readme.html">Preparation of the session</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/data_lifecycle/lustre.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../../../../_sources/04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/data_lifecycle/lustre.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Lustre</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#architectural-concepts">
+   Architectural Concepts
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#striping">
+     Striping
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#storage-tiers-and-caching">
+     Storage Tiers and Caching
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#rpcs-in-lustre">
+     RPCs in Lustre
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#usage-and-good-practices">
+   Usage and Good Practices
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#searching-the-directory-tree">
+     Searching the Directory Tree
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#useful-commands-for-lustre">
+     Useful Commands for Lustre
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#listing-disk-space-usage">
+     Listing Disk Space Usage
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#listing-personal-disk-usages-and-limits">
+     Listing Personal Disk Usages and Limits
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#listing-osts">
+     Listing OSTs
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#view-striping-information">
+     View Striping Information
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="lustre">
+<h1>Lustre<a class="headerlink" href="#lustre" title="Permalink to this heading">#</a></h1>
+<p>ZIH operates multiple parallel filesystems differing in capacity, architecture, performance
+characteristics, feature sets, and intended use. With <code class="docutils literal notranslate"><span class="pre">horse</span></code> and <code class="docutils literal notranslate"><span class="pre">walrus</span></code>, two Lustre filesystems
+are installed. Owing to the prevalence of Lustre as a parallel filesystem and its familiarity to
+many users, this page aims to provide comprehensive information on the general architecture and
+distinctive features of our installations.</p>
+<p><strong>Lustre</strong> is an object-based parallel filesystem. It is available as open source software, however
+the infrastructure at ZIH was installed by <a class="reference external" href="https://www.ddn.com/">DDN</a> and contains proprietary
+customisations.</p>
+<section id="architectural-concepts">
+<h2>Architectural Concepts<a class="headerlink" href="#architectural-concepts" title="Permalink to this heading">#</a></h2>
+<p>Lustre is logically comprised of a management service (MGS), metadata services (MDS) and object
+storage services (OSS). Each service has its own storage target to persist its respective data: A
+management target (MGT), metadata targets (MDT) and object storage targets (OST). Data resides on
+one or more OSTs, and compute nodes act as clients retrieving data from the OSTs. Lustre is
+POSIX-compliant.</p>
+<p>An exemplary procedure of opening a file on a simplified Lustre filesystem is showcased below. Its
+purpose is to illustrate the interaction between the most important components of Lustre, and the
+complexity involved in a simple operation.</p>
+<p><img alt="Opening a file on a simplified Lustre filesystem" src="../../../../../_images/lustre-access.png" /></p>
+<p>Six steps are highlighted: <strong>(1)</strong> A process requests to open a file from Lustre. <strong>(2)</strong> The
+Lustre client running on the compute node first requests the metadata from the MDS. <strong>(3)</strong> The MDS
+retrieves the file’s metadata, including which OSTs store relevant fragments. <strong>(4)</strong> The client
+requests the data objects from the corresponding OSSs. <strong>(5)</strong> They return the data objects. <strong>(6)</strong>
+The client returns the file to the requesting process. In total, the network is accessed at least 4
+separate times. Note that the MGS is not involved, since information about the filesystem
+configuration is only needed upon initial connection. Also note that this process is transparent to
+applications and Lustre can simply be used as an ordinary filesystem.</p>
+<section id="striping">
+<h3>Striping<a class="headerlink" href="#striping" title="Permalink to this heading">#</a></h3>
+<p>Making use of the parallel nature of the Lustre filesystem happens mostly automatically.
+Parallelism is present in multiple ways: The available I/O bandwidth supports serving multiple
+clients simultaneously, and data accesses are distributed over many OSTs. Drive-level parallelism
+can be exploited by <em>striping</em> (large) files and distributing them across the drives. Lustre
+automatically handles this, but this is user-controllable behavior. Striping is illustrated below.
+A file is split into chunks of 1 MiB size each by default, and is then evenly distributed in a
+round-robin (a.k.a. “raid0”) fashion across all stripes, where one OST is assigned to each stripe.
+Lower stripe-counts benefit small files by avoiding I/O overhead, although this leaves OSTs
+unused.</p>
+<p><img alt="Example of Lustre file striping" src="../../../../../_images/lustre-striping.png" /></p>
+<p>To prevent re-striping as a file grows, Lustre implements <em>Progressive File Layout</em> (PFL). A file
+is laid out as consecutive components, where the first 1 GiB might constitute the first component,
+and the region from 1 GiB to 4 GiB might make up the second component, and so forth. Each component
+may have a distinct striping configuration, such that I/O overhead is avoided for small files,
+while parallelism is used effectively for large files. The illustration below closely resembles PFL
+on our <code class="docutils literal notranslate"><span class="pre">horse</span></code> filesystem.</p>
+<p><img alt="Progressive File Layout on " src="../../../../../_images/lustre-progressive-file-layout.png" /></p>
+<p>???+ example “Try it yourself”
+This example demonstrates how to configure a Lustre Progressive File Layout (PFL) for a file on
+our Lustre filesystem <code class="docutils literal notranslate"><span class="pre">horse</span></code>. In this example, we will create the directory <code class="docutils literal notranslate"><span class="pre">pfl-test</span></code> with a
+specific striping layout (see inline comment), create a 4 GiB test file, and then verify the
+resulting file layout using <code class="docutils literal notranslate"><span class="pre">lfs</span> <span class="pre">getstripe</span></code>.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```console
+marie@login$ cd /data/horse/ws/marie-number_crunch
+marie@login$ mkdir pfl-test
+marie@login$ cd pfl-test
+
+# Set the striping layout: 0..1 GiB: 4 SSD Stripes; 1..4 GiB 8 HDD Stripes;
+#                          4 GiB..EOF Stripes over all HDDs
+marie@login$ lfs setstripe \
+                 --component-end 1G --stripe-count 4 --pool ddn_ssd \
+                 --component-end 4G --stripe-count 8 --pool ddn_hdd \
+                 --component-end -1 --stripe-count -1 --pool ddn_hdd .
+# Create a dummy file of size 4 GiB
+marie@login$ dd if=/dev/zero of=testfile4G bs=1M count=4K
+
+# See the result
+marie@login$ lfs getstripe testfile4G
+```
+
+Observe that the first component of the file contains 4 stripes, the second contains 8, and the
+last remains uninitialized. Be aware that this example is tailored to `horse`, as the pools may
+be unavailable or named differently on other filesystems.
+</pre></div>
+</div>
+</section>
+<section id="storage-tiers-and-caching">
+<h3>Storage Tiers and Caching<a class="headerlink" href="#storage-tiers-and-caching" title="Permalink to this heading">#</a></h3>
+<p>A faster second tier of storage, as is available with <code class="docutils literal notranslate"><span class="pre">horse</span></code>’s SSD pool <code class="docutils literal notranslate"><span class="pre">ddn_ssd</span></code>, allows for
+forms of caching. The presence of this SSD <em>hot pool</em> alongside the HDD <em>cold pool</em> allows
+integration with DDN’s <em>Hot Pools</em> feature. Using a PFL, some or all components of a file could be
+stored in the hot pool, improving access times especially for small files. Agents running on the
+storage servers then migrate files between pools autonomously to free up space in the hot pool.
+Migration is governed by one of two policies, <em>unidirectional mode</em> and <em>bidirectional mode</em>. In
+unidirectional mode, which is in use with <code class="docutils literal notranslate"><span class="pre">horse</span></code>, the server-side agent <code class="docutils literal notranslate"><span class="pre">lamigo</span></code> mirrors files to
+the cold pool after 7200 seconds at the earliest, and <code class="docutils literal notranslate"><span class="pre">lpurge</span></code> eventually removes their hot pool
+copies. Files return to the hot pool only upon explicit migration, there is no SSD-caching in
+unidirectional mode. Bidirectional mode works by aggregating accesses to each file over time into a
+<em>heat</em> value, allowing to distinguish the hottest files and migrating/mirroring them to the hot
+pool. Once a file has cooled off or others have surpassed its heat, it is evicted to the cold pool.
+Hot Pools may overwrite a PFL-component’s pool/OST choice.</p>
+<p>Since MDTs are usually flash-based, small files may also be stored on MDTs if the <em>Data-on-MDT</em>
+(DoM) feature is enabled. DoM complements PFL by storing a file’s first component on an MDT.
+Compared to storage on the hot pool, this also saves on network traffic between MDSs and OSSs. No
+ZIH storage system currently enables DoM by default, due to very limited space on the MDTs. While
+the feature is usable, please recall that the filesystem is a scarce shared resource and that DoM
+files compete with everyone else’s space for inodes. DoM could be configured as follows:</p>
+<p>???+ example “Try it yourself”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```console
+marie@login$ cd /data/horse/ws/marie-number_crunch
+marie@login$ mkdir dom-test
+marie@login$ cd dom-test
+
+# The crucial component is &quot;--layout mdt&quot;, as opposed to the default
+#                          &quot;--layout raid0&quot;
+marie@login$ lfs setstripe \
+                 --component-end 1M \
+                 --layout mdt \
+                 --component-end -1 \
+                 --stripe-count  -1 .
+
+# Create a 512 KiB dummy file that fits into the MDT component
+marie@login$ dd if=/dev/zero of=testfile512K bs=64K count=8
+
+# See the result and notice the first component:
+# lcme_id:             1
+# lcme_mirror_id:      0
+# lcme_flags:          init     &lt;-- data residing in the component
+# lcme_extent.e_start: 0
+# lcme_extent.e_end:   1048576
+#   lmm_stripe_count:  0
+#   lmm_stripe_size:   1048576
+#   lmm_pattern:       mdt      &lt;-- component mapped to MDT
+#   lmm_layout_gen:    0
+#   lmm_stripe_offset: 0
+marie@login$ lfs getstripe testfile512K
+```
+</pre></div>
+</div>
+<p>Apart from these Lustre-specific data placement techniques, the filesystem also benefits from the
+RAM-backed page cache. As MDSs and OSSs are again Linux machines, they possess their own page
+caches in addition to that on each compute node accessing the Lustre filesystem. An access to the
+filesystem could therefore hit a multitude of page caches, which is an important detail for
+filesystem analysis. See <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">lfs-ladvise</span></code> for tooling relevant to the servers’ page caches.</p>
+</section>
+<section id="rpcs-in-lustre">
+<h3>RPCs in Lustre<a class="headerlink" href="#rpcs-in-lustre" title="Permalink to this heading">#</a></h3>
+<p>Communication within the Lustre filesystem works via <em>Remote Procedure Calls</em> (RPCs) over the
+Lustre network layer <em>LNet</em>. Each metadata request to an MDS, for example, comprises at least one
+RPC. The size of an RPC is limited by the amount of pages it may contain, which is a Lustre
+configuration parameter. As a page is 4 KiB in size, a filesystem configured with at most 256 pages
+per RPC limits an RPC’s size to 1 MiB. RPC traffic to the filesystem may be controlled in a
+fine-grained manner, for example per client, per user or per job using Lustre’s <em>Token Bucket
+Filter</em> (TBF) feature. Be aware that this implicitly imposes a bandwidth-limit. Detailed
+information on RPC usage is available in <code class="docutils literal notranslate"><span class="pre">/proc/fs/lustre/osc/*/rpc_stats</span></code> or equivalently via
+<code class="docutils literal notranslate"><span class="pre">lctl</span> <span class="pre">get_param</span> <span class="pre">osc.scratch*.rpc_stats</span></code>.</p>
+<p>???+ example “Try it yourself”
+In one shell, monitor RPCs on <code class="docutils literal notranslate"><span class="pre">horse</span></code>’s OST 0:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```console
+# The OST scratch-OST0000 lies in the ddn_hdd pool on horse
+marie@login$ watch --interval 1 \
+                   cat /proc/fs/lustre/osc/scratch-OST0000*/rpc_stats
+```
+
+In another shell on the same node, create traffic on OST 0:
+
+```console
+marie@login$ cd /data/horse/ws/marie-number_crunch
+marie@login$ mkdir rpc-test
+marie@login$ cd rpc-test
+
+# For simplicity, pin all stripes to OST 0 without using a PFL
+marie@login$ lfs setstripe --ost 0 .
+
+# Generate 64 MiB of traffic
+marie@login$ dd if=/dev/urandom of=testfile bs=1M count=64
+```
+
+As `horse` allows 4096 pages per RPC, the maximum size of an RPC is 16 MiB. Hence the observed
+number of write-RPCs with 4096 pages should increase by 4.
+</pre></div>
+</div>
+</section>
+</section>
+<section id="usage-and-good-practices">
+<h2>Usage and Good Practices<a class="headerlink" href="#usage-and-good-practices" title="Permalink to this heading">#</a></h2>
+<p>!!! hint “Avoid accessing metadata information”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Querying metadata information such as file and directory attributes is a resource intensive task
+in Lustre filesystems. When these tasks are performed frequently or over large directories, it
+can degrade the filesystem&#39;s performance and thus affect all users.
+</pre></div>
+</div>
+<p>In this sense, you should minimize the usage of system calls querying or modifying file
+and directory attributes, e.g. <code class="docutils literal notranslate"><span class="pre">stat()</span></code>, <code class="docutils literal notranslate"><span class="pre">statx()</span></code>, <code class="docutils literal notranslate"><span class="pre">open()</span></code>, <code class="docutils literal notranslate"><span class="pre">openat()</span></code> etc.</p>
+<p>Please, also avoid commands basing on the above mentioned system calls such as <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">-l</span></code> and
+<code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">--color</span></code>. Instead, you should invoke <code class="docutils literal notranslate"><span class="pre">ls</span></code> or <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">-l</span> <span class="pre">&lt;filename&gt;</span></code> to reduce metadata operations.
+This also holds for commands walking the filesystems recursively performing massive metadata
+operations such as <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">-R</span></code>, <code class="docutils literal notranslate"><span class="pre">find</span></code>, <code class="docutils literal notranslate"><span class="pre">locate</span></code>, <code class="docutils literal notranslate"><span class="pre">du</span></code> and <code class="docutils literal notranslate"><span class="pre">df</span></code>.</p>
+<p>Lustre offers a number of commands that are suited to its architecture.</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Good</p></th>
+<th class="head text-left"><p>Bad</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">lfs</span> <span class="pre">df</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">df</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">lfs</span> <span class="pre">find</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">find</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">-l</span> <span class="pre">&lt;filename&gt;</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">-l</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">ls</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">--color</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>In case commands such as <code class="docutils literal notranslate"><span class="pre">du</span></code> are needed, for example to identify large
+directories, these commands should be applied to as little data as
+possible. You should not just query the main directory in general, you
+should try to work in the sub directories first. The deeper in the
+structure, the better.</p>
+<section id="searching-the-directory-tree">
+<h3>Searching the Directory Tree<a class="headerlink" href="#searching-the-directory-tree" title="Permalink to this heading">#</a></h3>
+<p>The command <code class="docutils literal notranslate"><span class="pre">lfs</span> <span class="pre">find</span></code> searches the directory tree for files matching the specified parameters.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>lfs<span class="w"> </span>find<span class="w"> </span>&lt;root<span class="w"> </span>directory&gt;<span class="w"> </span><span class="o">[</span>options<span class="o">]</span>
+</pre></div>
+</div>
+<p>If no option is provided, <code class="docutils literal notranslate"><span class="pre">lfs</span> <span class="pre">find</span></code> will efficiently list all files in a given directory and its
+subdirectories, without fetching any file attributes.</p>
+<p>Useful options:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--atime</span> <span class="pre">n</span></code> file was last accessed n*24 hours ago</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--ctime</span> <span class="pre">n</span></code> file was last changed n*24 hours ago</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--mtime</span> <span class="pre">n</span></code> file was last modified n*24 hours ago</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--maxdepth</span> <span class="pre">n</span></code> limits find to descend at most n levels of directory tree</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--print0|-0</span></code> print full file name to standard output if it matches the specified parameters,
+followed by a NUL character.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--name</span> <span class="pre">arg</span></code> filename matches the given filename (supporting regular expression and wildcards)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--type</span> <span class="pre">[b|c|d|f|p|l|s]</span></code> file has type: <strong>b</strong>lock, <strong>c</strong>haracter, <strong>d</strong>irectory, <strong>f</strong>ile,
+<strong>p</strong>ipe, sym<strong>l</strong>ink, or <strong>s</strong>ocket.</p></li>
+</ul>
+<p>??? example “Example: List files older than 30 days”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The follwing command will find and list all files older than 30 days in the workspace
+`/scratch/ws/0/marie-number_crunch`:
+
+```console
+marie@login$ lfs find /scratch/ws/0/marie-number_crunch --mtime +30 --type f
+/scratch/ws/0/marie-number_crunch/jobfile.sh
+/scratch/ws/0/marie-number_crunch/0001.dat
+/scratch/ws/0/marie-number_crunch/load_profile.sh
+/scratch/ws/0/marie-number_crunch/mes0001
+/scratch/ws/0/marie-number_crunch/d3dump01.0002
+/scratch/ws/0/marie-number_crunch/mes0032
+/scratch/ws/0/marie-number_crunch/dump01.0003
+/scratch/ws/0/marie-number_crunch/slurm-1234567.log
+```
+</pre></div>
+</div>
+</section>
+<section id="useful-commands-for-lustre">
+<h3>Useful Commands for Lustre<a class="headerlink" href="#useful-commands-for-lustre" title="Permalink to this heading">#</a></h3>
+<p>These commands work for Lustre filesystems <code class="docutils literal notranslate"><span class="pre">/data/horse</span></code> and <code class="docutils literal notranslate"><span class="pre">/data/walrus</span></code>. In order to hold this
+documentation as general as possible we will use <code class="docutils literal notranslate"><span class="pre">&lt;filesystem&gt;</span></code> as a placeholder for the Lustre
+filesystems. Just replace it when invoking the commands with the Lustre filesystem of interest.</p>
+<p>Lustre’s <code class="docutils literal notranslate"><span class="pre">lfs</span></code> client utility provides several options for monitoring and configuring your Lustre
+environment.</p>
+<p><code class="docutils literal notranslate"><span class="pre">lfs</span></code> can be used in interactive and in command line mode. To enter the interactive mode, you just
+call <code class="docutils literal notranslate"><span class="pre">lfs</span></code> and enter your commands. Since, both modes provide identical options, we use the command
+line mode within this documentation.</p>
+<p>!!! hint “Filesystem vs. Path”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If you provide a path to the lfs commands instead of a filesystem, the lfs option is applied to
+the filesystem this path is in. Thus, the passed information refers to the whole filesystem,
+not the path.
+</pre></div>
+</div>
+<p>You can retrieve a complete list of available options:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>lfs<span class="w"> </span>--list-commands
+<span class="go">setstripe           getstripe           setdirstripe        getdirstripe</span>
+<span class="go">mkdir               rm_entry            pool_list           find</span>
+<span class="go">check               osts                mdts                df</span>
+<span class="go">[...]</span>
+</pre></div>
+</div>
+<p>To get more information on a specific option, enter <code class="docutils literal notranslate"><span class="pre">help</span></code> followed by the option of interest:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>lfs<span class="w"> </span><span class="nb">help</span><span class="w"> </span>df
+<span class="go">df: report filesystem disk space usage or inodes usage of each MDS and all OSDs or a batch belonging to a specific pool.</span>
+<span class="go">Usage: df [--inodes|-i] [--human-readable|-h] [--lazy|-l]</span>
+<span class="go">          [--pool|-p &lt;fsname&gt;[.&lt;pool&gt;]] [path]</span>
+</pre></div>
+</div>
+<p>More comprehensive documentation can be found in the man pages of lfs (<code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">lfs</span></code>).</p>
+</section>
+<section id="listing-disk-space-usage">
+<h3>Listing Disk Space Usage<a class="headerlink" href="#listing-disk-space-usage" title="Permalink to this heading">#</a></h3>
+<p>The command <code class="docutils literal notranslate"><span class="pre">lfs</span> <span class="pre">df</span></code> lists the filesystems disk space usage:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>lfs<span class="w"> </span>df<span class="w"> </span>-h<span class="w"> </span>&lt;filesystem&gt;
+</pre></div>
+</div>
+<p>Useful options:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-h</span></code> outputs the units in human readable format.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-i</span></code> reports inode usage for each target and in summary.</p></li>
+</ul>
+<p>!!! example “Example disk space usage at <code class="docutils literal notranslate"><span class="pre">/scratch</span></code>”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>At one moment in time, the disk space usage of the Lustre filesystem `/scratch` was:
+
+```console
+lfs df -h /scratch
+UUID                       bytes        Used   Available Use% Mounted on
+scratch2-MDT0000_UUID        4.0T      502.8G        3.6T  13% /lustre/scratch2[MDT:0]
+scratch2-MDT0001_UUID      408.0G      117.7G      290.3G  29% /lustre/scratch2[MDT:1]
+scratch2-OST0000_UUID       28.9T       25.1T        3.7T  88% /lustre/scratch2[OST:0]
+scratch2-OST0001_UUID       28.9T       24.7T        4.1T  86% /lustre/scratch2[OST:1]
+scratch2-OST0002_UUID       28.9T       25.0T        3.9T  87% /lustre/scratch2[OST:2]
+scratch2-OST0003_UUID       28.9T       25.1T        3.8T  87% /lustre/scratch2[OST:3]
+[...]
+scratch2-OST008d_UUID       28.9T       25.0T        3.8T  87% /lustre/scratch2[OST:141]
+scratch2-OST008e_UUID       28.9T       24.9T        4.0T  87% /lustre/scratch2[OST:142]
+scratch2-OST008f_UUID       28.9T       25.3T        3.6T  88% /lustre/scratch2[OST:143]
+
+filesystem_summary:         4.1P        3.5P      571.8T  87% /lustre/scratch2
+```
+
+The disk space usage is displayed separately for each MDS and OST as well in total. You can see
+that the usage is quite balanced between all MDSs and OSTs.
+
+If very large files are not properly stripped across several OSTs, the filesystem might become
+unbalanced with one server near 100% full.
+</pre></div>
+</div>
+</section>
+<section id="listing-personal-disk-usages-and-limits">
+<h3>Listing Personal Disk Usages and Limits<a class="headerlink" href="#listing-personal-disk-usages-and-limits" title="Permalink to this heading">#</a></h3>
+<p>To list your personal filesystem usage and limits (quota), invoke</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>lfs<span class="w"> </span>quota<span class="w"> </span>-h<span class="w"> </span>-u<span class="w"> </span><span class="nv">$USER</span><span class="w"> </span>&lt;filesystem&gt;
+</pre></div>
+</div>
+<p>Useful options:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-h</span></code> outputs the units in human readable format.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-u|-g|-p</span> <span class="pre">&lt;arg&gt;</span></code> displays quota for specific user, group or project.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-v</span></code> displays the usage on each OST.</p></li>
+</ul>
+</section>
+<section id="listing-osts">
+<h3>Listing OSTs<a class="headerlink" href="#listing-osts" title="Permalink to this heading">#</a></h3>
+<p>You can list all OSTs available in a particular Lustre filesystem using <code class="docutils literal notranslate"><span class="pre">lfs</span> <span class="pre">osts</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>lfs<span class="w"> </span>osts<span class="w"> </span>&lt;filesystem&gt;
+</pre></div>
+</div>
+<p>If a path is specified, only OSTs belonging to the specified path are displayed.</p>
+</section>
+<section id="view-striping-information">
+<h3>View Striping Information<a class="headerlink" href="#view-striping-information" title="Permalink to this heading">#</a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>lfs<span class="w"> </span>getstripe<span class="w"> </span>myfile
+<span class="gp">marie@login$ </span>lfs<span class="w"> </span>getstripe<span class="w"> </span>-d<span class="w"> </span>mydirectory
+</pre></div>
+</div>
+<p>The argument <code class="docutils literal notranslate"><span class="pre">-d</span></code> will also display striping for all files in the directory.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/data_lifecycle"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#architectural-concepts">
+   Architectural Concepts
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#striping">
+     Striping
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#storage-tiers-and-caching">
+     Storage Tiers and Caching
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#rpcs-in-lustre">
+     RPCs in Lustre
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#usage-and-good-practices">
+   Usage and Good Practices
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#searching-the-directory-tree">
+     Searching the Directory Tree
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#useful-commands-for-lustre">
+     Useful Commands for Lustre
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#listing-disk-space-usage">
+     Listing Disk Space Usage
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#listing-personal-disk-usages-and-limits">
+     Listing Personal Disk Usages and Limits
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#listing-osts">
+     Listing OSTs
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#view-striping-information">
+     View Striping Information
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-23.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

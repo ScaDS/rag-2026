@@ -1,0 +1,1238 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Data Analytics with Python &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/data_analytics_with_python';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Preparation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../00_preparation/readme.html">Preparation of the session</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/data_analytics_with_python.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../../../../_sources/04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/data_analytics_with_python.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Data Analytics with Python</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#python-console-and-virtual-environments">
+   Python Console and Virtual Environments
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#jupyter-notebooks">
+   Jupyter Notebooks
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#parallel-computing-with-python">
+   Parallel Computing with Python
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pandas-with-pandarallel">
+     Pandas with Pandarallel
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dask">
+     Dask
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#dask-modules-on-zih-systems">
+       Dask Modules on ZIH Systems
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#scheduling-by-dask">
+       Scheduling by Dask
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#distributed-scheduler">
+         Distributed Scheduler
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#dask-mpi">
+         Dask-mpi
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#dask-jobqueue">
+         Dask-jobqueue
+        </a>
+        <ul class="nav section-nav flex-column">
+         <li class="toc-h6 nav-item toc-entry">
+          <a class="reference internal nav-link" href="#example-of-using-dask-jobqueue-with-slurmcluster">
+           Example of Using Dask-Jobqueue with SLURMCluster
+          </a>
+         </li>
+        </ul>
+       </li>
+      </ul>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#mpi4py-mpi-for-python">
+     Mpi4py -  MPI for Python
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="data-analytics-with-python">
+<h1>Data Analytics with Python<a class="headerlink" href="#data-analytics-with-python" title="Permalink to this heading">#</a></h1>
+<p>Python is a high-level interpreted language widely used in research and science. Using ZIH system
+allows you to work with Python quicker and more effective. Here, a general introduction to working
+with Python on ZIH systems is given. Further documentation is available for specific
+<a class="reference internal" href="machine_learning.html"><span class="doc std std-doc">machine learning frameworks</span></a>.</p>
+<section id="python-console-and-virtual-environments">
+<h2>Python Console and Virtual Environments<a class="headerlink" href="#python-console-and-virtual-environments" title="Permalink to this heading">#</a></h2>
+<p>Often, it is useful to create an isolated development environment, which can be shared among
+a research group and/or teaching class. For this purpose,
+<a class="reference internal" href="python_virtual_environments.html"><span class="doc std std-doc">Python virtual environments</span></a> can be used.</p>
+<p>!!! hint
+For working with conda virtual environments, it may be necessary to configure your shell as
+described in <span class="xref myst">Python virtual environments</span></p>
+<p>The interactive Python interpreter can also be used on ZIH systems via an interactive job:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>srun<span class="w"> </span>--gres<span class="o">=</span>gpu:1<span class="w"> </span>--nodes<span class="o">=</span><span class="m">1</span><span class="w"> </span>--ntasks<span class="o">=</span><span class="m">1</span><span class="w"> </span>--cpus-per-task<span class="o">=</span><span class="m">7</span><span class="w"> </span>--pty<span class="w"> </span>--mem-per-cpu<span class="o">=</span><span class="m">8000</span><span class="w"> </span>bash
+<span class="gp">marie@compute$ </span>module<span class="w"> </span>load<span class="w"> </span>Python
+<span class="gp">marie@compute$ </span>python
+<span class="go">Python 3.8.6 (default, Feb 17 2021, 11:48:51)</span>
+<span class="go">[GCC 10.2.0] on linux</span>
+<span class="go">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="jupyter-notebooks">
+<h2>Jupyter Notebooks<a class="headerlink" href="#jupyter-notebooks" title="Permalink to this heading">#</a></h2>
+<p>Jupyter notebooks allow to analyze data interactively using your web browser. One advantage of
+Jupyter is, that code, documentation and visualization can be included in a single notebook, so that
+it forms a unit. Jupyter notebooks can be used for many tasks, such as data cleaning and
+transformation, numerical simulation, statistical modeling, data visualization and also machine
+learning.</p>
+<p>On ZIH systems, a <a class="reference internal" href="../access/jupyterhub.html"><span class="doc std std-doc">JupyterHub</span></a> is available, which can be used to run a
+Jupyter notebook on a node, using a GPU when needed.</p>
+</section>
+<section id="parallel-computing-with-python">
+<h2>Parallel Computing with Python<a class="headerlink" href="#parallel-computing-with-python" title="Permalink to this heading">#</a></h2>
+<section id="pandas-with-pandarallel">
+<h3>Pandas with Pandarallel<a class="headerlink" href="#pandas-with-pandarallel" title="Permalink to this heading">#</a></h3>
+<p><a class="reference external" href="https://pandas.pydata.org/">Pandas</a>{:target=”_blank”} is a widely used library for data
+analytics in Python.
+In many cases, an existing source code using Pandas can be easily modified for parallel execution by
+using the <a class="reference external" href="https://github.com/nalepae/pandarallel/tree/v1.5.2">pandarallel</a> module. The number of
+threads that can be used in parallel depends on the number of cores (parameter <code class="docutils literal notranslate"><span class="pre">--cpus-per-task</span></code>)
+within the Slurm request, e.g.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>srun<span class="w"> </span>--cpus-per-task<span class="o">=</span><span class="m">4</span><span class="w"> </span>--mem<span class="o">=</span>2G<span class="w"> </span>--hint<span class="o">=</span>nomultithread<span class="w"> </span>--pty<span class="w"> </span>--time<span class="o">=</span><span class="m">8</span>:00:00<span class="w"> </span>bash
+</pre></div>
+</div>
+<p>The above request allows to use 4 parallel threads.</p>
+<p>The following example shows how to parallelize the apply method for pandas dataframes with the
+pandarallel module. If the pandarallel module is not installed already, use a
+<a class="reference internal" href="python_virtual_environments.html"><span class="doc std std-doc">virtual environment</span></a> to install the module.</p>
+<p>??? example</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```python
+import pandas as pd
+import numpy as np
+from pandarallel import pandarallel
+
+pandarallel.initialize()
+# unfortunately the initialize method gets the total number of physical cores without
+# taking into account allocated cores by Slurm, but the choice of the -c parameter is of relevance here
+
+N_rows = 10**5
+N_cols = 5
+df = pd.DataFrame(np.random.randn(N_rows, N_cols))
+
+# here some function that needs to be executed in parallel
+def transform(x):
+    return(np.mean(x))
+
+print(&#39;calculate with normal apply...&#39;)
+df.apply(func=transform, axis=1)
+
+print(&#39;calculate with pandarallel...&#39;)
+df.parallel_apply(func=transform, axis=1)
+```
+</pre></div>
+</div>
+<p>For more examples of using pandarallel check out
+<a class="reference external" href="https://github.com/nalepae/pandarallel/blob/master/docs/examples_mac_linux.ipynb">https://github.com/nalepae/pandarallel/blob/master/docs/examples.ipynb</a>.</p>
+</section>
+<section id="dask">
+<h3>Dask<a class="headerlink" href="#dask" title="Permalink to this heading">#</a></h3>
+<p><a class="reference external" href="https://dask.org/">Dask</a> is a flexible and open-source library
+for parallel computing in Python.
+It replaces some Python data structures with parallel versions
+in order to provide advanced
+parallelism for analytics, enabling performance at scale
+for some of the popular tools.
+For instance: Dask arrays replace NumPy arrays,
+Dask dataframes replace Pandas dataframes.
+Furthermore, Dask-ML scales machine learning APIs like Scikit-Learn and XGBoost.</p>
+<p>Dask is composed of two parts:</p>
+<ul class="simple">
+<li><p>Dynamic task scheduling optimized for computation and interactive
+computational workloads.</p></li>
+<li><p>Big Data collections like parallel arrays, data frames, and lists that extend common interfaces
+like NumPy, Pandas, or Python iterators to larger-than-memory or distributed environments.
+These parallel collections run on top of dynamic task schedulers.</p></li>
+</ul>
+<p>Dask supports several user interfaces:</p>
+<ul class="simple">
+<li><p>High-Level</p>
+<ul>
+<li><p>Arrays: Parallel NumPy</p></li>
+<li><p>Bags: Parallel lists</p></li>
+<li><p>DataFrames: Parallel Pandas</p></li>
+<li><p>Machine Learning: Parallel Scikit-Learn</p></li>
+<li><p>Others from external projects, like XArray</p></li>
+</ul>
+</li>
+<li><p>Low-Level</p>
+<ul>
+<li><p>Delayed: Parallel function evaluation</p></li>
+<li><p>Futures: Real-time parallel function evaluation</p></li>
+</ul>
+</li>
+</ul>
+<section id="dask-modules-on-zih-systems">
+<h4>Dask Modules on ZIH Systems<a class="headerlink" href="#dask-modules-on-zih-systems" title="Permalink to this heading">#</a></h4>
+<p>On ZIH systems, Dask is available as a module.
+Check available versions and load your preferred one:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@compute$ </span>module<span class="w"> </span>spider<span class="w"> </span>dask
+<span class="go">------------------------------------------------------------------------------------------</span>
+<span class="go">    dask:</span>
+<span class="go">----------------------------------------------------------------------------------------------</span>
+<span class="go">    Versions:</span>
+<span class="go">        dask/2.8.0-fosscuda-2019b-Python-3.7.4</span>
+<span class="go">        dask/2.8.0-Python-3.7.4</span>
+<span class="go">        dask/2.8.0 (E)</span>
+<span class="go">[...]</span>
+<span class="gp">marie@compute$ </span>module<span class="w"> </span>load<span class="w"> </span>dask/2.8.0-fosscuda-2019b-Python-3.7.4
+<span class="gp">marie@compute$ </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import dask; print(dask.__version__)&quot;</span>
+<span class="go">2021.08.1</span>
+</pre></div>
+</div>
+<p>The preferred way is to use Dask as a separate module as was described above.
+However, you can use it as part of the <strong>Anaconda</strong> module, e.g: <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">load</span> <span class="pre">Anaconda3</span></code>.</p>
+</section>
+<section id="scheduling-by-dask">
+<h4>Scheduling by Dask<a class="headerlink" href="#scheduling-by-dask" title="Permalink to this heading">#</a></h4>
+<p>Whenever you use functions on Dask collections (Dask Array, Dask Bag, etc.), Dask models these as
+single tasks forming larger task graphs in the background without you noticing.
+After Dask generates these task graphs,
+it needs to execute them on parallel hardware.
+This is the job of a task scheduler.
+Please use Distributed scheduler for your
+Dask computations on the cluster and avoid using a Single machine scheduler.</p>
+<section id="distributed-scheduler">
+<h5>Distributed Scheduler<a class="headerlink" href="#distributed-scheduler" title="Permalink to this heading">#</a></h5>
+<p>There are a variety of ways to set Distributed scheduler.
+However, <code class="docutils literal notranslate"><span class="pre">dask.distributed</span></code> scheduler will be used for many of them.
+To use the <code class="docutils literal notranslate"><span class="pre">dask.distributed</span></code> scheduler you must set up a Client:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dask.distributed</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>  <span class="c1"># Connect to distributed cluster and override default</span>
+<span class="n">df</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>  <span class="c1"># This now runs on the distributed system</span>
+</pre></div>
+</div>
+<p>The idea behind Dask is to scale Python and distribute computation among the workers (multiple
+machines, jobs).
+The preferred and simplest way to run Dask on ZIH systems
+today both for new or experienced users
+is to use <strong><a class="reference external" href="https://jobqueue.dask.org/">dask-jobqueue</a></strong>.</p>
+<p>However, Dask-jobqueue is slightly oriented toward
+interactive analysis
+usage, and it might be better to use tools like
+<strong><a class="reference external" href="https://docs.dask.org/en/latest/setup/hpc.html#using-mpi">Dask-mpi</a></strong>
+in some routine batch production workloads.</p>
+</section>
+<section id="dask-mpi">
+<h5>Dask-mpi<a class="headerlink" href="#dask-mpi" title="Permalink to this heading">#</a></h5>
+<p>You can launch a Dask network using
+<code class="docutils literal notranslate"><span class="pre">mpirun</span></code> or <code class="docutils literal notranslate"><span class="pre">mpiexec</span></code> and the <code class="docutils literal notranslate"><span class="pre">dask-mpi</span></code> command line executable.
+This depends on the <span class="xref myst">mpi4py library</span>.
+For more detailed information, please check
+<a class="reference external" href="https://docs.dask.org/en/latest/setup/hpc.html#using-mpi">the official documentation</a>.</p>
+</section>
+<section id="dask-jobqueue">
+<h5>Dask-jobqueue<a class="headerlink" href="#dask-jobqueue" title="Permalink to this heading">#</a></h5>
+<p><a class="reference external" href="https://jobqueue.dask.org/">Dask-jobqueue</a> can be used as the standard way
+to use dask for most users.
+It allows an easy deployment of Dask Distributed on HPC with Slurm
+or other job queuing systems.</p>
+<p>Dask-jobqueue is available as an extension
+for a Dask module (which can be loaded by: <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">load</span> <span class="pre">dask</span></code>).</p>
+<p>The availability of the exact packages (such a Dask-jobqueue)
+in the module can be checked by the
+<code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">whatis</span> <span class="pre">&lt;name_of_the_module&gt;</span></code> command, e.g. <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">whatis</span> <span class="pre">dask</span></code>.</p>
+<p>Moreover, it is possible to install and use <code class="docutils literal notranslate"><span class="pre">dask-jobqueue</span></code>
+in your local python environments.
+You can install Dask-jobqueue with <code class="docutils literal notranslate"><span class="pre">pip</span></code> or <code class="docutils literal notranslate"><span class="pre">conda</span></code>.</p>
+<section id="example-of-using-dask-jobqueue-with-slurmcluster">
+<h6>Example of Using Dask-Jobqueue with SLURMCluster<a class="headerlink" href="#example-of-using-dask-jobqueue-with-slurmcluster" title="Permalink to this heading">#</a></h6>
+<p><a class="reference external" href="https://jobqueue.dask.org/en/latest/howitworks.html#workers-vs-jobs">Dask-jobqueue</a>
+allows running jobs on the ZIH system
+inside the python code and scale computations over the jobs.
+<a class="reference external" href="https://jobqueue.dask.org/en/latest/howitworks.html#workers-vs-jobs">Dask-jobqueue</a>
+creates a Dask Scheduler in the Python process
+where the cluster object is instantiated.
+Please check the example of a definition of the cluster object
+for the cluster <code class="docutils literal notranslate"><span class="pre">Alpha</span></code> (queue at the dask terms) on the ZIH system:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dask_jobqueue</span><span class="w"> </span><span class="kn">import</span> <span class="n">SLURMCluster</span>
+
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">SLURMCluster</span><span class="p">(</span><span class="n">queue</span><span class="o">=</span><span class="s1">&#39;alpha&#39;</span><span class="p">,</span>
+  <span class="n">cores</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+  <span class="n">processes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+  <span class="n">project</span><span class="o">=</span><span class="s1">&#39;p_number_crunch&#39;</span><span class="p">,</span>
+  <span class="n">memory</span><span class="o">=</span><span class="s2">&quot;8GB&quot;</span><span class="p">,</span>
+  <span class="n">walltime</span><span class="o">=</span><span class="s2">&quot;00:30:00&quot;</span><span class="p">)</span>
+
+</pre></div>
+</div>
+<p>These parameters above specify the characteristics of a
+single job or a single compute node,
+rather than the characteristics of your computation as a whole.
+It hasn’t actually launched any jobs yet.
+For the full computation, you will then ask for a number of
+jobs using the scale command, e.g : <code class="docutils literal notranslate"><span class="pre">cluster.scale(2)</span></code>.
+Thus, you have to specify a <code class="docutils literal notranslate"><span class="pre">SLURMCluster</span></code> by <code class="docutils literal notranslate"><span class="pre">dask_jobqueue</span></code>,
+scale it and use it for your computations. There is an example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">distributed</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dask_jobqueue</span><span class="w"> </span><span class="kn">import</span> <span class="n">SLURMCluster</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dask</span><span class="w"> </span><span class="kn">import</span> <span class="n">delayed</span>
+
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">SLURMCluster</span><span class="p">(</span>
+  <span class="n">cores</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+  <span class="n">processes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+  <span class="n">project</span><span class="o">=</span><span class="s1">&#39;p_number_crunch&#39;</span><span class="p">,</span>
+  <span class="n">memory</span><span class="o">=</span><span class="s2">&quot;80GB&quot;</span><span class="p">,</span>
+  <span class="n">walltime</span><span class="o">=</span><span class="s2">&quot;00:30:00&quot;</span><span class="p">,</span>
+  <span class="n">extra</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;--resources gpu=1&#39;</span><span class="p">])</span>
+
+<span class="n">cluster</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>             <span class="c1">#scale it to 2 workers!</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>     <span class="c1">#command will show you number of workers (python objects corresponds to jobs)</span>
+</pre></div>
+</div>
+<p>Please have a look at the <code class="docutils literal notranslate"><span class="pre">extra</span></code> parameter in the script above.
+This could be used to specify a
+special hardware availability that the scheduler
+is not aware of, for example, GPUs.
+Please don’t forget to specify the name of your project.</p>
+<p>The Python code for setting up Slurm clusters
+and scaling clusters can be run by the <code class="docutils literal notranslate"><span class="pre">srun</span></code>
+(but remember that using <code class="docutils literal notranslate"><span class="pre">srun</span></code> directly on the shell
+blocks the shell and launches an
+interactive job) or batch jobs or
+<a class="reference internal" href="../access/jupyterhub.html"><span class="doc std std-doc">JupyterHub</span></a> with loaded Dask
+(by module or by Python virtual environment).</p>
+<p>!!! note
+The job to run original code (de facto an interface) with a setup should be simple and light.
+Please don’t use a lot of resources for that.</p>
+<p>The following example shows using
+Dask by <code class="docutils literal notranslate"><span class="pre">dask-jobqueue</span></code> with <code class="docutils literal notranslate"><span class="pre">SLURMCluster</span></code> and <code class="docutils literal notranslate"><span class="pre">dask.array</span></code>
+for the Monte-Carlo estimation of Pi.</p>
+<p>??? example “Example of using SLURMCluster”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```python
+#use of dask-jobqueue for the estimation of Pi by Monte-Carlo method
+
+import time
+from time import time, sleep
+from dask.distributed import Client
+from dask_jobqueue import SLURMCluster
+import subprocess as sp
+
+import dask.array as da
+import numpy as np
+
+#setting up the dashboard
+
+uid = int( sp.check_output(&#39;id -u&#39;, shell=True).decode(&#39;utf-8&#39;).replace(&#39;\n&#39;,&#39;&#39;) )
+portdash = 10001 + uid
+
+#create a Slurm cluster, please specify your project
+
+cluster = SLURMCluster(cores=2, project=&#39;p_number_crunch&#39;, memory=&quot;8GB&quot;, walltime=&quot;00:30:00&quot;, extra=[&#39;--resources gpu=1&#39;], scheduler_options={&quot;dashboard_address&quot;: f&quot;:{portdash}&quot;})
+
+#submit the job to the scheduler with the number of nodes (here 2) requested:
+
+cluster.scale(2)
+
+#wait for Slurm to allocate a resources
+
+sleep(120)
+
+#check resources
+
+client = Client(cluster)
+client
+
+#real calculations with a Monte Carlo method
+
+def calc_pi_mc(size_in_bytes, chunksize_in_bytes=200e6):
+  &quot;&quot;&quot;Calculate PI using a Monte Carlo estimate.&quot;&quot;&quot;
+
+  size = int(size_in_bytes / 8)
+  chunksize = int(chunksize_in_bytes / 8)
+
+  xy = da.random.uniform(0, 1, size=(size / 2, 2), chunks=(chunksize / 2, 2))
+
+  in_circle = ((xy ** 2).sum(axis=-1) &lt; 1)
+  pi = 4 * in_circle.mean()
+
+  return pi
+
+def print_pi_stats(size, pi, time_delta, num_workers):
+  &quot;&quot;&quot;Print pi, calculate offset from true value, and print some stats.&quot;&quot;&quot;
+  print(f&quot;{size / 1e9} GB\n&quot;
+        f&quot;\tMC pi: {pi : 13.11f}&quot;
+        f&quot;\tErr: {abs(pi - np.pi) : 10.3e}\n&quot;
+        f&quot;\tWorkers: {num_workers}&quot;
+        f&quot;\t\tTime: {time_delta : 7.3f}s&quot;)
+
+#let&#39;s loop over different volumes of double-precision random numbers and estimate it
+
+for size in (1e9 * n for n in (1, 10, 100)):
+
+  start = time()
+  pi = calc_pi_mc(size).compute()
+  elaps = time() - start
+
+  print_pi_stats(size, pi, time_delta=elaps, num_workers=len(cluster.scheduler.workers))
+
+#Scaling the Cluster to twice its size and re-run the experiments
+
+new_num_workers = 2 * len(cluster.scheduler.workers)
+
+print(f&quot;Scaling from {len(cluster.scheduler.workers)} to {new_num_workers} workers.&quot;)
+
+cluster.scale(new_num_workers)
+
+sleep(120)
+
+client
+
+#Re-run same experiments with doubled cluster
+
+for size in (1e9 * n for n in (1, 10, 100)):
+
+  start = time()
+  pi = calc_pi_mc(size).compute()
+  elaps = time() - start
+
+  print_pi_stats(size, pi, time_delta=elaps, num_workers=len(cluster.scheduler.workers))
+```
+</pre></div>
+</div>
+<p>Please check the availability of resources that you want to allocate
+by the script for the example above.
+You can do it with <code class="docutils literal notranslate"><span class="pre">sinfo</span></code> command. The script doesn’t work
+without available cluster resources.</p>
+</section>
+</section>
+</section>
+</section>
+<section id="mpi4py-mpi-for-python">
+<h3>Mpi4py -  MPI for Python<a class="headerlink" href="#mpi4py-mpi-for-python" title="Permalink to this heading">#</a></h3>
+<p>Message Passing Interface (MPI) is a standardized and
+portable message-passing standard, designed to
+function on a wide variety of parallel computing architectures.</p>
+<p>Mpi4py (MPI for Python) provides bindings of the MPI standard for
+the Python programming language,
+allowing any Python program to exploit multiple processors.</p>
+<p>Mpi4py is based on MPI-2 C++ bindings. It supports almost all MPI calls.
+It supports communication of pickle-able Python objects.
+Mpi4py provides optimized communication of NumPy arrays.</p>
+<p>Mpi4py is included in the SciPy-bundle modules on the ZIH system.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@compute$ </span>module<span class="w"> </span>load<span class="w"> </span>SciPy-bundle/2020.11-foss-2020b
+<span class="go">Module SciPy-bundle/2020.11-foss-2020b and 28 dependencies loaded.</span>
+<span class="gp">marie@compute$ </span>pip<span class="w"> </span>list
+<span class="go">Package                       Version</span>
+<span class="go">----------------------------- ----------</span>
+<span class="go">[...]</span>
+<span class="go">mpi4py                        3.0.3</span>
+<span class="go">[...]</span>
+</pre></div>
+</div>
+<p>Other versions of the package can be found with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@compute$ </span>module<span class="w"> </span>spider<span class="w"> </span>mpi4py
+<span class="go">-----------------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="go">  mpi4py:</span>
+<span class="go">-----------------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="go">     Versions:</span>
+<span class="go">        mpi4py/1.3.1</span>
+<span class="go">        mpi4py/2.0.0-impi</span>
+<span class="go">        mpi4py/3.0.0 (E)</span>
+<span class="go">        mpi4py/3.0.2 (E)</span>
+<span class="go">        mpi4py/3.0.3 (E)</span>
+
+<span class="go">Names marked by a trailing (E) are extensions provided by another module.</span>
+
+<span class="go">-----------------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="go">  For detailed information about a specific &quot;mpi4py&quot; package (including how to load the modules), use the module&#39;s full name.</span>
+<span class="go">  Note that names that have a trailing (E) are extensions provided by other modules.</span>
+<span class="go">  For example:</span>
+
+<span class="gp">     $ </span>module<span class="w"> </span>spider<span class="w"> </span>mpi4py/3.0.3
+<span class="go">-----------------------------------------------------------------------------------------------------------------------------------------</span>
+</pre></div>
+</div>
+<p>Moreover, it is possible to install mpi4py in your local conda
+environment.</p>
+<p>The example of mpi4py usage for the verification that
+mpi4py is running correctly can be found below:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mpi4py</span><span class="w"> </span><span class="kn">import</span> <span class="n">MPI</span>
+<span class="n">comm</span> <span class="o">=</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> of </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">comm</span><span class="o">.</span><span class="n">Get_rank</span><span class="p">(),</span> <span class="n">comm</span><span class="o">.</span><span class="n">Get_size</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>For the multi-node case, use a script similar to this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH --nodes=2</span>
+<span class="c1">#SBATCH --tasks-per-node=2</span>
+<span class="c1">#SBATCH --cpus-per-task=1</span>
+
+module<span class="w"> </span>load<span class="w"> </span>release/23.04
+module<span class="w"> </span>load<span class="w"> </span>Anaconda3/2022.05
+
+<span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>conda<span class="w"> </span>shell.bash<span class="w"> </span>hook<span class="k">)</span><span class="s2">&quot;</span>
+conda<span class="w"> </span>activate<span class="w"> </span>/home/marie/conda-virtual-environment/kernel2<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>srun<span class="w"> </span>python<span class="w"> </span>mpi4py_test.py<span class="w">    </span><span class="c1">#specify name of your virtual environment</span>
+</pre></div>
+</div>
+<p>For the verification of the multi-node case,
+you can use the Python code from the previous part
+(with verification of the installation) as a test file.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#python-console-and-virtual-environments">
+   Python Console and Virtual Environments
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#jupyter-notebooks">
+   Jupyter Notebooks
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#parallel-computing-with-python">
+   Parallel Computing with Python
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pandas-with-pandarallel">
+     Pandas with Pandarallel
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dask">
+     Dask
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#dask-modules-on-zih-systems">
+       Dask Modules on ZIH Systems
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#scheduling-by-dask">
+       Scheduling by Dask
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#distributed-scheduler">
+         Distributed Scheduler
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#dask-mpi">
+         Dask-mpi
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#dask-jobqueue">
+         Dask-jobqueue
+        </a>
+        <ul class="nav section-nav flex-column">
+         <li class="toc-h6 nav-item toc-entry">
+          <a class="reference internal nav-link" href="#example-of-using-dask-jobqueue-with-slurmcluster">
+           Example of Using Dask-Jobqueue with SLURMCluster
+          </a>
+         </li>
+        </ul>
+       </li>
+      </ul>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#mpi4py-mpi-for-python">
+     Mpi4py -  MPI for Python
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-23.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

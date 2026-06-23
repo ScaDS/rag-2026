@@ -1,0 +1,899 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Long-Term Preservation of Research Data &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/data_lifecycle/longterm_preservation';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Preparation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../00_preparation/readme.html">Preparation of the session</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/data_lifecycle/longterm_preservation.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../../../../_sources/04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/data_lifecycle/longterm_preservation.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Long-Term Preservation of Research Data</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#why-should-research-data-be-preserved">
+   Why should research data be preserved?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#which-research-data-should-be-preserved">
+   Which research data should be preserved?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#why-should-i-add-meta-data-to-my-data">
+   Why should I add Meta-Data to my data?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#what-are-meta-data">
+   What are Meta-Data?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#where-can-i-get-more-information-about-management-of-research-data">
+   Where can I get more information about management of research data?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#i-want-to-archive-my-research-data-at-zih-safely-how-can-i-do-that">
+   I want to archive my research data at ZIH safely. How can I do that?
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#storing-very-infrequently-used-data-during-the-course-of-the-project">
+     Storing very infrequently used data during the course of the project
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#archiving-data-beyond-the-project-lifetime-for-10-years-and-above">
+     Archiving data beyond the project lifetime, for 10 years and above
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="long-term-preservation-of-research-data">
+<h1>Long-Term Preservation of Research Data<a class="headerlink" href="#long-term-preservation-of-research-data" title="Permalink to this heading">#</a></h1>
+<section id="why-should-research-data-be-preserved">
+<h2>Why should research data be preserved?<a class="headerlink" href="#why-should-research-data-be-preserved" title="Permalink to this heading">#</a></h2>
+<p>There are several reasons. On the one hand, research data should be preserved to make the results
+reproducible. On the other hand research data could be used a second time for investigating another
+question. In the latter case persistent identifiers (like DOI) are needed to make these data
+findable and citable. In both cases it is important to add meta-data to the data.</p>
+</section>
+<section id="which-research-data-should-be-preserved">
+<h2>Which research data should be preserved?<a class="headerlink" href="#which-research-data-should-be-preserved" title="Permalink to this heading">#</a></h2>
+<p>Since large quantities of data are nowadays produced it is not possible to store everything. The
+researcher needs to decide which data are worth and important to keep.</p>
+<p>In case these data come from simulations, there are two possibilities: 1 Storing the result of the
+simulations 1 Storing the software and the input-values</p>
+<p>Which of these possibilities is preferable depends on the time the simulations need and on the size
+of the result of the calculations. Here one needs to estimate, which possibility is cheaper.</p>
+<p><strong>This is, what DFG says</strong> (translated from
+<a class="reference external" href="http://www.dfg.de/download/pdf/foerderung/programme/lis/ua_inf_empfehlungen_200901.pdf">http://www.dfg.de/download/pdf/foerderung/programme/lis/ua_inf_empfehlungen_200901.pdf</a>, page 2):</p>
+<p><em>Primary research data are data, which were created in the course</em> <em>of studies of sources,
+experiments, measurements or surveys. They are the</em> <em>basis of scholarly publications</em>. <em>The
+definition of primary research data depends on the subject</em>. <em>Each community of researchers should
+decide by itself, if raw data are</em> <em>already primary research data or at which degree of aggregation
+data</em> <em>should be preserved. Further it should be agreed upon the granularity</em> <em>of research data: how
+many data yield one set of data, which will be</em> <em>given a persistent identifier</em>.</p>
+</section>
+<section id="why-should-i-add-meta-data-to-my-data">
+<h2>Why should I add Meta-Data to my data?<a class="headerlink" href="#why-should-i-add-meta-data-to-my-data" title="Permalink to this heading">#</a></h2>
+<p>Many researchers think, that adding meta-data is time-consuming and senseless but that isn’t true.
+On the contrary, adding meta-data is very important, since they should enable other researchers to
+know, how and in which circumstances these data are created, in which format they are saved, and
+which software in which version is needed to view the data, and so on, so that other researchers can
+reproduce these data or use them for new investigations. Last but not least meta-data should enable
+you in ten years time to know what your data describe, which you created such a long time ago.</p>
+</section>
+<section id="what-are-meta-data">
+<h2>What are Meta-Data?<a class="headerlink" href="#what-are-meta-data" title="Permalink to this heading">#</a></h2>
+<p>Meta-data means data about data. Meta-data are information about the stored file. There can be
+administrative meta-data, descriptive meta-data, technical meta-data and so on. Often meta-data are
+stored in XML-format but free text is also possible. There are some meta-data standards like
+<a class="reference external" href="http://dublincore.org/">Dublin Core</a> or
+<a class="reference external" href="https://www.dnb.de/DE/Professionell/Standardisierung/Standards/_content/lmer_uof.html">LMER</a>
+Below are some examples:</p>
+<ul class="simple">
+<li><p>possible meta-data for a book would be:</p>
+<ul>
+<li><p>Title</p></li>
+<li><p>Author</p></li>
+<li><p>Publisher</p></li>
+<li><p>Publication</p></li>
+<li><p>year</p></li>
+<li><p>ISBN</p></li>
+</ul>
+</li>
+<li><p>possible meta-data for an electronically saved image would be:</p>
+<ul>
+<li><p>resolution of the image</p></li>
+<li><p>information about the color depth of the picture</p></li>
+<li><p>file format (jpg or tiff or …)</p></li>
+<li><p>file size how was this image created (digital camera, scanner, …)</p></li>
+<li><p>description of what the image shows</p></li>
+<li><p>creation date of the picture</p></li>
+<li><p>name of the person who made the picture</p></li>
+</ul>
+</li>
+<li><p>meta-data for the result of a calculation/simulation could be:</p>
+<ul>
+<li><p>file format</p></li>
+<li><p>file size</p></li>
+<li><p>input data</p></li>
+<li><p>which software in which version was used to calculate the result/to do the simulation</p></li>
+<li><p>configuration of the software</p></li>
+<li><p>date of the calculation/simulation (start/end or start/duration)</p></li>
+<li><p>computer on which the calculation/simulation was done</p></li>
+<li><p>name of the person who submitted the calculation/simulation</p></li>
+<li><p>description of what was calculated/simulated</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="where-can-i-get-more-information-about-management-of-research-data">
+<h2>Where can I get more information about management of research data?<a class="headerlink" href="#where-can-i-get-more-information-about-management-of-research-data" title="Permalink to this heading">#</a></h2>
+<p>Please visit the wiki <a class="reference external" href="https://www.forschungsdaten.org/en/">forschungsdaten.org</a> to learn more about
+all of the different aspects of research data management.</p>
+<p>For questions or individual consultations regarding research data management in general or any of
+its certain aspects, you can contact the
+<a class="reference external" href="https://tu-dresden.de/forschung-transfer/services-fuer-forschende/kontaktstelle-forschungsdaten?set_language=en">Service Center Research Data</a>
+(Kontaktstelle Forschungsdaten) of TU Dresden.</p>
+</section>
+<section id="i-want-to-archive-my-research-data-at-zih-safely-how-can-i-do-that">
+<h2>I want to archive my research data at ZIH safely. How can I do that?<a class="headerlink" href="#i-want-to-archive-my-research-data-at-zih-safely-how-can-i-do-that" title="Permalink to this heading">#</a></h2>
+<p>For TU Dresden there exist two different services at ZIH for archiving research data. Both of
+them ensure high data safety by duplicating data internally at two separate locations and
+require some data preparation (e.g. packaging), but serve different use cases:</p>
+<section id="storing-very-infrequently-used-data-during-the-course-of-the-project">
+<h3>Storing very infrequently used data during the course of the project<a class="headerlink" href="#storing-very-infrequently-used-data-during-the-course-of-the-project" title="Permalink to this heading">#</a></h3>
+<p>The intermediate archive is a tape storage easily accessible as a directory
+(<code class="docutils literal notranslate"><span class="pre">/archiv/&lt;HRSK-project&gt;/</span></code> or <code class="docutils literal notranslate"><span class="pre">/archiv/&lt;login&gt;/</span></code>) using the
+<a class="reference internal" href="../data_transfer/dataport_nodes.html"><span class="doc std std-doc">Dataport Nodes</span></a>
+and
+<a class="reference internal" href="../data_transfer/datamover.html"><span class="doc std std-doc">Datamover tools</span></a> to move your data to.
+For detailed information please visit the
+<a class="reference external" href="https://tu-dresden.de/zih/dienste/service-katalog/arbeitsumgebung/backup_archiv/archivierung_am_zih#section-2-1">ZIH intermediate archive documentation</a>.</p>
+<p>!!! note</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The usage of the HRSK-project-related archive is preferable to the login-related archive, as
+this enables assigning access rights and responsibility across multiple researchers, due to the
+common staff turnover in research.
+</pre></div>
+</div>
+<p>The use of the intermediate archive usually is limited by the end of the corresponding
+research project. Afterwards data is required to be removed, tidied up and submitted to a
+long-term repository (see next section).</p>
+<p>The intermediate archive is the preferred service when you keep large, mostly unused data volumes
+during the course of your research project; if you want or need to free storage capacities, but
+you are still not able to define certain or relevant datasets for long-term archival.</p>
+<p>If you are able to identify complete and final datasets, which you probably won’t use actively
+anymore, then repositories as described in the next section may be the more appropriate selection.</p>
+</section>
+<section id="archiving-data-beyond-the-project-lifetime-for-10-years-and-above">
+<h3>Archiving data beyond the project lifetime, for 10 years and above<a class="headerlink" href="#archiving-data-beyond-the-project-lifetime-for-10-years-and-above" title="Permalink to this heading">#</a></h3>
+<p>According to good scientific practice (cf.
+<a class="reference external" href="https://www.dfg.de/download/pdf/foerderung/rechtliche_rahmenbedingungen/gute_wissenschaftliche_praxis/kodex_gwp.pdf">DFG guidelines, #17</a>)
+and
+<a class="reference external" href="https://tu-dresden.de/tu-dresden/qualitaetsmanagement/ressourcen/dateien/wisprax/Leitlinien-fuer-den-Umgang-mit-Forschungsdaten-an-der-TU-Dresden.pdf">TU Dresden research data guidelines</a>,
+relevant research data needs to be archived at least for 10 years. The
+<a class="reference external" href="https://opara.zih.tu-dresden.de/xmlui/">OpARA service</a> (Open Access Repository and Archive) is the
+joint research data repository service for Saxon universities to address this requirement.</p>
+<p>Data can be uploaded and, to comply to the demands of long-term understanding of data, additional
+metadata and description must be added. Large datasets may be optionally imported beforehand. In
+this case, please contact the
+<a class="reference external" href="mailto:servicedesk&#37;&#52;&#48;tu-dresden&#46;de?subject=OpARA:%20Data%20Import">TU Dresden Service Desk</a>.
+Optionally, data can also be <strong>published</strong> by OpARA. To ensure data quality, data submissions
+undergo a review process.</p>
+<p>Beyond OpARA, it is also recommended to use discipline-specific data repositories for data
+publications. Usually those are well known in a scientific community, and offer better fitting
+options of data description and classification. Please visit <a class="reference external" href="https://re3data.org">re3data.org</a>
+to look up a suitable one for your discipline.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/data_lifecycle"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#why-should-research-data-be-preserved">
+   Why should research data be preserved?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#which-research-data-should-be-preserved">
+   Which research data should be preserved?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#why-should-i-add-meta-data-to-my-data">
+   Why should I add Meta-Data to my data?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#what-are-meta-data">
+   What are Meta-Data?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#where-can-i-get-more-information-about-management-of-research-data">
+   Where can I get more information about management of research data?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#i-want-to-archive-my-research-data-at-zih-safely-how-can-i-do-that">
+   I want to archive my research data at ZIH safely. How can I do that?
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#storing-very-infrequently-used-data-during-the-course-of-the-project">
+     Storing very infrequently used data during the course of the project
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#archiving-data-beyond-the-project-lifetime-for-10-years-and-above">
+     Archiving data beyond the project lifetime, for 10 years and above
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-23.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

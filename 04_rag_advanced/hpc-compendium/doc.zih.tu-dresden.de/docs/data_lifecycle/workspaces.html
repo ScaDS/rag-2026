@@ -1,0 +1,1728 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Workspaces &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/data_lifecycle/workspaces';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Preparation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../00_preparation/readme.html">Preparation of the session</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/data_lifecycle/workspaces.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../../../../_sources/04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/data_lifecycle/workspaces.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Workspaces</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#workspace-management">
+   Workspace Management
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#workspace-lifetimes">
+     Workspace Lifetimes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#list-available-filesystems">
+     List Available Filesystems
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#list-current-workspaces">
+     List Current Workspaces
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#allocate-a-workspace">
+     Allocate a Workspace
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#extension-of-a-workspace">
+     Extension of a Workspace
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#send-reminder-for-workspace-expiration-date">
+     Send Reminder for Workspace Expiration Date
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#send-daily-reminder">
+       Send Daily Reminder
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#send-calendar-invitation">
+       Send Calendar Invitation
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deletion-of-a-workspace">
+     Deletion of a Workspace
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#expire-process">
+       Expire Process
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#restoring-expired-workspaces">
+     Restoring Expired Workspaces
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#linking-workspaces-in-home">
+   Linking Workspaces in HOME
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#how-to-use-workspaces">
+   How to use Workspaces
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#per-job-storage">
+     Per-Job Storage
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-for-a-campaign">
+     Data for a Campaign
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#mid-term-storage">
+     Mid-Term Storage
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cooperative-usage-group-workspaces">
+   Cooperative Usage (Group Workspaces)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#grant-read-permissions-for-a-group">
+     Grant Read Permissions for a Group
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#grant-write-permissions-for-a-group">
+     Grant Write Permissions for a Group
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#faq-and-troubleshooting">
+   FAQ and Troubleshooting
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="workspaces">
+<h1>Workspaces<a class="headerlink" href="#workspaces" title="Permalink to this heading">#</a></h1>
+<p>Storage systems differ in terms of capacity, streaming bandwidth, IOPS rate, etc. Price and
+efficiency don’t allow to have it all in one. That is why fast parallel filesystems at ZIH have
+restrictions with regards to <strong>lifetime</strong> and volume <strong><span class="xref myst">quota</span></strong>. The mechanism
+of using <em>workspaces</em> enables you to better manage your HPC data. It is common and used at a large
+number of HPC centers.</p>
+<p>!!! note</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>A **workspace** is a directory, with an associated expiration date, created on behalf of a user
+in a certain filesystem.
+</pre></div>
+</div>
+<p>A workspace progresses through distinct states during its lifetime, as shown below.</p>
+<p><img alt="Workspace life-cycle" src="../../../../../_images/workspaces-statechart.png" />{: align=”center”}</p>
+<p>A workspace can be in one of the four states <em>Active</em>, <em>Expired</em>, <em>Released</em> and <em>Deleted</em>.
+It always starts in the active state upon creation. Once the workspace has reached its expiration
+date, it gets moved to a hidden directory and enters a grace period. An expired workspace is
+still physically present on the disk and may be restored.
+Once the grace period ends, the workspace is permanently deleted. Users may also release
+a workspace manually before it expires. A released workspace is handled similarly
+to a workspace in the expired state, except that a released workspace is marked for deletion
+at the next available opportunity, disregarding the grace period defined for expired workspaces.
+Using <code class="docutils literal notranslate"><span class="pre">--delete-data</span></code> when releasing a workspace, skips the released state entirely
+and deletes the workspace instantly.</p>
+<p>The maximum lifetime of a workspace depends on the storage system. All workspaces can be extended a
+certain amount of times.</p>
+<p>!!! tip</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Use the faster filesystems if you need to write temporary data in your computations, and use
+the capacity oriented filesystems if you only need to read data for your computations. Please
+keep track of your data and move it to a capacity oriented filesystem after the end of your
+computations.
+</pre></div>
+</div>
+<section id="workspace-management">
+<h2>Workspace Management<a class="headerlink" href="#workspace-management" title="Permalink to this heading">#</a></h2>
+<section id="workspace-lifetimes">
+<h3>Workspace Lifetimes<a class="headerlink" href="#workspace-lifetimes" title="Permalink to this heading">#</a></h3>
+<p>Since the workspace filesystems are intended for different use cases and thus differ in
+performance, their granted timespans differ accordingly. The maximum lifetime and number of
+renewals are provided in the following table.</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Filesystem (use with parameter <br><code class="docutils literal notranslate"><span class="pre">--filesystem</span> <span class="pre">&lt;filesystem&gt;</span></code>)</p></th>
+<th class="head text-right"><p>Max. duration in days</p></th>
+<th class="head text-right"><p>Extensions</p></th>
+<th class="head text-right"><p>Keeptime in days</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">horse</span></code></p></td>
+<td class="text-right"><p>100</p></td>
+<td class="text-right"><p>10</p></td>
+<td class="text-right"><p>30</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">walrus</span></code></p></td>
+<td class="text-right"><p>365</p></td>
+<td class="text-right"><p>2</p></td>
+<td class="text-right"><p>60</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">cat</span></code></p></td>
+<td class="text-right"><p>30</p></td>
+<td class="text-right"><p>2</p></td>
+<td class="text-right"><p>30</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">quokka</span></code></p></td>
+<td class="text-right"><p>30</p></td>
+<td class="text-right"><p>2</p></td>
+<td class="text-right"><p>30</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>{: summary=”Settings for Workspace Filesystems.”}</p></td>
+<td class="text-right"><p></p></td>
+<td class="text-right"><p></p></td>
+<td class="text-right"><p></p></td>
+</tr>
+</tbody>
+</table>
+<p>!!! note</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Currently, not all filesystems are available on all of our five clusters. The page
+[Working Filesystems](working.md) provides the necessary information.
+</pre></div>
+</div>
+</section>
+<section id="list-available-filesystems">
+<h3>List Available Filesystems<a class="headerlink" href="#list-available-filesystems" title="Permalink to this heading">#</a></h3>
+<p>To list all available filesystems for using workspaces, you can either invoke <code class="docutils literal notranslate"><span class="pre">ws_list</span> <span class="pre">-l</span></code> or
+<code class="docutils literal notranslate"><span class="pre">ws_find</span> <span class="pre">--list</span></code>. Since not all workspace filesystems are available on all HPC systems, the concrete
+output differs depending on the system you are logged in. The page <a class="reference internal" href="working.html"><span class="doc std std-doc">Working Filesystems</span></a>
+provides information which filesystem is available on which cluster.</p>
+<p>=== “Barnard”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```console
+marie@login.barnard$ ws_list -l
+available filesystems:
+horse (default)
+walrus
+```
+</pre></div>
+</div>
+<p>=== “Alpha Centauri”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```console
+marie@login.alpha$ ws_list -l
+available filesystems:
+horse (default)
+walrus
+quokka
+```
+</pre></div>
+</div>
+<p>=== “Capella”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```console
+marie@login.capella$ ws_list -l
+available filesystems:
+horse
+walrus
+cat (default)
+```
+</pre></div>
+</div>
+<p>=== “Julia”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```console
+marie@login.julia$ ws_list -l
+available filesystems:
+horse (default)
+walrus
+```
+</pre></div>
+</div>
+<p>=== “Romeo”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```console
+marie@login.romeo$ ws_list -l
+available filesystems:
+horse (default)
+walrus
+quokka
+```
+</pre></div>
+</div>
+<p>!!! note “Default filesystem”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The output of the commands `ws_find --list` and `ws_list -l` will indicate the
+**default filesystem**. If you prefer another filesystem (cf. section
+[List Available Filesystems](#list-available-filesystems)), you have to explictly
+provide the option `--filesystem &lt;filesystem&gt;` to the workspace commands. If the default
+filesystems is the one you want to work with, you can omit this option.
+</pre></div>
+</div>
+</section>
+<section id="list-current-workspaces">
+<h3>List Current Workspaces<a class="headerlink" href="#list-current-workspaces" title="Permalink to this heading">#</a></h3>
+<p>The command <code class="docutils literal notranslate"><span class="pre">ws_list</span></code> lists all your currently active (,i.e, not expired) workspaces, e.g.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>ws_list
+<span class="go">id: test-workspace</span>
+<span class="go">    workspace directory  : /data/horse/ws/marie-test-workspace</span>
+<span class="go">    remaining time       : 89 days 23 hours</span>
+<span class="go">    creation time        : Wed Dec  6 14:46:12 2023</span>
+<span class="go">    expiration date      : Tue Mar  5 14:46:12 2024</span>
+<span class="go">    filesystem name      : horse</span>
+<span class="go">    available extensions : 10</span>
+</pre></div>
+</div>
+<p>The output of <code class="docutils literal notranslate"><span class="pre">ws_list</span></code> can be customized via several options. The following switch tab provides a
+overview of some of these options. All available options can be queried by <code class="docutils literal notranslate"><span class="pre">ws_list</span> <span class="pre">--help</span></code>.</p>
+<p>=== “Certain filesystem”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```console
+marie@login$ ws_list --filesystem walrus
+id: marie-number_crunch
+    workspace directory  : /data/walrus/ws/marie-number_crunch
+    remaining time       : 89 days 23 hours
+    creation time        : Wed Dec  6 14:49:55 2023
+    expiration date      : Tue Mar  5 14:49:55 2024
+    filesystem name      : walrus
+    available extensions : 2
+```
+</pre></div>
+</div>
+<p>=== “Verbose output”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```console
+marie@login$ ws_list -v
+id: test-workspace
+    workspace directory  : /data/horse/ws/marie-test-workspace
+    remaining time       : 89 days 23 hours
+    creation time        : Wed Dec  6 14:46:12 2023
+    expiration date      : Tue Mar  5 14:46:12 2024
+    filesystem name      : horse
+    available extensions : 10
+    acctcode             : p_number_crunch
+    reminder             : Tue Feb 27 14:46:12 2024
+    mailaddress          : marie@tu-dresden.de
+```
+</pre></div>
+</div>
+<p>=== “Terse output”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```console
+marie@login$ ws_list -t
+id: test-workspace
+    workspace directory  : /data/horse/ws/marie-test-workspace
+    remaining time       : 89 days 23 hours
+    available extensions : 10
+id: number_crunch
+    workspace directory  : /data/walrus/ws/marie-number_crunch
+    remaining time       : 89 days 23 hours
+    available extensions : 2
+```
+</pre></div>
+</div>
+<p>=== “Show only names”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```console
+marie@login$ ws_list -s
+test-workspace
+number_crunch
+```
+</pre></div>
+</div>
+<p>=== “Sort by remaining time”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>You can list your currently allocated workspace by remaining time. This is especially useful
+for housekeeping tasks, such as extending soon expiring workspaces if necessary.
+
+```console
+marie@login$ ws_list -R -t
+id: test-workspace
+     workspace directory  : /data/horse/ws/marie-test-workspace
+     remaining time       : 89 days 23 hours
+     available extensions : 10
+id: marie-number_crunch
+    workspace directory  : /data/walrus/ws/marie-number_crunch
+    remaining time       : 89 days 23 hours
+    available extensions : 2
+```
+</pre></div>
+</div>
+</section>
+<section id="allocate-a-workspace">
+<h3>Allocate a Workspace<a class="headerlink" href="#allocate-a-workspace" title="Permalink to this heading">#</a></h3>
+<p>To allocate a workspace in one of the listed filesystems, use <code class="docutils literal notranslate"><span class="pre">ws_allocate</span></code>. It is necessary to
+specify a unique name and the duration (in days) of the workspace.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ws_allocate: [options] workspace_name duration</span>
+
+<span class="go">Options:</span>
+<span class="go">  -h [ --help]               produce help message</span>
+<span class="go">  -V [ --version ]           show version</span>
+<span class="go">  -d [ --duration ] arg (=1) duration in days</span>
+<span class="go">  -n [ --name ] arg          workspace name</span>
+<span class="go">  -F [ --filesystem ] arg    filesystem</span>
+<span class="go">  -r [ --reminder ] arg      reminder to be sent n days before expiration</span>
+<span class="go">  -m [ --mailaddress ] arg   mailaddress to send reminder to (works only with tu-dresden.de mails)</span>
+<span class="go">  -x [ --extension ]         extend workspace</span>
+<span class="go">  -u [ --username ] arg      username</span>
+<span class="go">  -g [ --group ]             group workspace</span>
+<span class="go">  -c [ --comment ] arg       comment</span>
+</pre></div>
+</div>
+<p>!!! Note “Name of a workspace”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The workspace name should help you to remember the experiment and data stored here. It has to
+be unique on a certain filesystem. On the other hand it is possible to use the very same name
+for workspaces on different filesystems.
+</pre></div>
+</div>
+<p>=== “Simple allocation”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The simple way to allocate a workspace is calling `ws_allocate` command with two arguments,
+where the first specifies the workspace name and the second the duration. This allocates a
+workspace on the default filesystem with no e-mail reminder.
+
+```console
+marie@login$ ws_allocate test-workspace 90
+Info: creating workspace.
+/data/horse/ws/marie-test-workspace
+remaining extensions  : 10
+remaining time in days: 90
+```
+</pre></div>
+</div>
+<p>=== “Specific filesystem”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>In order to allocate a workspace on a non-default filesystem, the option
+`--filesystem &lt;filesystem&gt;` is required.
+
+```console
+marie@login$ ws_allocate --filesystem walrus test-workspace 99
+Info: creating workspace.
+/data/walrus/ws/marie-test-workspace
+remaining extensions  : 2
+remaining time in days: 99
+```
+</pre></div>
+</div>
+<p>=== “with e-mail reminder”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>This command will allocate a workspace with the name `test-workspace` on the `/horse` filesystem
+(default)
+with a duration of 99 days and send an e-mail reminder. The e-mail reminder will be sent every
+day starting 7 days prior to expiration. We strongly recommend setting this e-mail reminder.
+
+```console
+marie@login$ ws_allocate --reminder 7 --mailaddress marie@tu-dresden.de test-workspace 99
+Info: creating workspace.
+/data/horse/ws/marie-test-workspace
+remaining extensions  : 10
+remaining time in days: 99
+```
+</pre></div>
+</div>
+<p>Please refer to the <span class="xref myst">section Cooperative Usage</span> for
+group workspaces.</p>
+</section>
+<section id="extension-of-a-workspace">
+<h3>Extension of a Workspace<a class="headerlink" href="#extension-of-a-workspace" title="Permalink to this heading">#</a></h3>
+<p>The lifetime of a workspace is finite and different filesystems (storage systems) have different
+maximum durations. The life time of a workspace can be adjusted multiple times, depending on the
+filesystem. You can find the concrete values in the
+<span class="xref myst">section settings for workspaces</span>.</p>
+<p>Use the command <code class="docutils literal notranslate"><span class="pre">ws_extend</span> <span class="pre">[-F</span> <span class="pre">filesystem]</span> <span class="pre">workspace</span> <span class="pre">days</span></code> to extend your workspace:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>ws_extend<span class="w"> </span>-F<span class="w"> </span>horse<span class="w"> </span>test-workspace<span class="w"> </span><span class="m">100</span>
+<span class="go">Info: extending workspace.</span>
+<span class="go">/data/horse/ws/marie-test-workspace</span>
+<span class="go">remaining extensions  : 1</span>
+<span class="go">remaining time in days: 100</span>
+</pre></div>
+</div>
+<p>E-mail reminder settings are retained. I.e., previously set e-mail alerts apply to the extended
+workspace, too.</p>
+<p>!!! attention</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>With the `ws_extend` command, a new duration for the workspace is set. The new duration is not
+added to the remaining lifetime!
+</pre></div>
+</div>
+<p>This means when you extend a workspace that expires in 90 days with the command</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>ws_extend<span class="w"> </span>-F<span class="w"> </span>horse<span class="w"> </span>test-workspace<span class="w"> </span><span class="m">40</span>
+</pre></div>
+</div>
+<p>it will now expire in 40 days, <strong>not</strong> in 130 days!</p>
+<p>??? note “Special care with same workspace name on different filesystems”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>There are two cases in which you need to take special care when extending a workspace. The
+solution to both cases is to add the option `--filesystem=&lt;filesystem&gt;` to the command
+`ws_extend`. Please find a more detailed explanation in the following.
+
+!!! info &quot;Workspaces with same name on different filesystems&quot;
+
+    You can allocate workspaces with the very same name but differing in the filesystem. For
+    example, the default filesystem for workspaces on `Capella` is `cat`. `horse` is also
+    available on `Capella`. Therefore, you can have a workspace named `numbercrunch` on `horse`
+    and `cat`:
+
+    ```console
+    marie@capella $ ws_list -t
+    id: numbercrunch
+         workspace directory  : /data/horse/ws/marie-numbercrunch
+         remaining time       : 99 days 2 hours
+         available extensions : 8
+    id: numbercrunch
+         workspace directory  : /data/cat/ws/marie-numbercrunch
+         remaining time       : 9 days 23 hours
+         available extensions : 2
+    ```
+
+    Thus, if you want to extend the workspace in `horse`, you need to explicitly pass the
+    option `--filesystem=horse` to the command `ws_extend`. Otherwise, the command is run using
+    the default value, i. e., as if `--filesystem=cat` was given.
+
+!!! info &quot;Extend workspace in non-default filesystem&quot;
+
+    When you want to extend the life time of a workspace in the non-default workspace
+    filesystem, you need to pass the option `--filesystem=&lt;filesystem&gt;` to the `ws_allocate`
+    command. Otherwise, the wrong configuration settings are read and applied resulting in
+    misbehavior.
+</pre></div>
+</div>
+</section>
+<section id="send-reminder-for-workspace-expiration-date">
+<h3>Send Reminder for Workspace Expiration Date<a class="headerlink" href="#send-reminder-for-workspace-expiration-date" title="Permalink to this heading">#</a></h3>
+<p>We strongly recommend using one of the two provided ways to ensure that the expiration date of a
+workspace is not forgotten.</p>
+<section id="send-daily-reminder">
+<h4>Send Daily Reminder<a class="headerlink" href="#send-daily-reminder" title="Permalink to this heading">#</a></h4>
+<p>An e-mail reminder can be set at workspace allocation using</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ws_allocate --reminder &lt;N&gt; --mailaddress &lt;your.email&gt;@tu-dresden.de [...]</span>
+</pre></div>
+</div>
+<p>This will send an e-mail every day starting <code class="docutils literal notranslate"><span class="pre">N</span></code> days prior to the expiration date.
+See the <span class="xref myst">example above</span> for reference.</p>
+<p>If you missed setting an e-mail reminder at workspace allocation, you can add a reminder later, e.g.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>initial<span class="w"> </span>allocation
+<span class="gp">marie@login$ </span>ws_allocate<span class="w"> </span>--name<span class="w"> </span>test-workspace<span class="w"> </span>--duration<span class="w"> </span><span class="m">17</span>
+<span class="go">[...]</span>
+<span class="gp"># </span>add<span class="w"> </span>e-mail<span class="w"> </span>reminder
+<span class="gp">marie@login$ </span>ws_allocate<span class="w"> </span>--name<span class="w"> </span>test-workspace<span class="w"> </span>--duration<span class="w"> </span><span class="m">17</span><span class="w"> </span>--reminder<span class="w"> </span><span class="m">7</span><span class="w"> </span>--mailaddress<span class="w"> </span>&lt;your.email&gt;@tu-dresden.de
+<span class="go">--extension</span>
+</pre></div>
+</div>
+<p>This will reallocate the workspace, which counts against your maximum number of reallocations (Note:
+No data is deleted, but the database entry is modified).</p>
+</section>
+<section id="send-calendar-invitation">
+<h4>Send Calendar Invitation<a class="headerlink" href="#send-calendar-invitation" title="Permalink to this heading">#</a></h4>
+<p>The command <code class="docutils literal notranslate"><span class="pre">ws_send_ical</span></code> sends you an ical event on the expiration date of a specified workspace.
+This calendar invitation can be further managed according to your personal preferences.
+The syntax is as follows:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ws_send_ical [--filesystem &lt;filesystem&gt;] --mail &lt;mail address&gt; --workspace &lt;workspace name&gt;</span>
+</pre></div>
+</div>
+<p>E.g.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>ws_send_ical<span class="w"> </span>--filesystem<span class="w"> </span>horse<span class="w"> </span>--mail<span class="w"> </span>&lt;your.email&gt;@tu-dresden.de<span class="w"> </span>--workspace<span class="w"> </span>test-workspace
+</pre></div>
+</div>
+</section>
+</section>
+<section id="deletion-of-a-workspace">
+<h3>Deletion of a Workspace<a class="headerlink" href="#deletion-of-a-workspace" title="Permalink to this heading">#</a></h3>
+<p>There is an <span class="xref myst">Expire process</span> for every workspace filesystem running on a daily
+basis. These processes check the lifetime of all workspaces and move expired workspaces into the
+grace period.</p>
+<p>In addition to this automatic process, you also have the option of <strong>explicitly releasing
+workspaces</strong> using the <code class="docutils literal notranslate"><span class="pre">ws_release</span></code> command. It is mandatory to specify the name of the
+workspace and the filesystem in which it is allocated:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>ws_release<span class="w"> </span>--filesystem<span class="w"> </span>horse<span class="w"> </span>--name<span class="w"> </span>test-workspace
+</pre></div>
+</div>
+<p>You can list your already released or expired workspaces using the <code class="docutils literal notranslate"><span class="pre">ws_restore</span> <span class="pre">--list</span></code> command.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>ws_restore<span class="w"> </span>--list
+<span class="go">horse:</span>
+<span class="go">marie-test-workspace-1701873807</span>
+<span class="go">    unavailable since Wed Dec  6 15:43:27 2023</span>
+<span class="go">walrus:</span>
+<span class="go">marie-number_crunch-1701873907</span>
+<span class="go">    unavailable since Wed Dec  6 15:45:07 2023</span>
+</pre></div>
+</div>
+<p>In this example, the user <code class="docutils literal notranslate"><span class="pre">marie</span></code> has two inactive, i.e., expired, workspaces namely
+<code class="docutils literal notranslate"><span class="pre">test-workspace</span></code> in <code class="docutils literal notranslate"><span class="pre">horse</span></code>, as well as <code class="docutils literal notranslate"><span class="pre">number_crunch</span></code> in the <code class="docutils literal notranslate"><span class="pre">walrus</span></code> filesystem. The command
+<code class="docutils literal notranslate"><span class="pre">ws_restore</span> <span class="pre">--list</span></code> lists the name of the workspace and its expiration date. As you can see, the
+expiration date in Unix timestamp format is added to the workspace name.</p>
+<p>!!! hint “Deleting data in an expired workspace”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If you are short on quota, you might want to delete data in expired workspaces since it counts
+to your quota. Expired workspaces are moved to a hidden directory named `.removed`. The access
+rights remain unchanged. I.e., you can delete the data inside the workspace directory but you
+must not delete the workspace directory itself!
+</pre></div>
+</div>
+<p>!!! warning</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>When you release a workspace **manually**, it will not receive a grace period and be
+**permanently deleted** the **next day**. The advantage of this design is that you can create
+and release workspaces inside jobs and not pollute the filesystem with data no one needs anymore
+in the hidden directories (when workspaces are in the grace period).
+</pre></div>
+</div>
+<section id="expire-process">
+<h4>Expire Process<a class="headerlink" href="#expire-process" title="Permalink to this heading">#</a></h4>
+<p>The clean up process of expired workspaces is automatically handled by a so-called expirer process.
+It performs the following steps once per day and filesystem:</p>
+<ul class="simple">
+<li><p>Check for remaining life time of all workspaces.</p>
+<ul>
+<li><p>If the workspaces expired, move it to a hidden directory so that it becomes inactive.</p></li>
+</ul>
+</li>
+<li><p>Send reminder e-mails to users if the reminder functionality was configured for their particular
+workspaces.</p></li>
+<li><p>Scan through all workspaces in grace period.</p>
+<ul>
+<li><p>If a workspace exceeded the grace period, the workspace and its data are permanently deleted.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="restoring-expired-workspaces">
+<h3>Restoring Expired Workspaces<a class="headerlink" href="#restoring-expired-workspaces" title="Permalink to this heading">#</a></h3>
+<p>At expiration time your workspace will be moved to a special, hidden directory. For a certain period
+of time (aka keeptime), you can still restore your data <strong>into an existing workspace</strong> using the
+command <code class="docutils literal notranslate"><span class="pre">ws_restore</span></code>. This keeptime may be configured differently for each workspace filesystem.
+Please refer to the table in section <span class="xref myst">Workspace Lifetimes</span> for the values.</p>
+<p>The expired workspace has to be specified by its full name as listed by <code class="docutils literal notranslate"><span class="pre">ws_restore</span> <span class="pre">--list</span></code>,
+including username prefix and timestamp suffix. Otherwise, it cannot be uniquely identified. The
+target workspace, on the other hand, must be given with just its short name, as listed by <code class="docutils literal notranslate"><span class="pre">ws_list</span></code>,
+without the username prefix.</p>
+<p>Both workspaces must be on the <strong>very same filesystem</strong>. The data from the old workspace will be
+moved into a directory in the new workspace with the name of the old one. This means a newly
+allocated workspace works as well as a workspace that already contains data.</p>
+<p>!!! note “General steps for restoring a workspace”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>1. Use `ws_restore --list` to list all your expired workspaces and get the correct identifier
+   string for the expired workspace. The identifier string of an expired and an active workspace
+   are different!
+1. (Optional) Allocate a new workspace on the very same filesystem using `ws_allocate`.
+1. Then, you can invoke `ws_restore --filesystem &lt;filesystem&gt; &lt;workspace_name&gt; &lt;target_name&gt;`
+   to restore the expired workspace into the active workspace.
+</pre></div>
+</div>
+<p>??? example “Restore workspace <code class="docutils literal notranslate"><span class="pre">number_crunch</span></code> into new workspace <code class="docutils literal notranslate"><span class="pre">long_computations</span></code>”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>This example depictes the necessary steps to restore the expired workspace `number_crunch` into
+a newly allocated workspace named `long_computations.`
+
+**First step**: List expired workspaces and retrieve correct identifier for the expired workspace.
+In this example, `marie` has two expired workspaces, namely `test-workspace` and `number_crunch`
+both in the `horse` filesystem. The identifier for the restore command is
+`marie-number_crunch-1701873907`.
+
+```console
+marie@login$ ws_restore --list
+horse:
+marie-test-workspace-1701873807
+    unavailable since Wed Dec  6 15:43:27 2023
+marie-number_crunch-1701873907
+    unavailable since Wed Dec  6 15:45:07 2023
+walrus:
+```
+
+**Second step:** Allocate new workspace `long_computations` on the very same filesystem. Please
+refer to the documentation of the [`ws_allocate` command](#allocate-a-workspace) for
+additional useful options.
+
+```console
+marie@login$ ws_allocate --filesystem horse --name long_computations --duration 60
+```
+
+**Third step:** Invoke the command `ws_restore`.
+
+```console
+marie@login$ ws_restore --filesystem horse marie-number_crunch-1701873907 long_computations
+to verify that you are human, please type &#39;menunesarowo&#39;: menunesarowo
+you are human
+Info: restore successful, database entry removed.
+```
+</pre></div>
+</div>
+</section>
+</section>
+<section id="linking-workspaces-in-home">
+<h2>Linking Workspaces in HOME<a class="headerlink" href="#linking-workspaces-in-home" title="Permalink to this heading">#</a></h2>
+<p>It might be valuable to have links to personal workspaces within a certain directory, e.g., your
+home directory. The command <code class="docutils literal notranslate"><span class="pre">ws_register</span> <span class="pre">DIR</span></code> will create and manage links to all personal
+workspaces within in the directory <code class="docutils literal notranslate"><span class="pre">DIR</span></code>. Calling this command will do the following:</p>
+<ul class="simple">
+<li><p>The directory <code class="docutils literal notranslate"><span class="pre">DIR</span></code> will be created if necessary.</p></li>
+<li><p>Links to all personal workspaces will be managed:</p>
+<ul>
+<li><p>Create links to all available workspaces if not already present.</p></li>
+<li><p>Remove links to released workspaces.</p></li>
+</ul>
+</li>
+</ul>
+<p>!!! hint “Automatic update of links”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>An automatic update of the workspace links can be invoked by putting the command
+`ws_register DIR` in your personal `shell` configuration file (e.g., `.bashrc`).
+
+When the filesystems are slow or even down, the command `ws_register` in your `.bashrc` can hang
+preventing you from logging in to ZIH systems.
+In order to make it failsafe, we recommend using `ws_register` in combination with a timeout.
+
+```bash
+ANSRED=$&#39;\e[41;1m&#39;
+ANSRESET=$&#39;\e[0m&#39;
+buf=&quot;$(timeout 10s ws_register $HOME/workspaces)&quot;
+if test $? -eq 0; then
+    echo &quot;${buf}&quot;
+else
+    echo &quot;${ANSRED} ws_register: timeout after 10 seconds.${ANSRESET}\n&quot;
+fi
+```
+</pre></div>
+</div>
+</section>
+<section id="how-to-use-workspaces">
+<h2>How to use Workspaces<a class="headerlink" href="#how-to-use-workspaces" title="Permalink to this heading">#</a></h2>
+<p>There are three typical options for the use of workspaces:</p>
+<section id="per-job-storage">
+<h3>Per-Job Storage<a class="headerlink" href="#per-job-storage" title="Permalink to this heading">#</a></h3>
+<p>The idea of a “workspace per-job storage” addresses the need of a batch job for a directory for
+temporary data which can be deleted afterwards. To help you to write your own
+<span class="xref myst">(Slurm) job file</span>, suited to your needs, we came up with
+the following example (which works <a class="reference internal" href="../software/nanoscale_simulations.html"><span class="doc std std-doc">for the program g16</span></a>).</p>
+<p>!!! hint</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Please do not blind copy the example, but rather take the essential idea and concept and adjust
+it to your needs and workflow, e.g.
+
+* adopt Slurm options for resource specification,
+* insert the path to your input file,
+* specify what software you want to [load](../software/modules.md),
+* and call the actual software to do your computation.
+</pre></div>
+</div>
+<p>!!! example “Using temporary workspaces for I/O intensive tasks”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```bash
+#!/bin/bash
+
+#SBATCH --time=48:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+## The optional constraint for the filesystem feature depends
+## on the filesystem on which you want to use a workspace.
+## Documentation here https://compendium.hpc.tu-dresden.de/jobs_and_resources/slurm/#filesystem-features
+#SBATCH --constraint=local_disk
+#SBATCH --cpus-per-task=24
+
+# Load the software you need here
+module purge
+module load &lt;modules&gt;
+
+# The path to where your input file is located
+INPUTFILE=&quot;/path/to/my/inputfile.data&quot;
+test ! -f &quot;${INPUTFILE}&quot; &amp;&amp; echo &quot;Error: Could not find the input file ${INPUTFILE}&quot; &amp;&amp; exit 1
+
+# The workspace where results from multiple expirements will be saved for later analysis
+RESULT_WSDIR=&quot;/path/to/workspace-experiments-results&quot;
+test -z &quot;${RESULT_WSDIR}&quot; &amp;&amp; echo &quot;Error: Cannot find workspace ${RESULT_WSDIR}&quot; &amp;&amp; exit 1
+
+# Allocate workspace for this job. Adjust time span to time limit of the job (--duration).
+WSNAME=computation_$SLURM_JOB_ID
+export WSDDIR=$(ws_allocate --filesystem horse --name ${WSNAME} --duration 2)
+echo ${WSDIR}
+
+# Check allocation
+test -z &quot;${WSDIR}&quot; &amp;&amp; echo &quot;Error: Cannot allocate workspace ${WSDIR}&quot; &amp;&amp; exit 1
+
+# Change to workspace directory
+cd ${WSDIR}
+
+# Adjust the following line to invoke the program you want to run
+srun &lt;application&gt; &lt; &quot;${INPUTFILE}&quot; &gt; logfile.log
+
+# Move result and log files of interest to directory named &#39;results&#39;. This directory and its
+# content will be saved in another storage location for later analysis. All files and
+# directories will be deleted right away at the end of this job file.
+mkdir results
+cp &lt;results and log files&gt; results/
+
+# Save result files in a general workspace (RESULT_WSDIR, s.a.) holding results from several
+# experiments.
+# Compress results with bzip2 (which includes CRC32 Checksums).
+bzip2 --compress --stdout -4 &quot;${WSDIR}/results&quot; &gt; ${RESULT_WSDIR}/gaussian_job-${SLURM_JOB_ID}.bz2
+RETURN_CODE=$?
+COMPRESSION_SUCCESS=&quot;$(if test ${RETURN_CODE} -eq 0; then echo &#39;TRUE&#39;; else echo &#39;FALSE&#39;; fi)&quot;
+
+# Clean up workspace
+if [ &quot;TRUE&quot; = ${COMPRESSION_SUCCESS} ]; then
+    test -d ${WSDIR} &amp;&amp; rm -rf ${WSDIR}/*
+    # Reduces grace period to 1 day!
+    ws_release -F horse ${WSNAME}
+else
+    echo &quot;Error with compression and writing of results&quot;
+    echo &quot;Please check the folder \&quot;${WSDIR}\&quot; for any partial(?) results.&quot;
+    exit 1
+fi
+```
+</pre></div>
+</div>
+</section>
+<section id="data-for-a-campaign">
+<h3>Data for a Campaign<a class="headerlink" href="#data-for-a-campaign" title="Permalink to this heading">#</a></h3>
+<p>For a series of jobs or calculations that work on the same data, you should allocate a workspace
+once, e.g., in <code class="docutils literal notranslate"><span class="pre">horse</span></code> for 100 days:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>ws_allocate<span class="w"> </span>--filesystem<span class="w"> </span>horse<span class="w"> </span>my_scratchdata<span class="w"> </span><span class="m">100</span>
+<span class="go">Info: creating workspace.</span>
+<span class="go">/data/horse/ws/marie-my_scratchdata</span>
+<span class="go">remaining extensions  : 10</span>
+<span class="go">remaining time in days: 99</span>
+</pre></div>
+</div>
+<p>You can grant your project group access rights:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>chmod<span class="w"> </span>g+wrx<span class="w"> </span>/data/horse/ws/marie-my_scratchdata
+</pre></div>
+</div>
+<p>And verify it with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>ls<span class="w"> </span>-la<span class="w"> </span>/data/horse/ws/marie-my_scratchdata
+<span class="go">total 8</span>
+<span class="go">drwxrwx--- 2 marie    hpcsupport 4096 Jul 10 09:03 .</span>
+<span class="go">drwxr-xr-x 5 operator adm        4096 Jul 10 09:01 ..</span>
+</pre></div>
+</div>
+</section>
+<section id="mid-term-storage">
+<h3>Mid-Term Storage<a class="headerlink" href="#mid-term-storage" title="Permalink to this heading">#</a></h3>
+<p>For data that rarely changes but consumes a lot of space, the <code class="docutils literal notranslate"><span class="pre">walrus</span></code> filesystem can be used. Note
+that this is mounted read-only on the compute nodes, so you cannot use it as a work directory for
+your jobs!</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>ws_allocate<span class="w"> </span>--filesystem<span class="w"> </span>walrus<span class="w"> </span>my_inputdata<span class="w"> </span><span class="m">100</span>
+<span class="go">/data/walrus/ws/marie-my_inputdata</span>
+<span class="go">remaining extensions  : 2</span>
+<span class="go">remaining time in days: 100</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="cooperative-usage-group-workspaces">
+<h2>Cooperative Usage (Group Workspaces)<a class="headerlink" href="#cooperative-usage-group-workspaces" title="Permalink to this heading">#</a></h2>
+<p>As described in the following subsections, you allocate workspaces with both
+<span class="xref myst">read permissions</span>
+and
+<span class="xref myst">write permissions</span>
+for a group.</p>
+<section id="grant-read-permissions-for-a-group">
+<h3>Grant Read Permissions for a Group<a class="headerlink" href="#grant-read-permissions-for-a-group" title="Permalink to this heading">#</a></h3>
+<p>When a workspace is allocated with the option <code class="docutils literal notranslate"><span class="pre">-g,</span> <span class="pre">--group</span></code>, it gets a group workspace that is
+visible to other members of the same group via <code class="docutils literal notranslate"><span class="pre">ws_list</span> <span class="pre">-g</span></code>. Specifically, the workspace directory
+is given read permissions for the very group.</p>
+<p>!!! hint “Choose group”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If you are member of multiple groups, then the group workspace is visible for your primary
+group. You can list all groups you belong to via `groups`, and the first entry is your
+primary group.
+
+Nevertheless, you can allocate a group workspace for any of your groups following these two
+steps:
+
+1. Change to the desired group using `newgrp &lt;other-group&gt;`.
+1. Allocate the group workspace as usual, i.e., `ws_allocate --group [...]`
+
+The [page on Sharing Data](data_sharing.md) provides
+information on how to grant access to certain colleagues and whole project groups.
+</pre></div>
+</div>
+<p>!!! Example “Allocate and list group workspaces”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If Marie wants to share results and scripts in a workspace with all of her colleagues
+in the project `p_number_crunch`, she can allocate a so-called group workspace.
+
+```console
+marie@login$ ws_allocate --group --name number_crunch --duration 30
+Info: creating workspace.
+/data/horse/ws/marie-number_crunch
+remaining extensions  : 10
+remaining time in days: 30
+```
+
+This workspace directory is readable for the group, e.g.,
+
+```console
+marie@login$ ls -ld /data/horse/ws/marie-number_crunch
+drwxr-x--- 2 marie p_number_crunch 4096 Mar  2 15:24 /data/horse/ws/marie-number_crunch
+```
+
+All members of the project group `p_number_crunch` can now list this workspace using
+`ws_list -g` and access the data (read-only).
+
+```console
+martin@login$ ws_list -g -t
+id: number_crunch
+     workspace directory  : /data/horse/ws/marie-number_crunch
+     remaining time       : 29 days 23 hours
+     available extensions : 10
+```
+</pre></div>
+</div>
+</section>
+<section id="grant-write-permissions-for-a-group">
+<h3>Grant Write Permissions for a Group<a class="headerlink" href="#grant-write-permissions-for-a-group" title="Permalink to this heading">#</a></h3>
+<p>You can also grant write permissions to a workspace for all members of a group. When a workspace is
+allocated with <code class="docutils literal notranslate"><span class="pre">-G</span> <span class="pre">&lt;groupname&gt;</span></code>, it becomes writable for the group. Furthermore, the group sticky
+bit (setgid) is set, i.e., files created within that directory (workspace) automatically inherit the
+group ownership of the directory, rather than the primary group of the user who created the file.</p>
+<p>!!! example “Creating a workspace with write permissions for a group”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The generic user `marie` has two groups, whereas `p_number_crunch` is the primary group. If
+`marie` wants to allocate a workspace which is writable by all colleagues in the group
+`p_long_computations`, she can do so using the following commands.
+
+List groups:
+```console
+marie@login$ groups
+p_number_crunch p_long_computations
+```
+
+Allocate a group-writabel workspace with name `long_computations` for 60 days:
+```console
+marie@login$ ws_allocate -G p_long_computations --name long_computations --duration 60
+Info: creating workspace.
+/data/horse/ws/marie-long_computations
+remaining extensions  : 10
+remaining time in days: 60
+```
+
+Verify write and group sticky bit on allocated workspace:
+```console
+marie@login$ stat -c &quot;%A %U %G&quot; data/horse/ws/marie-long_computations
+drwxrws--- marie p_long_computations
+```
+</pre></div>
+</div>
+</section>
+</section>
+<section id="faq-and-troubleshooting">
+<h2>FAQ and Troubleshooting<a class="headerlink" href="#faq-and-troubleshooting" title="Permalink to this heading">#</a></h2>
+<p><strong>Q</strong>: I am getting the error <code class="docutils literal notranslate"><span class="pre">Error:</span> <span class="pre">could</span> <span class="pre">not</span> <span class="pre">create</span> <span class="pre">workspace</span> <span class="pre">directory!</span></code></p>
+<p><strong>A</strong>: Please check the “locale” setting of your SSH client. Some clients (e.g. the one from Mac)
+set values that are not valid on our ZIH systems. You should overwrite <code class="docutils literal notranslate"><span class="pre">LC_CTYPE</span></code> and set it to a
+valid locale value like <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">LC_CTYPE=de_DE.UTF-8</span></code>.</p>
+<p>A list of valid locales can be retrieved via <code class="docutils literal notranslate"><span class="pre">locale</span> <span class="pre">-a</span></code>.</p>
+<p>Please use <code class="docutils literal notranslate"><span class="pre">language_CountryCode.UTF-8</span></code> (or plain) settings. Avoid “iso” codepages!</p>
+<p>Examples:</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Language</p></th>
+<th class="head"><p>Code</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Chinese - Simplified</p></td>
+<td><p>zh_CN.UTF-8</p></td>
+</tr>
+<tr class="row-odd"><td><p>English</p></td>
+<td><p>en_US.UTF-8</p></td>
+</tr>
+<tr class="row-even"><td><p>French</p></td>
+<td><p>fr_FR.UTF-8</p></td>
+</tr>
+<tr class="row-odd"><td><p>German</p></td>
+<td><p>de_DE.UTF-8</p></td>
+</tr>
+</tbody>
+</table>
+<hr class="docutils" />
+<p><strong>Q</strong>: I am getting the error <code class="docutils literal notranslate"><span class="pre">Error:</span> <span class="pre">target</span> <span class="pre">workspace</span> <span class="pre">does</span> <span class="pre">not</span> <span class="pre">exist!</span></code> when trying to restore my
+workspace.</p>
+<p><strong>A</strong>: The workspace you want to restore into is either not on the same filesystem or you used the
+wrong name. Use only the short name that is listed after <code class="docutils literal notranslate"><span class="pre">id:</span></code> when using <code class="docutils literal notranslate"><span class="pre">ws_list</span></code>.
+See section <span class="xref myst">restoring expired workspaces</span>.</p>
+<hr class="docutils" />
+<p><strong>Q</strong>: I forgot to specify an e-mail reminder when allocating my workspace. How can I add the
+e-mail alert functionality to an existing workspace?</p>
+<p><strong>A</strong>: You can add the e-mail alert by “overwriting” the workspace settings via</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>ws_allocate<span class="w"> </span>--extension<span class="w"> </span>--mailaddress<span class="w"> </span>&lt;mail<span class="w"> </span>address&gt;<span class="w"> </span>--reminder<span class="w"> </span>&lt;days&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">             </span>--name<span class="w"> </span>&lt;workspace-name&gt;<span class="w"> </span>--duration<span class="w"> </span>&lt;duration&gt;<span class="w"> </span>--filesystem<span class="w"> </span>&lt;filesystem&gt;
+</pre></div>
+</div>
+<p>E.g.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>ws_allocate<span class="w"> </span>--extension<span class="w"> </span>--mailaddress<span class="w"> </span>&lt;your.email&gt;@tu-dresden.de<span class="w"> </span>--reminder<span class="w"> </span><span class="m">7</span><span class="w"> </span><span class="se">\</span>
+<span class="w">             </span>--name<span class="w"> </span>number_crunch<span class="w"> </span>--duration<span class="w"> </span><span class="m">20</span><span class="w"> </span>--filesystem<span class="w"> </span>horse
+</pre></div>
+</div>
+<p>This will lower the remaining extensions by one.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/data_lifecycle"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#workspace-management">
+   Workspace Management
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#workspace-lifetimes">
+     Workspace Lifetimes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#list-available-filesystems">
+     List Available Filesystems
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#list-current-workspaces">
+     List Current Workspaces
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#allocate-a-workspace">
+     Allocate a Workspace
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#extension-of-a-workspace">
+     Extension of a Workspace
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#send-reminder-for-workspace-expiration-date">
+     Send Reminder for Workspace Expiration Date
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#send-daily-reminder">
+       Send Daily Reminder
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#send-calendar-invitation">
+       Send Calendar Invitation
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deletion-of-a-workspace">
+     Deletion of a Workspace
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#expire-process">
+       Expire Process
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#restoring-expired-workspaces">
+     Restoring Expired Workspaces
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#linking-workspaces-in-home">
+   Linking Workspaces in HOME
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#how-to-use-workspaces">
+   How to use Workspaces
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#per-job-storage">
+     Per-Job Storage
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-for-a-campaign">
+     Data for a Campaign
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#mid-term-storage">
+     Mid-Term Storage
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cooperative-usage-group-workspaces">
+   Cooperative Usage (Group Workspaces)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#grant-read-permissions-for-a-group">
+     Grant Read Permissions for a Group
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#grant-write-permissions-for-a-group">
+     Grant Write Permissions for a Group
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#faq-and-troubleshooting">
+   FAQ and Troubleshooting
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-23.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

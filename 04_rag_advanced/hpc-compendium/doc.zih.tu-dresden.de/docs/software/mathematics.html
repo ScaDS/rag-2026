@@ -1,0 +1,1525 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Mathematics Applications &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/mathematics';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Preparation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../00_preparation/readme.html">Preparation of the session</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/mathematics.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../../../../_sources/04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/mathematics.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Mathematics Applications</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#mathematica">
+   Mathematica
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fonts">
+     Fonts
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#linux-workstation">
+       Linux Workstation
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#windows-workstation">
+       Windows Workstation
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#using-textual-interface-of-mathematica">
+     Using Textual Interface of Mathematica
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#mathematica-and-slurm">
+     Mathematica and Slurm
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#matlab">
+   MATLAB
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#interactive-matlab-gui">
+     Interactive MATLAB-GUI
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#interactive">
+       Interactive
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#matlab-container">
+       MATLAB container
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#non-interactive">
+     Non-interactive
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#using-the-matlab-compiler">
+     Using the MATLAB Compiler
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#parallel-matlab">
+     Parallel MATLAB
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#with-local-configuration">
+       With ‘local’ Configuration
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#with-parfor">
+       With parfor
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#matlab-parallel-computing-toolbox">
+     MATLAB Parallel Computing Toolbox
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#configuration-matlab-client-on-the-cluster">
+       Configuration – MATLAB client on the cluster
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#installation-and-configuration-matlab-client-off-the-cluster">
+       Installation and Configuration – MATLAB client off the cluster
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#configuring-jobs">
+       Configuring Jobs
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#interactive-jobs-matlab-client-on-the-cluster">
+       Interactive Jobs - MATLAB Client on the Cluster
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#independent-batch-job">
+       Independent Batch Job
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#parallel-batch-job">
+       Parallel Batch Job
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#debugging">
+       Debugging
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#further-reading">
+       Further Reading
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="mathematics-applications">
+<h1>Mathematics Applications<a class="headerlink" href="#mathematics-applications" title="Permalink to this heading">#</a></h1>
+<p>!!! cite “Galileo Galilei”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Nature is written in mathematical language.
+</pre></div>
+</div>
+<!--*Please do not run expensive interactive sessions on the login nodes.  Instead, use* `srun --pty-->
+<!--...` *to let the batch system place it on a compute node.*-->
+<section id="mathematica">
+<h2>Mathematica<a class="headerlink" href="#mathematica" title="Permalink to this heading">#</a></h2>
+<p>Mathematica is a general computing environment, organizing many algorithmic, visualization, and user
+interface capabilities within a document-like user interface paradigm.</p>
+<section id="fonts">
+<h3>Fonts<a class="headerlink" href="#fonts" title="Permalink to this heading">#</a></h3>
+<p>To remotely use the graphical front-end, you have to add the Mathematica fonts to the local
+font manager.</p>
+<section id="linux-workstation">
+<h4>Linux Workstation<a class="headerlink" href="#linux-workstation" title="Permalink to this heading">#</a></h4>
+<p>You need to copy the fonts from ZIH systems to your local system and expand the font path</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@local$ </span>scp<span class="w"> </span>-r<span class="w"> </span>dataport:/software/rapids/r24.04/Mathematica/13.0.1/SystemFiles/Fonts/Type1/
+<span class="go">~/.fonts</span>
+<span class="gp">marie@local$ </span>xset<span class="w"> </span>fp+<span class="w"> </span>~/.fonts/Type1
+</pre></div>
+</div>
+<p>!!! important “SCP command”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The previous SCP command requires that you have already set up your [SSH configuration
+](../access/ssh_login.md#configuring-default-parameters-for-ssh).
+</pre></div>
+</div>
+</section>
+<section id="windows-workstation">
+<h4>Windows Workstation<a class="headerlink" href="#windows-workstation" title="Permalink to this heading">#</a></h4>
+<p>You have to add additional Mathematica fonts at your local PC
+<a class="reference download internal" download="" href="../../../../../_downloads/4085a5215e72908b3bbcdc966543de11/Mathematica-Fonts.zip"><span class="xref download myst">download fonts archive</span></a>.</p>
+<p>If you use <strong>Xming</strong> as X-server at your PC (refer to
+<a class="reference internal" href="../access/ssh_login.html"><span class="doc std std-doc">remote access from Windows</span></a>, follow these steps:</p>
+<ol class="arabic simple">
+<li><p>Create a new folder <code class="docutils literal notranslate"><span class="pre">Mathematica</span></code> in the directory <code class="docutils literal notranslate"><span class="pre">fonts</span></code> of the installation directory of Xming
+(mostly: <code class="docutils literal notranslate"><span class="pre">C:\\Programme\\Xming\\fonts\\</span></code>)</p></li>
+<li><p>Extract the fonts archive into this new directory <code class="docutils literal notranslate"><span class="pre">Mathematica</span></code>.  In result you should have the
+two directories <code class="docutils literal notranslate"><span class="pre">DBF</span></code> and <code class="docutils literal notranslate"><span class="pre">Type1</span></code>.</p></li>
+<li><p>Add the path to these font files into the file <code class="docutils literal notranslate"><span class="pre">font-dirs</span></code>.  You can find it in
+<code class="docutils literal notranslate"><span class="pre">C:\\Programme\\Xming\\</span></code>.</p></li>
+</ol>
+<div class="highlight-cmd notranslate"><div class="highlight"><pre><span></span># font-dirs
+# comma-separated list of directories to add to the default font path
+# defaults are built-ins, misc, TTF, Type1, 75dpi, 100dpi
+# also allows entries on individual lines
+C:\Programme\Xming\fonts\dejavu,C:\Programme\Xming\fonts\cyrillic
+C:\Programme\Xming\fonts\Mathematica\DBF
+C:\Programme\Xming\fonts\Mathematica\Type1
+C:\WINDOWS\Fonts
+</pre></div>
+</div>
+</section>
+</section>
+<section id="using-textual-interface-of-mathematica">
+<h3>Using Textual Interface of Mathematica<a class="headerlink" href="#using-textual-interface-of-mathematica" title="Permalink to this heading">#</a></h3>
+<p>Once a Mathematica module is loaded, you can use Mathematica’s textual interface via the command
+<code class="docutils literal notranslate"><span class="pre">math</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>module<span class="w"> </span>load<span class="w"> </span>release/24.04<span class="w"> </span>Mathematica/13.0.1
+<span class="go">[...]</span>
+<span class="gp">marie@login$ </span>math
+<span class="go">Mathematica 13.0.1 Kernel for Linux x86 (64-bit)</span>
+<span class="go">Copyright 1988-2022 Wolfram Research, Inc.</span>
+
+<span class="go">In[1]:= Sum[i, {i,1,100}]</span>
+<span class="go">Out[1]= 5050</span>
+<span class="go">In[2]:= Quit[];</span>
+</pre></div>
+</div>
+</section>
+<section id="mathematica-and-slurm">
+<h3>Mathematica and Slurm<a class="headerlink" href="#mathematica-and-slurm" title="Permalink to this heading">#</a></h3>
+<p>For running compute intensive and long calculations, please use the batch system
+<a class="reference internal" href="../jobs_and_resources/slurm.html"><span class="doc std std-doc">Slurm</span></a>. To submit Mathematica jobs to the resource scheduler Slurm,
+the Mathematica commands to be executed must be containined in a single <code class="docutils literal notranslate"><span class="pre">.m</span></code>-script. The <code class="docutils literal notranslate"><span class="pre">.m</span></code>-script
+will then be passed to the <code class="docutils literal notranslate"><span class="pre">math</span></code> command in a job file.</p>
+<p>??? example “1. Hello-world-script for Mathematica”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The file `math_example.m` is your input script that includes the calculation statements for
+Mathematica.
+
+```
+Print[&quot;Hello, World!&quot;];
+
+(* Perform some calculations *)
+x = 10;
+y = 20;
+
+sum = x + y;
+product = x * y;
+
+Print[&quot;The sum of &quot;, x, &quot; and &quot;, y, &quot; is: &quot;, sum];
+Print[&quot;The product of &quot;, x, &quot; and &quot;, y, &quot; is: &quot;, product];
+```
+</pre></div>
+</div>
+<p>??? example “2. Job file”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The file `jobfile.sh` is your jobfile with the resource specifications and the commands to
+executed.
+
+```bash
+#!/bin/bash
+#SBATCH --time=00:05:00
+#SBATCH --ntasks=1
+
+# prepare environment; load module
+module purge
+module load release/24.04 Mathematica/13.0.1
+
+# run the math kernel; perform calculations
+math -script math_example.m &gt; math.output
+```
+</pre></div>
+</div>
+<p>??? example “3. Submit the job”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Invoke the command `sbatch jobfile.sh` to submit the job to the scheduler. The scheduler will
+provide you the unqiue job id.
+
+```
+marie@login$ sbatch jobfile.sh
+Submitted batch job 10705392
+```
+
+All output of the `math` command  will be saved in the file `math.output`.
+</pre></div>
+</div>
+<p>!!! note</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Mathematica licenses are limited.
+</pre></div>
+</div>
+<p>There exist two types, <em>MathKernel</em> and <em>SubMathKernel</em> licenses. Every sequential job you start
+will consume a MathKernel license of which we only have 61. We do have, however, 488 SubMathKernel
+licenses, so please, don’t start many sequential jobs but try to parallelize your calculation,
+utilizing multiple SubMathKernel licenses per job, in order to achieve a more reasonable license
+usage.</p>
+</section>
+</section>
+<section id="matlab">
+<h2>MATLAB<a class="headerlink" href="#matlab" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://de.mathworks.com/products/matlab.html">MATLAB</a> is a numerical computing environment and
+programming language. Created by The MathWorks, MATLAB allows easy matrix manipulation, plotting of
+functions and data, implementation of algorithms, creation of user interfaces, and interfacing with
+programs in other languages.  Although it specializes in numerical computing, an optional toolbox
+interfaces with the Maple symbolic engine, allowing it to be part of a full computer algebra system.</p>
+<p>Running MATLAB via the batch system could look like this (for 2 Gb RAM per core and 12 cores
+reserved). Please adapt this to your needs!</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>module<span class="w"> </span>load<span class="w"> </span>MATLAB
+<span class="gp">marie@login$ </span>srun<span class="w"> </span>--time<span class="o">=</span><span class="m">8</span>:00<span class="w"> </span>--cpus-per-task<span class="o">=</span><span class="m">12</span><span class="w"> </span>--mem-per-cpu<span class="o">=</span><span class="m">2000</span><span class="w"> </span>--pty<span class="w"> </span>--x11<span class="o">=</span>first<span class="w"> </span>bash
+<span class="gp">marie@compute$ </span>matlab
+</pre></div>
+</div>
+<p>With following command you can see a list of installed software - also
+the different versions of MATLAB.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>module<span class="w"> </span>avail<span class="w"> </span>MATLAB
+</pre></div>
+</div>
+<p>Please choose one of these, then load the chosen software with the command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>marie@login$<span class="w"> </span>module<span class="w"> </span>load<span class="w"> </span>MATLAB/&lt;version&gt;
+</pre></div>
+</div>
+<p>Or use:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>module<span class="w"> </span>load<span class="w"> </span>MATLAB
+</pre></div>
+</div>
+<p>(then you will get the most recent MATLAB version.
+<span class="xref myst">Refer to the modules page for details.</span>)</p>
+<section id="interactive-matlab-gui">
+<h3>Interactive MATLAB-GUI<a class="headerlink" href="#interactive-matlab-gui" title="Permalink to this heading">#</a></h3>
+<p>If you have a connection with X11 forwarding enabled.</p>
+<section id="interactive">
+<h4>Interactive<a class="headerlink" href="#interactive" title="Permalink to this heading">#</a></h4>
+<p>You should allocate a CPU for your working with command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>srun<span class="w"> </span>--time<span class="o">=</span><span class="m">01</span>:00:00<span class="w"> </span>--pty<span class="w"> </span>--x11<span class="o">=</span>first<span class="w"> </span>bash
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>now you can call “matlab” (you have 1h to work with the MATLAB-GUI)</p></li>
+</ul>
+</section>
+<section id="matlab-container">
+<h4>MATLAB container<a class="headerlink" href="#matlab-container" title="Permalink to this heading">#</a></h4>
+<p>We provide MATLAB containers that can be started as following:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>start_matlab.sh
+</pre></div>
+</div>
+</section>
+</section>
+<section id="non-interactive">
+<h3>Non-interactive<a class="headerlink" href="#non-interactive" title="Permalink to this heading">#</a></h3>
+<p>Using Scripts</p>
+<p>You have to start matlab-calculation as a Batch-Job via command</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>srun<span class="w"> </span>--pty<span class="w"> </span>matlab<span class="w"> </span>-batch<span class="w"> </span>&lt;basename_of_your_matlab_script&gt;
+<span class="gp"># </span>NOTE:<span class="w"> </span>you<span class="w"> </span>must<span class="w"> </span>omit<span class="w"> </span>the<span class="w"> </span>file<span class="w"> </span>extension<span class="w"> </span><span class="s2">&quot;.m&quot;</span><span class="w"> </span>here,<span class="w"> </span>because<span class="w"> </span>-r<span class="w"> </span>expects<span class="w"> </span>a<span class="w"> </span>matlab<span class="w"> </span><span class="nb">command</span><span class="w"> </span>or<span class="w"> </span><span class="k">function</span><span class="w"> </span>call,<span class="w"> </span>not<span class="w"> </span>a<span class="w"> </span>file-name.
+</pre></div>
+</div>
+<p>!!! info “License occupying”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>While running your calculations as a script this way is possible, it is generally frowned upon,
+because you are occupying MATLAB licenses for the entire duration of your calculation when doing so.
+Since the available licenses are limited, it is highly recommended you first compile your script via
+the MATLAB Compiler (`mcc`) before running it for a longer period of time on our systems.  That way,
+you only need to check-out a license during compile time (which is relatively short) and can run as
+many instances of your calculation as you&#39;d like, since it does not need a license during runtime
+when compiled to a binary.
+</pre></div>
+</div>
+<p>You can find detailed documentation on the MATLAB compiler at
+<a class="reference external" href="https://de.mathworks.com/help/compiler/">MathWorks’ help pages</a>.</p>
+</section>
+<section id="using-the-matlab-compiler">
+<h3>Using the MATLAB Compiler<a class="headerlink" href="#using-the-matlab-compiler" title="Permalink to this heading">#</a></h3>
+<p>Compile your <code class="docutils literal notranslate"><span class="pre">.m</span></code> script into a binary:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>marie@login$<span class="w"> </span>mcc<span class="w"> </span>-m<span class="w"> </span>name_of_your_matlab_script.m<span class="w"> </span>-o<span class="w"> </span>compiled_executable<span class="w"> </span>-R<span class="w"> </span>-nodisplay<span class="w"> </span>-R<span class="w"> </span>-nosplash
+</pre></div>
+</div>
+<p>This will also generate a wrapper script called <code class="docutils literal notranslate"><span class="pre">run_compiled_executable.sh</span></code> which sets the required
+library path environment variables in order to make this work. It expects the path to the MATLAB
+installation as an argument, you can use the environment variable <code class="docutils literal notranslate"><span class="pre">$EBROOTMATLAB</span></code> as set by the
+module file for that.</p>
+<p>Then run the binary via the wrapper script in a job (just a simple example, you should be using an
+<span class="xref myst">sbatch script</span> for that)</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>marie@login$<span class="w"> </span>srun<span class="w"> </span>./run_compiled_executable.sh<span class="w"> </span><span class="si">${</span><span class="nv">EBROOTMATLAB</span><span class="si">}</span>
+</pre></div>
+</div>
+</section>
+<section id="parallel-matlab">
+<h3>Parallel MATLAB<a class="headerlink" href="#parallel-matlab" title="Permalink to this heading">#</a></h3>
+<section id="with-local-configuration">
+<h4>With ‘local’ Configuration<a class="headerlink" href="#with-local-configuration" title="Permalink to this heading">#</a></h4>
+<ul class="simple">
+<li><p>If you want to run your code in parallel, please request as many cores as you need!</p></li>
+<li><p>Start a batch job with the number <code class="docutils literal notranslate"><span class="pre">N</span></code> of processes, e.g., <code class="docutils literal notranslate"><span class="pre">srun</span> <span class="pre">--cpus-per-task=4</span> <span class="pre">--pty</span> <span class="pre">--x11=first</span> <span class="pre">bash</span> <span class="pre">-l</span></code></p></li>
+<li><p>Run MATLAB with the GUI or the CLI or with a script</p></li>
+<li><p>Inside MATLAB use <code class="docutils literal notranslate"><span class="pre">parpool</span> <span class="pre">open</span> <span class="pre">4</span></code> to start parallel processing</p></li>
+</ul>
+<p>!!! example “Example for 1000*1000 matrix-matrix multiplication”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```bash
+R = distributed.rand(1000);
+D = R * R
+```
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Close parallel task using <code class="docutils literal notranslate"><span class="pre">delete(gcp('nocreate'))</span></code></p></li>
+</ul>
+</section>
+<section id="with-parfor">
+<h4>With parfor<a class="headerlink" href="#with-parfor" title="Permalink to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Start a batch job with the number <code class="docutils literal notranslate"><span class="pre">N</span></code> of processes (,e.g., <code class="docutils literal notranslate"><span class="pre">N=12</span></code>)</p></li>
+<li><p>Inside use <code class="docutils literal notranslate"><span class="pre">matlabpool</span> <span class="pre">open</span> <span class="pre">N</span></code> or <code class="docutils literal notranslate"><span class="pre">matlabpool(N)</span></code> to start parallel processing. It will use
+the ‘local’ configuration by default.</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">parfor</span></code> for a parallel loop, where the <strong>independent</strong> loop iterations are processed by <code class="docutils literal notranslate"><span class="pre">N</span></code>
+processes</p></li>
+</ul>
+<p>!!! example</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```bash
+parfor i = 1:3
+    c(:,i) = eig(rand(1000));
+end
+```
+</pre></div>
+</div>
+<p>Please refer to the documentation <code class="docutils literal notranslate"><span class="pre">help</span> <span class="pre">parfor</span></code> for further information.</p>
+</section>
+</section>
+<section id="matlab-parallel-computing-toolbox">
+<h3>MATLAB Parallel Computing Toolbox<a class="headerlink" href="#matlab-parallel-computing-toolbox" title="Permalink to this heading">#</a></h3>
+<p>In the following, the steps to configure MATLAB to submit jobs to a cluster, retrieve results, and
+debug errors are outlined.</p>
+<section id="configuration-matlab-client-on-the-cluster">
+<h4>Configuration – MATLAB client on the cluster<a class="headerlink" href="#configuration-matlab-client-on-the-cluster" title="Permalink to this heading">#</a></h4>
+<p>After logging into the HPC system, you configure MATLAB to run parallel jobs on the HPC system by
+calling the shell script <code class="docutils literal notranslate"><span class="pre">configCluster.sh</span></code>.  This only needs to be called once per version of
+MATLAB.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>module<span class="w"> </span>load<span class="w"> </span>MATLAB
+<span class="gp">marie@login$ </span>configCluster.sh
+</pre></div>
+</div>
+<p>Jobs will now default to the HPC system rather than submit to the local machine.</p>
+</section>
+<section id="installation-and-configuration-matlab-client-off-the-cluster">
+<h4>Installation and Configuration – MATLAB client off the cluster<a class="headerlink" href="#installation-and-configuration-matlab-client-off-the-cluster" title="Permalink to this heading">#</a></h4>
+<p>The MATLAB support package for ZIH Systems can be found as follows:</p>
+<ul class="simple">
+<li><p>Windows:</p>
+<ul>
+<li><p><a class="reference download internal" download="" href="../../../../../_downloads/556d149c3658fbf621781e76b32c9fa3/tud.nonshared.R2021b.zip"><span class="xref download myst">tud.nonshared.R2021b.zip</span></a></p></li>
+<li><p><a class="reference download internal" download="" href="../../../../../_downloads/56d3a7c72ec2e1afc9a3f571dfb04c5c/tud.nonshared.R2022a.zip"><span class="xref download myst">tud.nonshared.R2022a.zip</span></a></p></li>
+</ul>
+</li>
+<li><p>Linux/Mac:</p>
+<ul>
+<li><p><a class="reference download internal" download="" href="../../../../../_downloads/dc458a1f285755cce0ebae3cc9fe6ba8/tud.nonshared.R2021b.tar.gz"><span class="xref download myst">tud.nonshared.R2021b.tar.gz</span></a></p></li>
+<li><p><a class="reference download internal" download="" href="../../../../../_downloads/ca1f30baaa7b7829665d377065801bf4/tud.nonshared.R2022a.tar.gz"><span class="xref download myst">tud.nonshared.R2022a.tar.gz</span></a></p></li>
+</ul>
+</li>
+</ul>
+<p>Download the appropriate archive file and start MATLAB. The archive file should be extracted
+in the location returned by calling</p>
+<div class="highlight-matlabsession notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt; </span><span class="nb">userpath</span>
+</pre></div>
+</div>
+<p>Configure MATLAB to run parallel jobs on ZIH Systems by calling <code class="docutils literal notranslate"><span class="pre">configCluster</span></code>. <code class="docutils literal notranslate"><span class="pre">configCluster</span></code>
+only needs to be called once per version of MATLAB.</p>
+<div class="highlight-matlabsession notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt; </span><span class="n">configCluster</span>
+</pre></div>
+</div>
+<p>Submission to the remote cluster requires SSH credentials. You will be prompted for your SSH
+username and password or identity file (private key). The username and location of the private key
+will be stored in MATLAB for future sessions. Jobs will now default to the cluster rather than
+submit to the local machine.</p>
+<p>!!! note</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If you would like to submit to the local machine then run the following command:
+
+```matlab
+&gt;&gt; % Get a handle to the local resources
+&gt;&gt; c = parcluster(&#39;local&#39;);
+```
+</pre></div>
+</div>
+</section>
+<section id="configuring-jobs">
+<h4>Configuring Jobs<a class="headerlink" href="#configuring-jobs" title="Permalink to this heading">#</a></h4>
+<p>Prior to submitting the job, you can specify various parameters to pass to your jobs, such as queue,
+e-mail, walltime, etc. <em>Only <code class="docutils literal notranslate"><span class="pre">MemPerCpu</span></code> and <code class="docutils literal notranslate"><span class="pre">QueueName</span></code> are required</em>.</p>
+<div class="highlight-matlabsession notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt; </span><span class="c">% Get a handle to the cluster</span>
+<span class="gp">&gt;&gt; </span><span class="n">c</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">parcluster</span><span class="p">;</span>
+
+<span class="go">[REQUIRED]</span>
+
+<span class="gp">&gt;&gt; </span><span class="c">% Specify memory to use, per core (default: 2gb)</span>
+<span class="gp">&gt;&gt; </span><span class="n">c</span><span class="p">.</span><span class="n">AdditionalProperties</span><span class="p">.</span><span class="n">MemPerCpu</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;4gb&#39;</span><span class="p">;</span>
+
+<span class="gp">&gt;&gt; </span><span class="c">% Specify the walltime (e.g., 5 hours)</span>
+<span class="gp">&gt;&gt; </span><span class="n">c</span><span class="p">.</span><span class="n">AdditionalProperties</span><span class="p">.</span><span class="n">WallTime</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;05:00:00&#39;</span><span class="p">;</span>
+
+<span class="go">[OPTIONAL]</span>
+
+<span class="gp">&gt;&gt; </span><span class="c">% Specify the account to use</span>
+<span class="gp">&gt;&gt; </span><span class="n">c</span><span class="p">.</span><span class="n">AdditionalProperties</span><span class="p">.</span><span class="n">Account</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;account-name&#39;</span><span class="p">;</span>
+
+<span class="gp">&gt;&gt; </span><span class="c">% Request constraint</span>
+<span class="gp">&gt;&gt; </span><span class="n">c</span><span class="p">.</span><span class="n">AdditionalProperties</span><span class="p">.</span><span class="n">Constraint</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;a-constraint&#39;</span><span class="p">;</span>
+
+<span class="gp">&gt;&gt; </span><span class="c">% Request job to run on exclusive node(s) (default: false)</span>
+<span class="gp">&gt;&gt; </span><span class="n">c</span><span class="p">.</span><span class="n">AdditionalProperties</span><span class="p">.</span><span class="n">EnableExclusive</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+
+<span class="gp">&gt;&gt; </span><span class="c">% Request email notification of job status</span>
+<span class="gp">&gt;&gt; </span><span class="n">c</span><span class="p">.</span><span class="n">AdditionalProperties</span><span class="p">.</span><span class="n">EmailAddress</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;user-id@tu-dresden.de&#39;</span><span class="p">;</span>
+
+<span class="gp">&gt;&gt; </span><span class="c">% Specify number of GPUs to use (GpuType is optional)</span>
+<span class="gp">&gt;&gt; </span><span class="n">c</span><span class="p">.</span><span class="n">AdditionalProperties</span><span class="p">.</span><span class="n">GpusPerNode</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="gp">&gt;&gt; </span><span class="n">c</span><span class="p">.</span><span class="n">AdditionalProperties</span><span class="p">.</span><span class="n">GpuType</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;gpu-card&#39;</span><span class="p">;</span>
+
+<span class="gp">&gt;&gt; </span><span class="c">% Specify the queue to use</span>
+<span class="gp">&gt;&gt; </span><span class="n">c</span><span class="p">.</span><span class="n">AdditionalProperties</span><span class="p">.</span><span class="n">Partition</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;queue-name&#39;</span><span class="p">;</span>
+
+<span class="gp">&gt;&gt; </span><span class="c">% Specify a reservation to use</span>
+<span class="gp">&gt;&gt; </span><span class="n">c</span><span class="p">.</span><span class="n">AdditionalProperties</span><span class="p">.</span><span class="n">Reservation</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;a-reservation&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Save changes after modifying <code class="docutils literal notranslate"><span class="pre">AdditionalProperties</span></code> for the above changes to persist between MATLAB
+sessions.</p>
+<div class="highlight-matlabsession notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt; </span><span class="n">c</span><span class="p">.</span><span class="n">saveProfile</span>
+</pre></div>
+</div>
+<p>To see the values of the current configuration options, display <code class="docutils literal notranslate"><span class="pre">AdditionalProperties</span></code>.</p>
+<div class="highlight-matlabsession notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt; </span><span class="c">% To view current properties</span>
+<span class="gp">&gt;&gt; </span><span class="n">c</span><span class="p">.</span><span class="n">AdditionalProperties</span>
+</pre></div>
+</div>
+<p>You can unset a value when no longer needed.</p>
+<div class="highlight-matlabsession notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt; </span><span class="c">% Turn off email notifications</span>
+<span class="gp">&gt;&gt; </span><span class="n">c</span><span class="p">.</span><span class="n">AdditionalProperties</span><span class="p">.</span><span class="n">EmailAddress</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#39;&#39;</span><span class="p">;</span>
+<span class="gp">&gt;&gt; </span><span class="n">c</span><span class="p">.</span><span class="n">saveProfile</span>
+</pre></div>
+</div>
+</section>
+<section id="interactive-jobs-matlab-client-on-the-cluster">
+<h4>Interactive Jobs - MATLAB Client on the Cluster<a class="headerlink" href="#interactive-jobs-matlab-client-on-the-cluster" title="Permalink to this heading">#</a></h4>
+<p>To run an interactive pool job on the ZIH systems, continue to use <code class="docutils literal notranslate"><span class="pre">parpool</span></code> as you’ve done before.</p>
+<div class="highlight-matlabsession notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt; </span><span class="c">% Get a handle to the cluster</span>
+<span class="gp">&gt;&gt; </span><span class="n">c</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">parcluster</span><span class="p">;</span>
+
+<span class="gp">&gt;&gt; </span><span class="c">% Open a pool of 64 workers on the cluster</span>
+<span class="gp">&gt;&gt; </span><span class="n">pool</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">parpool</span><span class="p">(</span><span class="mi">64</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Rather than running local on your machine, the pool can now run across multiple nodes on the
+cluster.</p>
+<div class="highlight-matlabsession notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt; </span><span class="c">% Run a parfor over 1000 iterations</span>
+<span class="gp">&gt;&gt; </span><span class="k">parfor</span><span class="w"> </span><span class="n">idx</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="mi">1000</span>
+<span class="go">      a(idx) = …</span>
+<span class="go">   end</span>
+</pre></div>
+</div>
+<p>Once you are done with the pool, delete it.</p>
+<div class="highlight-matlabsession notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt; </span><span class="c">% Delete the pool</span>
+<span class="gp">&gt;&gt; </span><span class="n">pool</span><span class="p">.</span><span class="n">delete</span>
+</pre></div>
+</div>
+</section>
+<section id="independent-batch-job">
+<h4>Independent Batch Job<a class="headerlink" href="#independent-batch-job" title="Permalink to this heading">#</a></h4>
+<p>Use the batch command to submit asynchronous jobs to the HPC system. The <code class="docutils literal notranslate"><span class="pre">batch</span></code> command will return
+a job object which is used to access the output of the submitted job. See the MATLAB documentation
+for more help on <code class="docutils literal notranslate"><span class="pre">batch</span></code>.</p>
+<div class="highlight-matlabsession notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt; </span><span class="c">% Get a handle to the cluster</span>
+<span class="gp">&gt;&gt; </span><span class="n">c</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">parcluster</span><span class="p">;</span>
+
+<span class="gp">&gt;&gt; </span><span class="c">% Submit job to query where MATLAB is running on the cluster</span>
+<span class="gp">&gt;&gt; </span><span class="n">job</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">batch</span><span class="p">(@</span><span class="nb">pwd</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w">  </span><span class="k">...</span>
+<span class="gp">   </span><span class="w">    </span><span class="s">&#39;CurrentFolder&#39;</span><span class="p">,</span><span class="s">&#39;.&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;AutoAddClientPath&#39;</span><span class="p">,</span><span class="nb">false</span><span class="p">);</span>
+
+<span class="gp">&gt;&gt; </span><span class="c">% Query job for state</span>
+<span class="gp">&gt;&gt; </span><span class="n">job</span><span class="p">.</span><span class="n">State</span>
+
+<span class="gp">&gt;&gt; </span><span class="c">% If state is finished, fetch the results</span>
+<span class="gp">&gt;&gt; </span><span class="n">job</span><span class="p">.</span><span class="n">fetchOutputs</span><span class="p">{:}</span>
+
+<span class="gp">&gt;&gt; </span><span class="c">% Delete the job after results are no longer needed</span>
+<span class="gp">&gt;&gt; </span><span class="n">job</span><span class="p">.</span><span class="n">delete</span>
+</pre></div>
+</div>
+<p>To retrieve a list of currently running or completed jobs, call <code class="docutils literal notranslate"><span class="pre">parcluster</span></code> to retrieve the cluster
+object. The cluster object stores an array of jobs that were run, are running, or are queued to
+run. This allows us to fetch the results of completed jobs. Retrieve and view the list of jobs as
+shown below.</p>
+<div class="highlight-matlabsession notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt; </span><span class="n">c</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">parcluster</span><span class="p">;</span>
+<span class="gp">&gt;&gt; </span><span class="n">jobs</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">Jobs</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Once you have identified the job you want, you can retrieve the results as done previously.</p>
+<p><code class="docutils literal notranslate"><span class="pre">fetchOutputs</span></code> is used to retrieve function output arguments; if calling <code class="docutils literal notranslate"><span class="pre">batch</span></code> with a script, use
+<code class="docutils literal notranslate"><span class="pre">load</span></code> instead. Data that has been written to files on the cluster needs be retrieved directly
+from the filesystem (e.g. via ftp). To view results of a previously completed job:</p>
+<div class="highlight-matlabsession notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt; </span><span class="c">% Get a handle to the job with ID 2</span>
+<span class="gp">&gt;&gt; </span><span class="n">job2</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">Jobs</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>!!! note</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>You can view a list of your jobs, as well as their IDs, using the above `c.Jobs` command.
+
+```matlabsession
+&gt;&gt; % Fetch results for job with ID 2
+&gt;&gt; job2.fetchOutputs{:}
+```
+</pre></div>
+</div>
+</section>
+<section id="parallel-batch-job">
+<h4>Parallel Batch Job<a class="headerlink" href="#parallel-batch-job" title="Permalink to this heading">#</a></h4>
+<p>You can also submit parallel workflows with the <code class="docutils literal notranslate"><span class="pre">batch</span></code> command. Let’s use the following example
+for a parallel job, which is saved as <code class="docutils literal notranslate"><span class="pre">parallel_example.m</span></code>.</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="nf">[t, A] = parallel_example</span><span class="p">(</span>iter<span class="p">)</span>
+
+<span class="k">if</span><span class="w"> </span><span class="nb">nargin</span><span class="o">==</span><span class="mi">0</span>
+<span class="w">    </span><span class="n">iter</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span>
+<span class="k">end</span>
+
+<span class="nb">disp</span><span class="p">(</span><span class="s">&#39;Start sim&#39;</span><span class="p">)</span>
+
+<span class="n">t0</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">tic</span><span class="p">;</span>
+<span class="k">parfor</span><span class="w"> </span><span class="n">idx</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="n">iter</span>
+<span class="w">    </span><span class="n">A</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">idx</span><span class="p">;</span>
+<span class="w">    </span><span class="nb">pause</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="w">    </span><span class="n">idx</span>
+<span class="k">end</span>
+<span class="n">t</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">toc</span><span class="p">(</span><span class="n">t0</span><span class="p">);</span>
+
+<span class="nb">disp</span><span class="p">(</span><span class="s">&#39;Sim completed&#39;</span><span class="p">)</span>
+
+<span class="nb">save</span><span class="w"> </span><span class="n">RESULTS</span><span class="w"> </span><span class="n">A</span>
+
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>This time when you use the <code class="docutils literal notranslate"><span class="pre">batch</span></code> command, to run a parallel job, you will also specify a MATLAB
+Pool.</p>
+<div class="highlight-matlabsession notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt; </span><span class="c">% Get a handle to the cluster</span>
+<span class="gp">&gt;&gt; </span><span class="n">c</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">parcluster</span><span class="p">;</span>
+
+<span class="gp">&gt;&gt; </span><span class="c">% Submit a batch pool job using 4 workers for 16 simulations</span>
+<span class="gp">&gt;&gt; </span><span class="n">job</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">batch</span><span class="p">(@</span><span class="n">parallel_example</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="mi">16</span><span class="p">},</span><span class="w"> </span><span class="s">&#39;Pool&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="k">...</span>
+<span class="gp">   </span><span class="w">    </span><span class="s">&#39;CurrentFolder&#39;</span><span class="p">,</span><span class="s">&#39;.&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;AutoAddClientPath&#39;</span><span class="p">,</span><span class="nb">false</span><span class="p">);</span>
+
+<span class="gp">&gt;&gt; </span><span class="c">% View current job status</span>
+<span class="gp">&gt;&gt; </span><span class="n">job</span><span class="p">.</span><span class="n">State</span>
+
+<span class="gp">&gt;&gt; </span><span class="c">% Fetch the results after a finished state is retrieved</span>
+<span class="gp">&gt;&gt; </span><span class="n">job</span><span class="p">.</span><span class="n">fetchOutputs</span><span class="p">{:}</span>
+<span class="go">ans =</span>
+<span class="go">  8.8872</span>
+</pre></div>
+</div>
+<p>The job ran in 8.89 seconds using four workers. Note that these jobs will always request N+1 CPU
+cores, since one worker is required to manage the batch job and pool of workers. For example, a
+job that needs eight workers will consume nine CPU cores.</p>
+<p>You might run the same simulation but increase the Pool size. This time, to retrieve the results later,
+you will keep track of the job ID.</p>
+<p>!!! note</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>For some applications, there will be a diminishing return when allocating too many workers, as
+the overhead may exceed computation time.
+
+```matlabsession
+&gt;&gt; % Get a handle to the cluster
+&gt;&gt; c = parcluster;
+
+&gt;&gt; % Submit a batch pool job using 8 workers for 16 simulations
+&gt;&gt; job = c.batch(@parallel_example, 1, {16}, &#39;Pool&#39;, 8, ...
+       &#39;CurrentFolder&#39;,&#39;.&#39;, &#39;AutoAddClientPath&#39;,false);
+
+&gt;&gt; % Get the job ID
+&gt;&gt; id = job.ID
+id =
+  4
+&gt;&gt; % Clear job from workspace (as though you quit MATLAB)
+&gt;&gt; clear job
+```
+</pre></div>
+</div>
+<p>Once you have a handle to the cluster, you can call the <code class="docutils literal notranslate"><span class="pre">findJob</span></code> method to search for the job with
+the specified job ID.</p>
+<div class="highlight-matlabsession notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt; </span><span class="c">% Get a handle to the cluster</span>
+<span class="gp">&gt;&gt; </span><span class="n">c</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">parcluster</span><span class="p">;</span>
+
+<span class="gp">&gt;&gt; </span><span class="c">% Find the old job</span>
+<span class="gp">&gt;&gt; </span><span class="n">job</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">findJob</span><span class="p">(</span><span class="s">&#39;ID&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span>
+
+<span class="gp">&gt;&gt; </span><span class="c">% Retrieve the state of the job</span>
+<span class="gp">&gt;&gt; </span><span class="n">job</span><span class="p">.</span><span class="n">State</span>
+<span class="go">ans =</span>
+<span class="go">  finished</span>
+<span class="gp">&gt;&gt; </span><span class="c">% Fetch the results</span>
+<span class="gp">&gt;&gt; </span><span class="n">job</span><span class="p">.</span><span class="n">fetchOutputs</span><span class="p">{:};</span>
+<span class="go">ans =</span>
+<span class="go">  4.7270</span>
+</pre></div>
+</div>
+<p>The job now runs in 4.73 seconds using eight workers. Run code with different number of workers to
+determine the ideal number to use. Alternatively, to retrieve job results via a graphical user
+interface, use the Job Monitor (Parallel &gt; Monitor Jobs).</p>
+<p><img alt="Job monitor" src="../../../../../_images/matlab_monitor_jobs.png" />
+{: summary=”Retrieve job results via GUI using the Job Monitor.” align=”center”}</p>
+</section>
+<section id="debugging">
+<h4>Debugging<a class="headerlink" href="#debugging" title="Permalink to this heading">#</a></h4>
+<p>If a serial job produces an error, call the <code class="docutils literal notranslate"><span class="pre">getDebugLog</span></code> method to view the error log file.  When
+submitting independent jobs, with multiple tasks, specify the task number.</p>
+<div class="highlight-matlabsession notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt; </span><span class="n">c</span><span class="p">.</span><span class="n">getDebugLog</span><span class="p">(</span><span class="n">job</span><span class="p">.</span><span class="n">Tasks</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>For Pool jobs, only specify the job object.</p>
+<div class="highlight-matlabsession notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt; </span><span class="n">c</span><span class="p">.</span><span class="n">getDebugLog</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>When troubleshooting a job, the cluster admin may request the scheduler ID of the job.  This can be
+derived by calling <code class="docutils literal notranslate"><span class="pre">schedID</span></code>.</p>
+<div class="highlight-matlabsession notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt; </span><span class="n">schedID</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+<span class="go">ans =</span>
+<span class="go">  25539</span>
+</pre></div>
+</div>
+</section>
+<section id="further-reading">
+<h4>Further Reading<a class="headerlink" href="#further-reading" title="Permalink to this heading">#</a></h4>
+<p>To learn more about the MATLAB Parallel Computing Toolbox, check out these resources:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.mathworks.com/help/parallel-computing/examples.html">Parallel Computing Coding
+Examples</a></p></li>
+<li><p><a class="reference external" href="http://www.mathworks.com/help/distcomp/index.html">Parallel Computing Documentation</a></p></li>
+<li><p><a class="reference external" href="http://www.mathworks.com/products/parallel-computing/index.html">Parallel Computing Overview</a></p></li>
+<li><p><a class="reference external" href="http://www.mathworks.com/products/parallel-computing/tutorials.html">Parallel Computing
+Tutorials</a></p></li>
+<li><p><a class="reference external" href="http://www.mathworks.com/products/parallel-computing/videos.html">Parallel Computing Videos</a></p></li>
+<li><p><a class="reference external" href="http://www.mathworks.com/products/parallel-computing/webinars.html">Parallel Computing Webinars</a></p></li>
+<li><p><a class="reference external" href="https://event.zih.tu-dresden.de/nhr/matlab/module1/materials">MATLAB NHR Tutorial Slides: Parallel Computing with MATLAB</a></p></li>
+<li><p><a class="reference external" href="https://event.zih.tu-dresden.de/nhr/matlab/module2/materials">MATLAB NHR Tutorial Slides: Machine Learning with MATLAB</a></p></li>
+<li><p><a class="reference external" href="https://event.zih.tu-dresden.de/nhr/matlab/module3/materials">MATLAB NHR Tutorial Slides: Deep Learning with MATLAB</a></p></li>
+<li><p><a class="reference external" href="https://event.zih.tu-dresden.de/nhr/matlab/module4/materials">MATLAB NHR Tutorial Slides: Interoperability of MATLAB and Python</a></p></li>
+</ul>
+</section>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#mathematica">
+   Mathematica
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fonts">
+     Fonts
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#linux-workstation">
+       Linux Workstation
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#windows-workstation">
+       Windows Workstation
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#using-textual-interface-of-mathematica">
+     Using Textual Interface of Mathematica
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#mathematica-and-slurm">
+     Mathematica and Slurm
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#matlab">
+   MATLAB
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#interactive-matlab-gui">
+     Interactive MATLAB-GUI
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#interactive">
+       Interactive
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#matlab-container">
+       MATLAB container
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#non-interactive">
+     Non-interactive
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#using-the-matlab-compiler">
+     Using the MATLAB Compiler
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#parallel-matlab">
+     Parallel MATLAB
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#with-local-configuration">
+       With ‘local’ Configuration
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#with-parfor">
+       With parfor
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#matlab-parallel-computing-toolbox">
+     MATLAB Parallel Computing Toolbox
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#configuration-matlab-client-on-the-cluster">
+       Configuration – MATLAB client on the cluster
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#installation-and-configuration-matlab-client-off-the-cluster">
+       Installation and Configuration – MATLAB client off the cluster
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#configuring-jobs">
+       Configuring Jobs
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#interactive-jobs-matlab-client-on-the-cluster">
+       Interactive Jobs - MATLAB Client on the Cluster
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#independent-batch-job">
+       Independent Batch Job
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#parallel-batch-job">
+       Parallel Batch Job
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#debugging">
+       Debugging
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#further-reading">
+       Further Reading
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-23.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

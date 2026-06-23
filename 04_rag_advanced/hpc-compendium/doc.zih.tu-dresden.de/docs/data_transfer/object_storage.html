@@ -1,0 +1,1066 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Transfer Data between ZIH Systems and Object Storage (S3) &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/data_transfer/object_storage';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Preparation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../00_preparation/readme.html">Preparation of the session</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/data_transfer/object_storage.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../../../../_sources/04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/data_transfer/object_storage.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Transfer Data between ZIH Systems and Object Storage (S3)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#initial-configuration">
+   Initial Configuration
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#copying-data-from-to-object-storage">
+   Copying Data from/to Object Storage
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#accessing-the-object-storage">
+   Accessing the Object Storage
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#copying-a-file-from-object-storage-to-zih-systems">
+     Copying a File from Object Storage to ZIH systems
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#copying-a-file-from-object-storage-to-your-workstation">
+     Copying a File from Object Storage to Your Workstation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#accessing-a-public-readable-file">
+     Accessing a Public-Readable File
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="transfer-data-between-zih-systems-and-object-storage-s3">
+<h1>Transfer Data between ZIH Systems and Object Storage (S3)<a class="headerlink" href="#transfer-data-between-zih-systems-and-object-storage-s3" title="Permalink to this heading">#</a></h1>
+<p>Object Storage is an alternative to normal filesystem storage. It can be accessed via HTTPS and can
+therefor be used where direct <code class="docutils literal notranslate"><span class="pre">scp</span></code> connections are prohibited, e.g. when one wants to copy data to
+another data center. Access is provided on request via the corresponding
+<a class="reference external" href="https://selfservice.tu-dresden.de/services/objectstorage/">self service page on object storage</a>.
+The access key (<code class="docutils literal notranslate"><span class="pre">Zugriffsschlüssel</span></code>) and the secret key (<code class="docutils literal notranslate"><span class="pre">Geheimer</span> <span class="pre">Schlüssel</span></code>) are required later
+when copying data to it.</p>
+<p>Access to object storage is possible on ZIH systems via the module <code class="docutils literal notranslate"><span class="pre">rclone</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>module<span class="w"> </span>load<span class="w"> </span>rclone
+</pre></div>
+</div>
+<section id="initial-configuration">
+<h2>Initial Configuration<a class="headerlink" href="#initial-configuration" title="Permalink to this heading">#</a></h2>
+<p>Before you use <code class="docutils literal notranslate"><span class="pre">rclone</span></code> for the first time, you have to configure it. This is done interactively as
+shown below. Replace <code class="docutils literal notranslate"><span class="pre">REPLACE_ME_WITH_ACCESS_KEY</span></code> and <code class="docutils literal notranslate"><span class="pre">REPLACE_ME_WITH_SECRET_KEY</span></code> with the values
+from the self service portal:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>rclone<span class="w"> </span>config
+<span class="go">2023/03/22 09:35:55 NOTICE: Config file &quot;/home/marie/.config/rclone/rclone.conf&quot; not found - using defaults</span>
+<span class="go">No remotes found, make a new one?</span>
+<span class="go">n) New remote</span>
+<span class="go">s) Set configuration password</span>
+<span class="go">q) Quit config</span>
+<span class="go">n/s/q&gt; n</span>
+
+<span class="go">Enter name for new remote.</span>
+<span class="go">name&gt; s3store</span>
+
+<span class="go">Option Storage.</span>
+<span class="go">Type of storage to configure.</span>
+<span class="go">Choose a number from below, or type in your own value.</span>
+<span class="go"> 1 / 1Fichier</span>
+<span class="go">   \ (fichier)</span>
+<span class="go"> 2 / Akamai NetStorage</span>
+<span class="go">   \ (netstorage)</span>
+<span class="go"> 3 / Alias for an existing remote</span>
+<span class="go">   \ (alias)</span>
+<span class="go"> 4 / Amazon Drive</span>
+<span class="go">   \ (amazon cloud drive)</span>
+<span class="go"> 5 / Amazon S3 Compliant Storage Providers including AWS, Alibaba, Ceph, China Mobile, Cloudflare, ArvanCloud, Digital Ocean, Dreamhost, Huawei OBS, IBM COS, IDrive e2, IONOS Cloud, Lyve Cloud, Minio, Netease, RackCorp, Scaleway, SeaweedFS, StackPath, Storj, Tencent COS, Qiniu and Wasabi</span>
+<span class="go">   \ (s3)</span>
+<span class="go"> 6 / Backblaze B2</span>
+<span class="go">   \ (b2)</span>
+<span class="go"> 7 / Better checksums for other remotes</span>
+<span class="go">   \ (hasher)</span>
+<span class="go"> 8 / Box</span>
+<span class="go">   \ (box)</span>
+<span class="go"> 9 / Cache a remote</span>
+<span class="go">   \ (cache)</span>
+<span class="go">10 / Citrix Sharefile</span>
+<span class="go">   \ (sharefile)</span>
+<span class="go">11 / Combine several remotes into one</span>
+<span class="go">   \ (combine)</span>
+<span class="go">12 / Compress a remote</span>
+<span class="go">   \ (compress)</span>
+<span class="go">13 / Dropbox</span>
+<span class="go">   \ (dropbox)</span>
+<span class="go">14 / Encrypt/Decrypt a remote</span>
+<span class="go">   \ (crypt)</span>
+<span class="go">15 / Enterprise File Fabric</span>
+<span class="go">   \ (filefabric)</span>
+<span class="go">16 / FTP</span>
+<span class="go">   \ (ftp)</span>
+<span class="go">17 / Google Cloud Storage (this is not Google Drive)</span>
+<span class="go">   \ (google cloud storage)</span>
+<span class="go">18 / Google Drive</span>
+<span class="go">   \ (drive)</span>
+<span class="go">19 / Google Photos</span>
+<span class="go">   \ (google photos)</span>
+<span class="go">20 / HTTP</span>
+<span class="go">   \ (http)</span>
+<span class="go">21 / Hadoop distributed file system</span>
+<span class="go">   \ (hdfs)</span>
+<span class="go">22 / HiDrive</span>
+<span class="go">   \ (hidrive)</span>
+<span class="go">23 / In memory object storage system.</span>
+<span class="go">   \ (memory)</span>
+<span class="go">24 / Internet Archive</span>
+<span class="go">   \ (internetarchive)</span>
+<span class="go">25 / Jottacloud</span>
+<span class="go">   \ (jottacloud)</span>
+<span class="go">26 / Koofr, Digi Storage and other Koofr-compatible storage providers</span>
+<span class="go">   \ (koofr)</span>
+<span class="go">27 / Local Disk</span>
+<span class="go">   \ (local)</span>
+<span class="go">28 / Mail.ru Cloud</span>
+<span class="go">   \ (mailru)</span>
+<span class="go">29 / Mega</span>
+<span class="go">   \ (mega)</span>
+<span class="go">30 / Microsoft Azure Blob Storage</span>
+<span class="go">   \ (azureblob)</span>
+<span class="go">31 / Microsoft OneDrive</span>
+<span class="go">   \ (onedrive)</span>
+<span class="go">32 / OpenDrive</span>
+<span class="go">   \ (opendrive)</span>
+<span class="go">33 / OpenStack Swift (Rackspace Cloud Files, Memset Memstore, OVH)</span>
+<span class="go">   \ (swift)</span>
+<span class="go">34 / Oracle Cloud Infrastructure Object Storage</span>
+<span class="go">   \ (oracleobjectstorage)</span>
+<span class="go">35 / Pcloud</span>
+<span class="go">   \ (pcloud)</span>
+<span class="go">36 / Put.io</span>
+<span class="go">   \ (putio)</span>
+<span class="go">37 / QingCloud Object Storage</span>
+<span class="go">   \ (qingstor)</span>
+<span class="go">38 / SMB / CIFS</span>
+<span class="go">   \ (smb)</span>
+<span class="go">39 / SSH/SFTP</span>
+<span class="go">   \ (sftp)</span>
+<span class="go">40 / Sia Decentralized Cloud</span>
+<span class="go">   \ (sia)</span>
+<span class="go">41 / Storj Decentralized Cloud Storage</span>
+<span class="go">   \ (storj)</span>
+<span class="go">42 / Sugarsync</span>
+<span class="go">   \ (sugarsync)</span>
+<span class="go">43 / Transparently chunk/split large files</span>
+<span class="go">   \ (chunker)</span>
+<span class="go">44 / Union merges the contents of several upstream fs</span>
+<span class="go">   \ (union)</span>
+<span class="go">45 / Uptobox</span>
+<span class="go">   \ (uptobox)</span>
+<span class="go">46 / WebDAV</span>
+<span class="go">   \ (webdav)</span>
+<span class="go">47 / Yandex Disk</span>
+<span class="go">   \ (yandex)</span>
+<span class="go">48 / Zoho</span>
+<span class="go">   \ (zoho)</span>
+<span class="go">49 / premiumize.me</span>
+<span class="go">   \ (premiumizeme)</span>
+<span class="go">50 / seafile</span>
+<span class="go">   \ (seafile)</span>
+<span class="go">Storage&gt; 5</span>
+
+<span class="go">Option provider.</span>
+<span class="go">Choose your S3 provider.</span>
+<span class="go">Choose a number from below, or type in your own value.</span>
+<span class="go">Press Enter to leave empty.</span>
+<span class="go"> 1 / Amazon Web Services (AWS) S3</span>
+<span class="go">   \ (AWS)</span>
+<span class="go"> 2 / Alibaba Cloud Object Storage System (OSS) formerly Aliyun</span>
+<span class="go">   \ (Alibaba)</span>
+<span class="go"> 3 / Ceph Object Storage</span>
+<span class="go">   \ (Ceph)</span>
+<span class="go"> 4 / China Mobile Ecloud Elastic Object Storage (EOS)</span>
+<span class="go">   \ (ChinaMobile)</span>
+<span class="go"> 5 / Cloudflare R2 Storage</span>
+<span class="go">   \ (Cloudflare)</span>
+<span class="go"> 6 / Arvan Cloud Object Storage (AOS)</span>
+<span class="go">   \ (ArvanCloud)</span>
+<span class="go"> 7 / Digital Ocean Spaces</span>
+<span class="go">   \ (DigitalOcean)</span>
+<span class="go"> 8 / Dreamhost DreamObjects</span>
+<span class="go">   \ (Dreamhost)</span>
+<span class="go"> 9 / Huawei Object Storage Service</span>
+<span class="go">   \ (HuaweiOBS)</span>
+<span class="go">10 / IBM COS S3</span>
+<span class="go">   \ (IBMCOS)</span>
+<span class="go">11 / IDrive e2</span>
+<span class="go">   \ (IDrive)</span>
+<span class="go">12 / IONOS Cloud</span>
+<span class="go">   \ (IONOS)</span>
+<span class="go">13 / Seagate Lyve Cloud</span>
+<span class="go">   \ (LyveCloud)</span>
+<span class="go">14 / Minio Object Storage</span>
+<span class="go">   \ (Minio)</span>
+<span class="go">15 / Netease Object Storage (NOS)</span>
+<span class="go">   \ (Netease)</span>
+<span class="go">16 / RackCorp Object Storage</span>
+<span class="go">   \ (RackCorp)</span>
+<span class="go">17 / Scaleway Object Storage</span>
+<span class="go">   \ (Scaleway)</span>
+<span class="go">18 / SeaweedFS S3</span>
+<span class="go">   \ (SeaweedFS)</span>
+<span class="go">19 / StackPath Object Storage</span>
+<span class="go">   \ (StackPath)</span>
+<span class="go">20 / Storj (S3 Compatible Gateway)</span>
+<span class="go">   \ (Storj)</span>
+<span class="go">21 / Tencent Cloud Object Storage (COS)</span>
+<span class="go">   \ (TencentCOS)</span>
+<span class="go">22 / Wasabi Object Storage</span>
+<span class="go">   \ (Wasabi)</span>
+<span class="go">23 / Qiniu Object Storage (Kodo)</span>
+<span class="go">   \ (Qiniu)</span>
+<span class="go">24 / Any other S3 compatible provider</span>
+<span class="go">   \ (Other)</span>
+<span class="go">provider&gt; 24</span>
+
+<span class="go">Option env_auth.</span>
+<span class="go">Get AWS credentials from runtime (environment variables or EC2/ECS meta data if no env vars).</span>
+<span class="go">Only applies if access_key_id and secret_access_key is blank.</span>
+<span class="go">Choose a number from below, or type in your own boolean value (true or false).</span>
+<span class="go">Press Enter for the default (false).</span>
+<span class="go"> 1 / Enter AWS credentials in the next step.</span>
+<span class="go">   \ (false)</span>
+<span class="go"> 2 / Get AWS credentials from the environment (env vars or IAM).</span>
+<span class="go">   \ (true)</span>
+<span class="go">env_auth&gt; 1</span>
+
+<span class="go">Option access_key_id.</span>
+<span class="go">AWS Access Key ID.</span>
+<span class="go">Leave blank for anonymous access or runtime credentials.</span>
+<span class="go">Enter a value. Press Enter to leave empty.</span>
+<span class="go">access_key_id&gt; REPLACE_ME_WITH_ACCESS_KEY</span>
+
+<span class="go">Option secret_access_key.</span>
+<span class="go">AWS Secret Access Key (password).</span>
+<span class="go">Leave blank for anonymous access or runtime credentials.</span>
+<span class="go">Enter a value. Press Enter to leave empty.</span>
+<span class="go">secret_access_key&gt; REPLACE_ME_WITH_SECRET_KEY</span>
+
+<span class="go">Option region.</span>
+<span class="go">Region to connect to.</span>
+<span class="go">Leave blank if you are using an S3 clone and you don&#39;t have a region.</span>
+<span class="go">Choose a number from below, or type in your own value.</span>
+<span class="go">Press Enter to leave empty.</span>
+<span class="go">   / Use this if unsure.</span>
+<span class="go"> 1 | Will use v4 signatures and an empty region.</span>
+<span class="go">   \ ()</span>
+<span class="go">   / Use this only if v4 signatures don&#39;t work.</span>
+<span class="go"> 2 | E.g. pre Jewel/v10 CEPH.</span>
+<span class="go">   \ (other-v2-signature)</span>
+<span class="go">region&gt; 1</span>
+
+<span class="go">Option endpoint.</span>
+<span class="go">Endpoint for S3 API.</span>
+<span class="go">Required when using an S3 clone.</span>
+<span class="go">Enter a value. Press Enter to leave empty.</span>
+<span class="go">endpoint&gt; s3.zih.tu-dresden.de</span>
+
+<span class="go">Option location_constraint.</span>
+<span class="go">Location constraint - must be set to match the Region.</span>
+<span class="go">Leave blank if not sure. Used when creating buckets only.</span>
+<span class="go">Enter a value. Press Enter to leave empty.</span>
+<span class="go">location_constraint&gt; </span>
+
+<span class="go">Option acl.</span>
+<span class="go">Canned ACL used when creating buckets and storing or copying objects.</span>
+<span class="go">This ACL is used for creating objects and if bucket_acl isn&#39;t set, for creating buckets too.</span>
+<span class="go">For more info visit https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl</span>
+<span class="go">Note that this ACL is applied when server-side copying objects as S3</span>
+<span class="go">doesn&#39;t copy the ACL from the source but rather writes a fresh one.</span>
+<span class="go">Choose a number from below, or type in your own value.</span>
+<span class="go">Press Enter to leave empty.</span>
+<span class="go">   / Owner gets FULL_CONTROL.</span>
+<span class="go"> 1 | No one else has access rights (default).</span>
+<span class="go">   \ (private)</span>
+<span class="go">   / Owner gets FULL_CONTROL.</span>
+<span class="go"> 2 | The AllUsers group gets READ access.</span>
+<span class="go">   \ (public-read)</span>
+<span class="go">   / Owner gets FULL_CONTROL.</span>
+<span class="go"> 3 | The AllUsers group gets READ and WRITE access.</span>
+<span class="go">   | Granting this on a bucket is generally not recommended.</span>
+<span class="go">   \ (public-read-write)</span>
+<span class="go">   / Owner gets FULL_CONTROL.</span>
+<span class="go"> 4 | The AuthenticatedUsers group gets READ access.</span>
+<span class="go">   \ (authenticated-read)</span>
+<span class="go">   / Object owner gets FULL_CONTROL.</span>
+<span class="go"> 5 | Bucket owner gets READ access.</span>
+<span class="go">   | If you specify this canned ACL when creating a bucket, Amazon S3 ignores it.</span>
+<span class="go">   \ (bucket-owner-read)</span>
+<span class="go">   / Both the object owner and the bucket owner get FULL_CONTROL over the object.</span>
+<span class="go"> 6 | If you specify this canned ACL when creating a bucket, Amazon S3 ignores it.</span>
+<span class="go">   \ (bucket-owner-full-control)</span>
+<span class="go">acl&gt; 1</span>
+
+<span class="go">Edit advanced config?</span>
+<span class="go">y) Yes</span>
+<span class="go">n) No (default)</span>
+<span class="go">y/n&gt; n</span>
+</pre></div>
+</div>
+</section>
+<section id="copying-data-from-to-object-storage">
+<h2>Copying Data from/to Object Storage<a class="headerlink" href="#copying-data-from-to-object-storage" title="Permalink to this heading">#</a></h2>
+<p>The following commands show how to create a bucket <code class="docutils literal notranslate"><span class="pre">mystorage</span></code> in your part of the object store:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>module<span class="w"> </span>load<span class="w"> </span>rclone
+<span class="gp">marie@login$ </span>rclone<span class="w"> </span>mkdir<span class="w"> </span>s3store:mystorage
+</pre></div>
+</div>
+<p>After these commands, you can copy a file, e. g. <code class="docutils literal notranslate"><span class="pre">largedata.tar.gz</span></code>, to it in a separate job with
+the help of the <a class="reference internal" href="datamover.html"><span class="doc std std-doc">Datamover</span></a>. Adjust the parameters <code class="docutils literal notranslate"><span class="pre">time</span></code> and <code class="docutils literal notranslate"><span class="pre">account</span></code> as required:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>dtrclone<span class="w"> </span>--time<span class="o">=</span><span class="m">0</span>:10:00<span class="w"> </span>--account<span class="o">=</span>p_number_crunch<span class="w"> </span>copy<span class="w"> </span>--s3-acl<span class="w"> </span><span class="s2">&quot;public-read&quot;</span><span class="w"> </span>largedata.tar.gz<span class="w"> </span>s3store:mystorage
+</pre></div>
+</div>
+<p>!!! warning “Restricted access”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If you want to restrict access to your data, replace the last command with:
+
+```console
+marie@login$ dtrclone --time=0:10:00 --account=p_number_crunch copy largedata.tar.gz s3store:mystorage
+```
+
+Then, it is not possible to access your data without providing your credentials.
+</pre></div>
+</div>
+<p>For small files, you can also directly copy data:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>module<span class="w"> </span>load<span class="w"> </span>rclone
+<span class="gp">marie@login$ </span>rclone<span class="w"> </span>copy<span class="w"> </span>--s3-acl<span class="w"> </span><span class="s2">&quot;public-read&quot;</span><span class="w"> </span>largedata.tar.gz<span class="w"> </span>s3store:mystorage
+</pre></div>
+</div>
+</section>
+<section id="accessing-the-object-storage">
+<h2>Accessing the Object Storage<a class="headerlink" href="#accessing-the-object-storage" title="Permalink to this heading">#</a></h2>
+<p>The following commands show different possibilities to access a file from object storage.</p>
+<section id="copying-a-file-from-object-storage-to-zih-systems">
+<h3>Copying a File from Object Storage to ZIH systems<a class="headerlink" href="#copying-a-file-from-object-storage-to-zih-systems" title="Permalink to this heading">#</a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>dtrclone<span class="w"> </span>--time<span class="o">=</span><span class="m">0</span>:10:00<span class="w"> </span>--account<span class="o">=</span>p_number_crunch<span class="w"> </span>copy<span class="w"> </span>s3store:mystorage/largedata.tar.gz<span class="w"> </span>.
+</pre></div>
+</div>
+</section>
+<section id="copying-a-file-from-object-storage-to-your-workstation">
+<h3>Copying a File from Object Storage to Your Workstation<a class="headerlink" href="#copying-a-file-from-object-storage-to-your-workstation" title="Permalink to this heading">#</a></h3>
+<p>The following command assumes you have installed the command <code class="docutils literal notranslate"><span class="pre">s3cmd</span></code>, please also see the
+<a class="reference external" href="https://tu-dresden.de/zih/dienste/service-katalog/arbeitsumgebung/datenspeicher/objektspeicher-s3">s3cmd Installation Instructions</a></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@local$ </span>s3cmd<span class="w"> </span>get<span class="w"> </span>s3://mystorage/largedata.tar.gz
+</pre></div>
+</div>
+</section>
+<section id="accessing-a-public-readable-file">
+<h3>Accessing a Public-Readable File<a class="headerlink" href="#accessing-a-public-readable-file" title="Permalink to this heading">#</a></h3>
+<p>It is possible to copy a public-readable file via <code class="docutils literal notranslate"><span class="pre">wget</span></code> or similar command line tools. Replace
+<code class="docutils literal notranslate"><span class="pre">$USER</span></code> with your ZIH account.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@somewhere$ </span>wget<span class="w"> </span>https://s3.zih.tu-dresden.de/<span class="nv">$USER</span>:mystorage/largedata.tar.gz
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/data_transfer"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#initial-configuration">
+   Initial Configuration
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#copying-data-from-to-object-storage">
+   Copying Data from/to Object Storage
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#accessing-the-object-storage">
+   Accessing the Object Storage
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#copying-a-file-from-object-storage-to-zih-systems">
+     Copying a File from Object Storage to ZIH systems
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#copying-a-file-from-object-storage-to-your-workstation">
+     Copying a File from Object Storage to Your Workstation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#accessing-a-public-readable-file">
+     Accessing a Public-Readable File
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-23.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

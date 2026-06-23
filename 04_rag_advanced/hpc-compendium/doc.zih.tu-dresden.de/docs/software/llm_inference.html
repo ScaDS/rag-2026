@@ -1,0 +1,1015 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>LLM Inference &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/llm_inference';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Preparation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../00_preparation/readme.html">Preparation of the session</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/llm_inference.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../../../../_sources/04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/llm_inference.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>LLM Inference</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#getting-access-to-llm-models">
+   Getting Access to LLM Models
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#hugging-face-hub">
+     Hugging Face Hub
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#inference-processing-with-vllm">
+   Inference Processing with vLLM
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#offline-processing">
+     Offline Processing
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#online-server">
+     Online Server
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="llm-inference">
+<h1>LLM Inference<a class="headerlink" href="#llm-inference" title="Permalink to this heading">#</a></h1>
+<p>The process of using pre-trained Large Language Models (LLM) in combination with new inputs,
+is called <strong>LLM inference</strong>.
+This is becoming increasingly important in many research areas.
+However, running these large models requires significant hardware resources, including powerful
+GPUs and lots of memory, making it a demanding and resource-intensive task.
+We describe below how to run inference with some popular LLM libraries.
+The steps are:</p>
+<ul class="simple">
+<li><p><span class="xref myst">Downloading a model from Hugging face to the filesystem</span></p></li>
+<li><p><span class="xref myst">Use vLLM</span></p></li>
+<li><p>Use vLLM for inference processing</p>
+<ul>
+<li><p>either <span class="xref myst">Offline</span></p></li>
+<li><p>or <span class="xref myst">Online</span></p></li>
+</ul>
+</li>
+</ul>
+<section id="getting-access-to-llm-models">
+<h2>Getting Access to LLM Models<a class="headerlink" href="#getting-access-to-llm-models" title="Permalink to this heading">#</a></h2>
+<section id="hugging-face-hub">
+<h3>Hugging Face Hub<a class="headerlink" href="#hugging-face-hub" title="Permalink to this heading">#</a></h3>
+<p>The <a class="reference external" href="https://huggingface.co">Hugging Face Hub</a> is a central platform for sharing and accessing
+machine learning models, datasets, and tools.
+It hosts a vast collection of models for tasks such as text generation, translation, and classification.
+To download certain models, such as.
+<a class="reference external" href="https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3">mistralai/Mistral-7B-Instruct-v0.3</a>
+you must first apply for access by accepting the model’s license agreement.
+This requires creating an account on the Hugging Face website and generating an access token.
+Once logged in, you need to visit the model’s page and click the <em>Accept</em> button to gain access.
+But there are also models freely available, such as
+<a class="reference external" href="https://huggingface.co/facebook/opt-125m">facebook/OPT-125M</a>.</p>
+<p>!!! note
+Downloading models should be done on the CPU clusters e.g. <code class="docutils literal notranslate"><span class="pre">Barnard</span></code> and <code class="docutils literal notranslate"><span class="pre">Romeo</span></code> and not on the
+GPU clusters like <code class="docutils literal notranslate"><span class="pre">Alpha</span> <span class="pre">Centauri</span></code> or <code class="docutils literal notranslate"><span class="pre">Capella</span></code> to save resources.</p>
+<p>!!! note
+Be aware that the Hugging Face command <code class="docutils literal notranslate"><span class="pre">hf</span></code> will store a lot of files into your home directory
+per default.
+We highly advice you to change <code class="docutils literal notranslate"><span class="pre">HF_HOME</span></code> environment variable to a directory in some
+<a class="reference internal" href="../data_lifecycle/workspaces.html"><span class="doc std std-doc">workspace</span></a>.
+Otherwise, you may exceed your home directory quota and be blocked from submitting jobs.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span># start an interactive session
+marie@compute$ export WS=/data/horse/ws/marie-number_crunch
+marie@compute$ cd $WS
+
+# Create a Python environment and install huggingface_hub package via Python&#39;s pip
+marie@compute$ module load release/25.06  GCCcore/14.2.0 Python/3.13.1
+marie@compute$ python -m venv ./my_venv
+marie@compute$ source ./my_venv/bin/activate
+marie@compute$ pip install huggingface_hub
+
+# Enter your HF access token if you download access restricted models
+# It is neccessary for this example
+marie@compute$ export HF_HOME=$WS/hf_home
+marie@compute$ hf auth login
+
+# Download the module in $HF_HOME/hub/models--*
+marie@compute$ hf download mistralai/Mistral-7B-Instruct-v0.3
+
+# You can download it into a different directory with
+marie@compute$ hf download mistralai/Mistral-7B-Instruct-v0.3
+    --local-dir $WS/models/mistralai-Mistral-7B-Instruct-v0.3
+</pre></div>
+</div>
+</section>
+</section>
+<section id="inference-processing-with-vllm">
+<h2>Inference Processing with vLLM<a class="headerlink" href="#inference-processing-with-vllm" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/vllm-project/vllm">vLLM</a> is an efficient inference system designed
+to accelerate large language model serving by optimizing resource usage and reducing latency.
+However, other alternatives are also available, for example: Hugging Face, llama.cpp</p>
+<p>We can only provide a brief overview of how to run vLLM on our clusters, as it offers many
+configuration options that can be tuned depending on the specific task. Detailed instructions
+are available in vLLM’s
+<a class="reference external" href="https://docs.vllm.ai/en/stable/getting_started/quickstart.html">Getting started guide</a>.</p>
+<p>!!! note
+We highly recommend running vLLM on our GPU clusters such as <code class="docutils literal notranslate"><span class="pre">AlphaCentauri</span></code> or <code class="docutils literal notranslate"><span class="pre">Capella</span></code>.
+vLLM is optimized for GPU acceleration and does not perform efficiently on CPU-only clusters.
+However, vLLM does not work on MIG enabled cluster configurations like partition <code class="docutils literal notranslate"><span class="pre">capella-interactive</span></code>.</p>
+<p>!!! note
+vLLM searches for models in the directory specified by the <code class="docutils literal notranslate"><span class="pre">HF_HOME</span></code> environment variable.
+We highly advice you to change <code class="docutils literal notranslate"><span class="pre">HF_HOME</span></code> environment variable to a directory in some workspace.</p>
+<p>If the model is not found in your <code class="docutils literal notranslate"><span class="pre">HF_HOME</span></code> directory, it will be downloaded automatically from
+Hugging Face.
+To learn how to access restricted models on Hugging Face, see
+the <span class="xref myst">Hugging Face Hub</span> section.</p>
+<section id="offline-processing">
+<h3>Offline Processing<a class="headerlink" href="#offline-processing" title="Permalink to this heading">#</a></h3>
+<p>vLLM’s offline mode is designed for batch inference or using scripts.
+Prompts are processed directly via the command line or Python scripts without launching a server.
+If you have a set of queries or documents that can be processed in the background,
+then offline processing is the right choice.
+It uses the same optimized backend as vLLM’s server mode.
+This ensures high performance without the overhead of HTTP requests.
+Moreover, jobs do not have to run live or interactively.
+They can be processed as standard batch jobs in the background.</p>
+<p>You simply specify the model, prompt, and generation parameters.
+This makes it a lightweight and scriptable alternative for local inference tasks.
+You mainly have to create an <code class="docutils literal notranslate"><span class="pre">LLM</span></code> instance and invoke its <code class="docutils literal notranslate"><span class="pre">.generate()</span></code> method.
+Detailed instructions can be found in vLLM’s
+<a class="reference external" href="https://docs.vllm.ai/en/stable/getting_started/quickstart.html#offline-batched-inference">Getting Started Guide – Offline Processing section</a></p>
+<p>!!! example “Basic example script”
+An example <a class="reference external" href="https://github.com/vllm-project/vllm/blob/main/examples/offline_inference/basic/basic.py"><code class="docutils literal notranslate"><span class="pre">basic.py</span></code></a>
+taken from the vLLM repository.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```python
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright contributors to the vLLM project
+
+from vllm import LLM, SamplingParams
+
+# Sample prompts.
+prompts = [
+    &quot;Hello, my name is&quot;,
+    &quot;The president of the United States is&quot;,
+    &quot;The capital of France is&quot;,
+    &quot;The future of AI is&quot;,
+]
+# Create a sampling params object.
+sampling_params = SamplingParams(temperature=0.8, top_p=0.95)
+
+
+def main():
+    # Create an LLM.
+    llm = LLM(model=&quot;facebook/opt-125m&quot;)
+    # Generate texts from the prompts.
+    # The output is a list of RequestOutput objects
+    # that contain the prompt, generated text, and other information.
+    outputs = llm.generate(prompts, sampling_params)
+    # Print the outputs.
+    print(&quot;\nGenerated Outputs:\n&quot; + &quot;-&quot; * 60)
+    for output in outputs:
+        prompt = output.prompt
+        generated_text = output.outputs[0].text
+        print(f&quot;Prompt:    {prompt!r}&quot;)
+        print(f&quot;Output:    {generated_text!r}&quot;)
+        print(&quot;-&quot; * 60)
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+```
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login.capella$ </span>salloc<span class="w"> </span>--ntasks<span class="o">=</span><span class="m">1</span><span class="w"> </span>--nodes<span class="o">=</span><span class="m">1</span><span class="w"> </span>--cpus-per-task<span class="o">=</span><span class="m">13</span><span class="w"> </span>--mem<span class="o">=</span>100G<span class="w"> </span>--gres<span class="o">=</span>gpu:1
+<span class="gp">marie@login.capella$ </span>module<span class="w"> </span>load<span class="w"> </span>container/all<span class="w"> </span>vLLM/0.10.0
+<span class="gp">marie@login.capella$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">HF_HOME</span><span class="o">=</span>/data/horse/ws/marie-number_crunch/hf_home
+<span class="gp">marie@login.capella$ </span>srun<span class="w"> </span>run_vllm<span class="w"> </span>python3<span class="w"> </span>basic.py
+<span class="go">INFO 08-13 17:44:31 [__init__.py:235] Automatically detected platform cuda.</span>
+<span class="go">INFO 08-13 17:44:43 [config.py:1604] Using max model len 2048</span>
+<span class="go">INFO 08-13 17:44:44 [config.py:2434] Chunked prefill is enabled with max_num_batched_tokens=16384.</span>
+<span class="go">INFO 08-13 17:44:45 [core.py:572] Waiting for init message from front-end.</span>
+<span class="go">INFO 08-13 17:44:45 [core.py:71] Initializing a V1 LLM engine (v0.10.1.dev1+gbcc0a3cbe) with config: model=&#39;facebook/opt-125m&#39;, speculative_config=None, tokenizer=&#39;facebook/opt-125m&#39;, skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, override_neuron_config={}, tokenizer_revision=None, trust_remote_code=False, dtype=torch.float16, max_seq_len=2048, download_dir=None, load_format=LoadFormat.AUTO, tensor_parallel_size=1, pipeline_parallel_size=1, disable_custom_all_reduce=False, quantization=None, enforce_eager=False, kv_cache_dtype=auto,  device_config=cuda, decoding_config=DecodingConfig(backend=&#39;auto&#39;, disable_fallback=False, disable_any_whitespace=False, disable_additional_properties=False, reasoning_backend=&#39;&#39;), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None), seed=0, served_model_name=facebook/opt-125m, num_scheduler_steps=1, multi_step_stream_outputs=True, enable_prefix_caching=True, chunked_prefill_enabled=True, use_async_output_proc=True, pooler_config=None, compilation_config={&quot;level&quot;:3,&quot;debug_dump_path&quot;:&quot;&quot;,&quot;cache_dir&quot;:&quot;&quot;,&quot;backend&quot;:&quot;&quot;,&quot;custom_ops&quot;:[],&quot;splitting_ops&quot;:[&quot;vllm.unified_attention&quot;,&quot;vllm.unified_attention_with_output&quot;,&quot;vllm.mamba_mixer2&quot;],&quot;use_inductor&quot;:true,&quot;compile_sizes&quot;:[],&quot;inductor_compile_config&quot;:{&quot;enable_auto_functionalized_v2&quot;:false},&quot;inductor_passes&quot;:{},&quot;use_cudagraph&quot;:true,&quot;cudagraph_num_of_warmups&quot;:1,&quot;cudagraph_capture_sizes&quot;:[512,504,496,488,480,472,464,456,448,440,432,424,416,408,400,392,384,376,368,360,352,344,336,328,320,312,304,296,288,280,272,264,256,248,240,232,224,216,208,200,192,184,176,168,160,152,144,136,128,120,112,104,96,88,80,72,64,56,48,40,32,24,16,8,4,2,1],&quot;cudagraph_copy_inputs&quot;:false,&quot;full_cuda_graph&quot;:false,&quot;max_capture_size&quot;:512,&quot;local_cache_dir&quot;:null}</span>
+<span class="go">[....]</span>
+<span class="go">Adding requests: 100%|██████████| 4/4 [00:00&lt;00:00, 939.53it/s]</span>
+<span class="go">Processed prompts: 100%|██████████| 4/4 [00:00&lt;00:00, 29.57it/s, est. speed input: 192.44 toks/s, output: 473.66 toks/s]</span>
+
+<span class="go">Generated Outputs:</span>
+<span class="go">------------------------------------------------------------</span>
+<span class="go">Prompt:    &#39;Hello, my name is&#39;</span>
+<span class="go">Output:    &quot; Dan, and I&#39;m the owner of Nae Nae Embrace, which&quot;</span>
+<span class="go">------------------------------------------------------------</span>
+<span class="go">Prompt:    &#39;The president of the United States is&#39;</span>
+<span class="go">Output:    &quot; publicly heckling the comedian&#39;s show for his jokes on black people.\n\n&quot;</span>
+<span class="go">------------------------------------------------------------</span>
+<span class="go">Prompt:    &#39;The capital of France is&#39;</span>
+<span class="go">Output:    &#39; probably still the worst country in the world. No one is going to comment on&#39;</span>
+<span class="go">------------------------------------------------------------</span>
+<span class="go">Prompt:    &#39;The future of AI is&#39;</span>
+<span class="go">Output:    &#39; right here\nIs this what you think our world will be like next year?&#39;</span>
+<span class="go">------------------------------------------------------------</span>
+</pre></div>
+</div>
+</section>
+<section id="online-server">
+<h3>Online Server<a class="headerlink" href="#online-server" title="Permalink to this heading">#</a></h3>
+<p>vLLM’s online mode provides an OpenAI-compatible HTTP API for real-time text generation.
+It is designed for low-latency, high-throughput applications such as chatbots, web services,
+and interactive tools.
+Online mode runs a server that accepts requests over a RESTful API using standard OpenAI endpoints.
+This allows seamless integration with existing tools that support OpenAI-style interfaces.
+You can configure e.g. model parameters, deployment settings, … via the command line.</p>
+<p>Online inference is ideal for interactive use cases where prompt-response cycles must happen quickly.</p>
+<p>Detailed instructions can be found in vLLM’s
+<a class="reference external" href="https://docs.vllm.ai/en/stable/getting_started/quickstart.html#openai-compatible-server">Getting Started Guide – OpenAI-Compatible Server section</a></p>
+<p>!!! note “Inference Infrastructure by <a class="reference external" href="http://ScaDS.AI">ScaDS.AI</a>”
+For TU Dresden members, <a class="reference external" href="http://ScaDS.AI">ScaDS.AI</a> provides <a class="reference external" href="https://chat.llm.scads.ai/">chat interface</a> and
+<a class="reference external" href="https://llm.scads.ai/">API access</a> to many popular open-source models.</p>
+<p>!!! warning “Only for personal Access”
+Please make sure that the services are used only for your personal use and that access
+to such service remains protected.
+Using them in other ways may conflict with our terms of use.</p>
+<p>!!! warning
+When running vLLM in online mode, you are using a Slurm allocation for the entire duration
+that your server instance is active.
+This means that compute resources, including GPUs, are blocked for the full allocation time—
+not just while your server is actively processing requests.
+GPU usage will be charged based on the total allocation time,
+regardless of how long the server spends performing actual computations.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login.capella$ </span>salloc<span class="w"> </span>--ntasks<span class="o">=</span><span class="m">1</span><span class="w"> </span>--nodes<span class="o">=</span><span class="m">1</span><span class="w"> </span>--cpus-per-task<span class="o">=</span><span class="m">13</span><span class="w"> </span>--mem<span class="o">=</span>100G<span class="w"> </span>--gres<span class="o">=</span>gpu:1
+<span class="gp">marie@login.capella$ </span>module<span class="w"> </span>load<span class="w"> </span>container/all<span class="w"> </span>vLLM/0.10.0
+<span class="gp">marie@login.capella$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">HF_HOME</span><span class="o">=</span>/data/horse/ws/marie-number_crunch/hf_home
+<span class="gp">marie@login.capella$ </span>srun<span class="w"> </span>run_vllm<span class="w"> </span>vllm<span class="w"> </span>serve<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--port<span class="w"> </span><span class="m">8080</span><span class="w"> </span><span class="se">\ </span><span class="c1"># use a free port on the node</span>
+<span class="go">    --api-key=&quot;&lt;my_secret_token&gt;&quot; \ # protect access to your instance by an arbitrary, secret token</span>
+<span class="go">    mistralai/Mistral-7B-Instruct-v0.3</span>
+
+<span class="go">INFO 08-13 17:16:49 [__init__.py:235] Automatically detected platform cuda.</span>
+<span class="go">INFO 08-13 17:16:54 [api_server.py:1755] vLLM API server version 0.10.1.dev1+gbcc0a3cbe</span>
+<span class="go">INFO 08-13 17:16:54 [cli_args.py:261]  non-default args: {&#39;model_tag&#39;: &#39;mistralai/Mistral-7B-Instruct-v0.3&#39;, &#39;port&#39;: 8080, &#39;api_key&#39;: &#39;&lt;my_secret_token&gt;&#39;, &#39;model&#39;: &#39;mistralai/Mistral-7B-Instruct-v0.3&#39;}</span>
+<span class="go">INFO 08-13 17:17:12 [config.py:1604] Using max model len 32768</span>
+<span class="go">INFO 08-13 17:17:14 [config.py:2434] Chunked prefill is enabled with max_num_batched_tokens=8192.</span>
+<span class="go">/usr/local/lib/python3.12/dist-packages/vllm/transformers_utils/tokenizer_group.py:24: FutureWarning: It is strongly recommended to run mistral models with `--tokenizer-mode &quot;mistral&quot;` to ensure correct encoding and decoding.</span>
+<span class="go">  self.tokenizer = get_tokenizer(self.tokenizer_id, **tokenizer_config)</span>
+<span class="go">INFO 08-13 17:17:27 [__init__.py:235] Automatically detected platform cuda.</span>
+<span class="go">INFO 08-13 17:17:30 [core.py:572] Waiting for init message from front-end.</span>
+<span class="go">INFO 08-13 17:17:30 [core.py:71] Initializing a V1 LLM engine (v0.10.1.dev1+gbcc0a3cbe) with config: model=&#39;mistralai/Mistral-7B-Instruct-v0.3&#39;, speculative_config=None, tokenizer=&#39;mistralai/Mistral-7B-Instruct-v0.3&#39;, skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, override_neuron_config={}, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=32768, download_dir=None, load_format=LoadFormat.AUTO, tensor_parallel_size=1, pipeline_parallel_size=1, disable_custom_all_reduce=False, quantization=None, enforce_eager=False, kv_cache_dtype=auto,  device_config=cuda, decoding_config=DecodingConfig(backend=&#39;auto&#39;, disable_fallback=False, disable_any_whitespace=False, disable_additional_properties=False, reasoning_backend=&#39;&#39;), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None), seed=0, served_model_name=mistralai/Mistral-7B-Instruct-v0.3, num_scheduler_steps=1, multi_step_stream_outputs=True, enable_prefix_caching=True, chunked_prefill_enabled=True, use_async_output_proc=True, pooler_config=None, compilation_config={&quot;level&quot;:3,&quot;debug_dump_path&quot;:&quot;&quot;,&quot;cache_dir&quot;:&quot;&quot;,&quot;backend&quot;:&quot;&quot;,&quot;custom_ops&quot;:[],&quot;splitting_ops&quot;:[&quot;vllm.unified_attention&quot;,&quot;vllm.unified_attention_with_output&quot;,&quot;vllm.mamba_mixer2&quot;],&quot;use_inductor&quot;:true,&quot;compile_sizes&quot;:[],&quot;inductor_compile_config&quot;:{&quot;enable_auto_functionalized_v2&quot;:false},&quot;inductor_passes&quot;:{},&quot;use_cudagraph&quot;:true,&quot;cudagraph_num_of_warmups&quot;:1,&quot;cudagraph_capture_sizes&quot;:[512,504,496,488,480,472,464,456,448,440,432,424,416,408,400,392,384,376,368,360,352,344,336,328,320,312,304,296,288,280,272,264,256,248,240,232,224,216,208,200,192,184,176,168,160,152,144,136,128,120,112,104,96,88,80,72,64,56,48,40,32,24,16,8,4,2,1],&quot;cudagraph_copy_inputs&quot;:false,&quot;full_cuda_graph&quot;:false,&quot;max_capture_size&quot;:512,&quot;local_cache_dir&quot;:null}</span>
+<span class="go">[...]</span>
+<span class="go">INFO 08-13 17:18:34 [api_server.py:1818] Starting vLLM API server 0 on http://0.0.0.0:8080</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:29] Available routes are:</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /openapi.json, Methods: HEAD, GET</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /docs, Methods: HEAD, GET</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /docs/oauth2-redirect, Methods: HEAD, GET</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /redoc, Methods: HEAD, GET</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /health, Methods: GET</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /load, Methods: GET</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /ping, Methods: POST</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /ping, Methods: GET</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /tokenize, Methods: POST</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /detokenize, Methods: POST</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /v1/models, Methods: GET</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /version, Methods: GET</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /v1/responses, Methods: POST</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /v1/responses/{response_id}, Methods: GET</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /v1/responses/{response_id}/cancel, Methods: POST</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /v1/chat/completions, Methods: POST</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /v1/completions, Methods: POST</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /v1/embeddings, Methods: POST</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /pooling, Methods: POST</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /classify, Methods: POST</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /score, Methods: POST</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /v1/score, Methods: POST</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /v1/audio/transcriptions, Methods: POST</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /v1/audio/translations, Methods: POST</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /rerank, Methods: POST</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /v1/rerank, Methods: POST</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /v2/rerank, Methods: POST</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /scale_elastic_ep, Methods: POST</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /is_scaling_elastic_ep, Methods: POST</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /invocations, Methods: POST</span>
+<span class="go">INFO 08-13 17:18:34 [launcher.py:37] Route: /metrics, Methods: GET</span>
+<span class="go">INFO:     Started server process [1006308]</span>
+<span class="go">INFO:     Waiting for application startup.</span>
+<span class="go">INFO:     Application startup complete.</span>
+</pre></div>
+</div>
+<p>You can test server access via its OpenAI-compatible API from another node.
+In this example, the server runs on node <code class="docutils literal notranslate"><span class="pre">c28</span></code> and port <code class="docutils literal notranslate"><span class="pre">8080</span></code> with the API key <code class="docutils literal notranslate"><span class="pre">&lt;my_secret_token&gt;</span></code>.
+You can verify this using <code class="docutils literal notranslate"><span class="pre">squeue</span></code> on a login node or <code class="docutils literal notranslate"><span class="pre">hostname</span></code> on the compute node
+before starting the vLLM server.</p>
+<p>The vLLM server instance is only reachable from within same the cluster.
+This includes access from the login nodes or from another compute node.
+If you need to access the instance from an external computer, you must set up port forwarding.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span>marie@login.capella$ squeue -u marie
+             JOBID PARTITION                 NAME     USER ST      TIME TIME_LIMI  NODES NODELIST(REASON)
+            &lt;Job_ID&gt;   capella          interactive marie  R      5:31   1:00:00      1 c28
+marie@login.capella$ curl http://c28:8080/v1/completions \
+    -H &quot;Content-Type: application/json&quot; \
+    -H &quot;Authorization: Bearer &lt;my_secret_token&gt;&quot; \
+    -d &#39;{
+        &quot;model&quot;: &quot;mistralai/Mistral-7B-Instruct-v0.3&quot;,
+        &quot;prompt&quot;: &quot;San Francisco is a&quot;,
+        &quot;max_tokens&quot;: 7,
+        &quot;temperature&quot;: 0
+    }&#39;
+
+{&quot;id&quot;:&quot;cmpl-5b7f165a8e864d82a256276e556bc4dd&quot;,&quot;object&quot;:&quot;text_completion&quot;,&quot;created&quot;:1755098628,&quot;model&quot;:&quot;mistralai/Mistral-7B-Instruct-v0.3&quot;,&quot;choices&quot;:[{&quot;index&quot;:0,&quot;text&quot;:&quot; city that is known for its beautiful&quot;,&quot;logprobs&quot;:null,&quot;finish_reason&quot;:&quot;length&quot;,&quot;stop_reason&quot;:null,&quot;prompt_logprobs&quot;:null}],&quot;service_tier&quot;:null,&quot;system_fingerprint&quot;:null,&quot;usage&quot;:{&quot;prompt_tokens&quot;:5,&quot;total_tokens&quot;:12,&quot;completion_tokens&quot;:7,&quot;prompt_tokens_details&quot;:null},&quot;kv_transfer_params&quot;:null}
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#getting-access-to-llm-models">
+   Getting Access to LLM Models
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#hugging-face-hub">
+     Hugging Face Hub
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#inference-processing-with-vllm">
+   Inference Processing with vLLM
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#offline-processing">
+     Offline Processing
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#online-server">
+     Online Server
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-23.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

@@ -1,0 +1,1031 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>SGI Altix (Outdated) &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/archive/system_altix';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Preparation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../00_preparation/readme.html">Preparation of the session</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/archive/system_altix.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../../../../_sources/04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/archive/system_altix.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>SGI Altix (Outdated)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#system">
+   System
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#filesystems">
+     Filesystems
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ccnuma-architecture">
+     ccNUMA Architecture
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#compute-module">
+     Compute Module
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cpu">
+     CPU
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#usage">
+   Usage
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#compiling-parallel-applications">
+     Compiling Parallel Applications
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#batch-system">
+     Batch System
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lsf">
+       LSF
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#submission-of-parallel-jobs">
+       Submission of Parallel Jobs
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#batch-queues">
+       Batch Queues
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="sgi-altix-outdated">
+<h1>SGI Altix (Outdated)<a class="headerlink" href="#sgi-altix-outdated" title="Permalink to this heading">#</a></h1>
+<p>!!! warning</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>**This page is deprecated! The SGI Altix is a former system!**
+</pre></div>
+</div>
+<section id="system">
+<h2>System<a class="headerlink" href="#system" title="Permalink to this heading">#</a></h2>
+<p>The SGI Altix 4700 is a shared memory system with dual core Intel Itanium 2 CPUs (Montecito)
+operated by the Linux operating system SUSE SLES 10 with a 2.6 kernel. Currently, the following
+Altix partitions are installed at ZIH:</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Name</p></th>
+<th class="head text-left"><p>Total Cores</p></th>
+<th class="head text-left"><p>Compute Cores</p></th>
+<th class="head text-left"><p>Memory per Core</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Mars</p></td>
+<td class="text-left"><p>384</p></td>
+<td class="text-left"><p>348</p></td>
+<td class="text-left"><p>1 GB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Jupiter</p></td>
+<td class="text-left"><p>512</p></td>
+<td class="text-left"><p>506</p></td>
+<td class="text-left"><p>4 GB</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Saturn</p></td>
+<td class="text-left"><p>512</p></td>
+<td class="text-left"><p>506</p></td>
+<td class="text-left"><p>4 GB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Uranus</p></td>
+<td class="text-left"><p>512</p></td>
+<td class="text-left"><p>506</p></td>
+<td class="text-left"><p>4 GB</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Neptun</p></td>
+<td class="text-left"><p>128</p></td>
+<td class="text-left"><p>128</p></td>
+<td class="text-left"><p>1 GB</p></td>
+</tr>
+</tbody>
+</table>
+<p>The jobs for these partitions (except Neptun) are scheduled by the <a class="reference internal" href="platform_lsf.html"><span class="doc std std-doc">Platform LSF</span></a>
+batch system running on <code class="docutils literal notranslate"><span class="pre">mars.hrsk.tu-dresden.de</span></code>. The actual placement of a submitted job may
+depend on factors like memory size, number of processors, time limit.</p>
+<section id="filesystems">
+<h3>Filesystems<a class="headerlink" href="#filesystems" title="Permalink to this heading">#</a></h3>
+<p>All partitions share the same CXFS filesystems <code class="docutils literal notranslate"><span class="pre">/work</span></code> and <code class="docutils literal notranslate"><span class="pre">/fastfs</span></code>.</p>
+</section>
+<section id="ccnuma-architecture">
+<h3>ccNUMA Architecture<a class="headerlink" href="#ccnuma-architecture" title="Permalink to this heading">#</a></h3>
+<p>The SGI Altix has a ccNUMA architecture, which stands for <em>Cache Coherent Non-Uniform Memory Access</em>.
+It can be considered as a SM-MIMD (<em>shared memory - multiple instruction multiple data</em>) machine.
+The SGI ccNUMA system has the following properties:</p>
+<ul class="simple">
+<li><p>Memory is physically distributed but logically shared</p></li>
+<li><p>Memory is kept coherent automatically by hardware.</p></li>
+<li><p>Coherent memory: memory is always valid (caches hold copies)</p></li>
+<li><p>Granularity is L3 cache line (128 B)</p></li>
+<li><p>Bandwidth of NUMAlink4 is 6.4 GB/s</p></li>
+</ul>
+<p>The ccNUMA is a compromise between a distributed memory system and a flat symmetric multi processing
+machine (SMP). Although the memory is shared, the access properties are not the same.</p>
+</section>
+<section id="compute-module">
+<h3>Compute Module<a class="headerlink" href="#compute-module" title="Permalink to this heading">#</a></h3>
+<p>The basic compute module of an Altix system is shown below.</p>
+<p><img alt="Altix compute blade" src="../../../../../_images/altix_brick_web.png" />
+{: align=”center”}</p>
+<p>It consists of one dual core Intel Itanium 2 “Montecito” processor, the
+local memory of 4 GB (2 GB on <code class="docutils literal notranslate"><span class="pre">Mars</span></code>), and the communication component,
+the so-called SHUB. All resources are shared by both cores. They have a
+common front side bus, so that accumulated memory bandwidth for both is
+not higher than for just one core.</p>
+<p>The SHUB connects local and remote resources. Via the SHUB and NUMAlink
+all CPUs can access remote memory in the whole system. Naturally, the
+fastest access provides local memory. There are some hints and commands
+that may help you to get optimal memory allocation and process placement
+). Four of these blades are grouped together with a NUMA router in a
+compute brick. All bricks are connected with NUMAlink4 in a
+“fat-tree”-topology.</p>
+<p>Remote memory access via SHUBs and NUMAlink
+<img alt="Remote memory access via SHUBs and NUMAlink" src="../../../../../_images/memory_access_web.png" />
+{: align=”center”}</p>
+</section>
+<section id="cpu">
+<h3>CPU<a class="headerlink" href="#cpu" title="Permalink to this heading">#</a></h3>
+<p>The current SGI Altix is based on the dual core Intel Itanium 2
+processor (code name “Montecito”). One core has the following basic
+properties:</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Component</p></th>
+<th class="head"><p>Count</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Clock rate</p></td>
+<td><p>1.6 GHz</p></td>
+</tr>
+<tr class="row-odd"><td><p>Integer units</p></td>
+<td><p>6</p></td>
+</tr>
+<tr class="row-even"><td><p>Floating point units (multiply-add)</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-odd"><td><p>Peak performance</p></td>
+<td><p>6.4 GFLOPS</p></td>
+</tr>
+<tr class="row-even"><td><p>L1 cache</p></td>
+<td><p>2 x 16 kB, 1 clock latency</p></td>
+</tr>
+<tr class="row-odd"><td><p>L2 cache</p></td>
+<td><p>256 kB, 5 clock latency</p></td>
+</tr>
+<tr class="row-even"><td><p>L3 cache</p></td>
+<td><p>9 MB, 12 clock latency</p></td>
+</tr>
+<tr class="row-odd"><td><p>Front side bus</p></td>
+<td><p>128 bit x 200 MHz</p></td>
+</tr>
+</tbody>
+</table>
+<p>The theoretical peak performance of all Altix partitions is hence about 13.1 TFLOPS.</p>
+<p>The processor has hardware support for efficient software pipelining. For many scientific
+applications it provides a high sustained performance exceeding the performance of RISC CPUs with
+similar peak performance. On the down side is the fact that the compiler has to explicitly discover
+and exploit the parallelism in the application.</p>
+</section>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
+<section id="compiling-parallel-applications">
+<h3>Compiling Parallel Applications<a class="headerlink" href="#compiling-parallel-applications" title="Permalink to this heading">#</a></h3>
+<p>This installation of the Message Passing Interface supports the MPI 1.2 standard with a few MPI-2
+features (see <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">mpi</span></code> ). There is no command like <code class="docutils literal notranslate"><span class="pre">mpicc</span></code>, instead you just have to use the normal
+compiler (e.g.  <code class="docutils literal notranslate"><span class="pre">icc</span></code>, <code class="docutils literal notranslate"><span class="pre">icpc</span></code>, or <code class="docutils literal notranslate"><span class="pre">ifort</span></code>) and append <code class="docutils literal notranslate"><span class="pre">-lmpi</span></code> to the linker command line. Since the
+include files as well as the library are in standard directories there is no need to append
+additional library- or include-paths.</p>
+<ul class="simple">
+<li><p>Note for C++ programmers: You need to link with <code class="docutils literal notranslate"><span class="pre">-lmpi++abi1002</span> <span class="pre">-lmpi</span></code> instead of <code class="docutils literal notranslate"><span class="pre">-lmpi</span></code>.</p></li>
+<li><p>Note for Fortran programmers: The MPI module is only provided for the Intel compiler and does not
+work with <code class="docutils literal notranslate"><span class="pre">gfortran</span></code>.</p></li>
+</ul>
+<p>Please follow these following guidelines to run your parallel program using the batch system on
+Mars.</p>
+</section>
+<section id="batch-system">
+<h3>Batch System<a class="headerlink" href="#batch-system" title="Permalink to this heading">#</a></h3>
+<p>Applications on an HPC system can not be run on the login node. They have to be submitted to compute
+nodes with dedicated resources for the user’s job. Normally a job can be submitted with these data:</p>
+<ul class="simple">
+<li><p>number of CPU cores,</p></li>
+<li><p>requested CPU cores have to belong on one node (OpenMP programs) or
+can distributed (MPI),</p></li>
+<li><p>memory per process,</p></li>
+<li><p>maximum wall clock time (after reaching this limit the process is
+killed automatically),</p></li>
+<li><p>files for redirection of output and error messages,</p></li>
+<li><p>executable and command line parameters.</p></li>
+</ul>
+<section id="lsf">
+<h4>LSF<a class="headerlink" href="#lsf" title="Permalink to this heading">#</a></h4>
+<p>The batch system on Atlas is LSF, see also the
+<a class="reference internal" href="platform_lsf.html"><span class="doc std std-doc">general information on LSF</span></a>.</p>
+</section>
+<section id="submission-of-parallel-jobs">
+<h4>Submission of Parallel Jobs<a class="headerlink" href="#submission-of-parallel-jobs" title="Permalink to this heading">#</a></h4>
+<p>The MPI library running on the Altix is provided by SGI and highly optimized for the ccNUMA
+architecture of this machine. However, communication within a partition is faster than across
+partitions. Take this into consideration when you submit your job.</p>
+<p>Single-partition jobs can be started like this:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">bsub -R &quot;span[hosts=1]&quot; -n 16 mpirun -np 16 a.out&lt;</span>
+</pre></div>
+</div>
+<p>Really large jobs with over 256 CPUs might run over multiple partitions. Cross-partition jobs can
+be submitted via PAM like this</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">bsub -n 1024 pamrun a.out</span>
+</pre></div>
+</div>
+</section>
+<section id="batch-queues">
+<h4>Batch Queues<a class="headerlink" href="#batch-queues" title="Permalink to this heading">#</a></h4>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Batch Queue</p></th>
+<th class="head text-left"><p>Admitted Users</p></th>
+<th class="head text-left"><p>Available CPUs</p></th>
+<th class="head text-left"><p>Default Runtime</p></th>
+<th class="head text-left"><p>Max. Runtime</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">interactive</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">all</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">min.</span> <span class="pre">1,</span> <span class="pre">max.</span> <span class="pre">32</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">12h</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">12h</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">small</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">all</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">min.</span> <span class="pre">1,</span> <span class="pre">max.</span> <span class="pre">63</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">12h</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">120h</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">intermediate</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">all</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">min.</span> <span class="pre">64,</span> <span class="pre">max.</span> <span class="pre">255</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">12h</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">120h</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">large</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">all</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">min.256,</span> <span class="pre">max.1866</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">12h</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">24h</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">ilr</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">selected</span> <span class="pre">users</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">min.</span> <span class="pre">1,</span> <span class="pre">max.</span> <span class="pre">768</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">12h</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">24h</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/archive"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#system">
+   System
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#filesystems">
+     Filesystems
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ccnuma-architecture">
+     ccNUMA Architecture
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#compute-module">
+     Compute Module
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cpu">
+     CPU
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#usage">
+   Usage
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#compiling-parallel-applications">
+     Compiling Parallel Applications
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#batch-system">
+     Batch System
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lsf">
+       LSF
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#submission-of-parallel-jobs">
+       Submission of Parallel Jobs
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#batch-queues">
+       Batch Queues
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-23.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

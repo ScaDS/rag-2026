@@ -1,0 +1,1058 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Connecting via Terminal (Linux, Mac, Windows) &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/access/ssh_login';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Preparation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../00_preparation/readme.html">Preparation of the session</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/access/ssh_login.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../../../../_sources/04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/access/ssh_login.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Connecting via Terminal (Linux, Mac, Windows)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#before-your-first-connection">
+   Before Your First Connection
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#configuring-default-parameters-for-ssh">
+     Configuring Default Parameters for SSH
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#x11-forwarding">
+   X11-Forwarding
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#advanced-configuration">
+   Advanced Configuration
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#working-on-multiple-clusters">
+     Working on Multiple Clusters
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#working-on-compute-nodes">
+     Working on Compute Nodes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#connecting-via-visual-studio-code">
+     Connecting via Visual Studio Code
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="connecting-via-terminal-linux-mac-windows">
+<h1>Connecting via Terminal (Linux, Mac, Windows)<a class="headerlink" href="#connecting-via-terminal-linux-mac-windows" title="Permalink to this heading">#</a></h1>
+<p>Connecting via terminal works on every operating system. For Linux and Mac operating systems
+no additional software is required. For users of a Windows OS a recent version of Windows is
+required (Windows 10, Build 1809 and higher). It is possible to use
+<a class="reference external" href="https://en.wikipedia.org/wiki/Cmd.exe">Command Prompt</a> or <a class="reference external" href="https://en.wikipedia.org/wiki/PowerShell">PowerShell</a>).
+Ensure that <a class="reference external" href="https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/factoryos/connect-using-ssh?view=windows-10">OpenSSH</a>
+is installed on the system.</p>
+<p>SSH establishes secure connections using authentication and encryption. The login nodes accept
+the following encryption algorithms: <code class="docutils literal notranslate"><span class="pre">aes128-ctr</span></code>, <code class="docutils literal notranslate"><span class="pre">aes192-ctr</span></code>, <code class="docutils literal notranslate"><span class="pre">aes256-ctr</span></code>,
+<code class="docutils literal notranslate"><span class="pre">aes128-gcm&#64;openssh.com</span></code>, <code class="docutils literal notranslate"><span class="pre">aes256-gcm&#64;openssh.com</span></code>, <code class="docutils literal notranslate"><span class="pre">chacha20-poly1305&#64;openssh.com</span></code>,
+<code class="docutils literal notranslate"><span class="pre">chacha20-poly1305&#64;openssh.com</span></code>.</p>
+<p>??? info “Warning message: post-quantum algorithm”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>When using a recent version of OpenSSH (&gt;= 10.2), you may see the following warning:
+
+&gt; ** WARNING: connection is not using a post-quantum key exchange algorithm.
+&gt; ** This session may be vulnerable to &quot;store now, decrypt later&quot; attacks.
+&gt; ** The server may need to be upgraded. See https://openssh.com/pq.html
+
+You can safely ignore this message. Our cluster systems currently do not support
+the post-quantum key exchange algorithms mentioned in the warning.
+</pre></div>
+</div>
+<p>??? info “Troubleshooting VPN connection”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If you have problems logging in from outside the campus network, the ZIH
+[FAQ and Service Catalog page](https://tu-dresden.de/zih/dienste/service-katalog/arbeitsumgebung/zugang_datennetz/vpn)
+provides information on how to set up the VPN connection
+and solutions to the most common issues.
+</pre></div>
+</div>
+<section id="before-your-first-connection">
+<h2>Before Your First Connection<a class="headerlink" href="#before-your-first-connection" title="Permalink to this heading">#</a></h2>
+<p>We suggest to create an SSH key pair before you work with the ZIH systems. This ensures high
+connection security.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@local$ </span>mkdir<span class="w"> </span>-p<span class="w"> </span>~/.ssh
+<span class="gp">marie@local$ </span>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-f<span class="w"> </span>~/.ssh/id_ed25519
+<span class="go">Generating public/private ed25519 key pair.</span>
+<span class="go">Enter passphrase (empty for no passphrase):</span>
+<span class="go">Enter same passphrase again:</span>
+<span class="go">[...]</span>
+</pre></div>
+</div>
+<p>Type in a passphrase for the protection of your key. The passphrase should be <strong>non-empty</strong>.
+Copy the <strong>public key</strong> to the ZIH system (Replace placeholder <code class="docutils literal notranslate"><span class="pre">marie</span></code> with your ZIH login):</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@local$ </span>ssh-copy-id<span class="w"> </span>-i<span class="w"> </span>~/.ssh/ssh_host_ed25519_key.pub<span class="w"> </span>marie@login2.barnard.hpc.tu-dresden.de
+<span class="go">The authenticity of host &#39;barnard.hpc.tu-dresden.de (141.30.73.104)&#39; can&#39;t be established.</span>
+<span class="go">RSA key fingerprint is SHA256:HjpVeymTpk0rqoc8Yvyc8d9KXQ/p2K0R8TJ27aFnIL8.</span>
+<span class="go">Are you sure you want to continue connecting (yes/no)?</span>
+</pre></div>
+</div>
+<p>Compare the shown fingerprint with the <a class="reference internal" href="key_fingerprints.html"><span class="doc std std-doc">documented fingerprints</span></a>. Make sure
+they match. Then you can accept by typing <code class="docutils literal notranslate"><span class="pre">yes</span></code>.</p>
+<p>!!! note “One <code class="docutils literal notranslate"><span class="pre">ssh-copy-id</span></code> command for all clusters”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Since your home directory, where the file `.ssh/authorized_keys` is stored, is available on all HPC
+systems, this task is only required once and you can freely choose a target system for the
+`ssh-copy-id` command. Afterwards, you can access all clusters with this key file.
+</pre></div>
+</div>
+<p>??? info “ssh-copy-id is not available”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If `ssh-copy-id` is not available, you need to do additional steps:
+
+```console
+marie@local$ scp ~/.ssh/ssh_host_ed25519_key.pub marie@login2.barnard.hpc.tu-dresden.de:
+The authenticity of host &#39;barnard.hpc.tu-dresden.de (141.30.73.104)&#39; can&#39;t be established.
+RSA key fingerprint is SHA256:Gn4n5IX9eEvkpOGrtZzs9T9yAfJUB200bgRchchiKAQ.
+Are you sure you want to continue connecting (yes/no)?
+```
+
+After that, you need to manually copy the key to the right place:
+
+```console
+marie@local$ ssh marie@login2.barnard.hpc.tu-dresden.de
+[...]
+marie@login.barnard$ mkdir -p ~/.ssh
+marie@login.barnard$ touch ~/.ssh/authorized_keys
+marie@login.barnard$ cat ssh_host_ed25519_key.pub &gt;&gt; ~/.ssh/authorized_keys
+```
+</pre></div>
+</div>
+<section id="configuring-default-parameters-for-ssh">
+<h3>Configuring Default Parameters for SSH<a class="headerlink" href="#configuring-default-parameters-for-ssh" title="Permalink to this heading">#</a></h3>
+<p>After you have copied your key to the ZIH system, you should be able to connect using:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@local$ </span>ssh<span class="w"> </span>marie@login2.barnard.hpc.tu-dresden.de
+<span class="go">[...]</span>
+<span class="gp">marie@login.barnard$ </span><span class="nb">exit</span>
+</pre></div>
+</div>
+<p>However, you can make this more comfortable if you prepare an SSH configuration on your local
+workstation. Navigate to the subdirectory <code class="docutils literal notranslate"><span class="pre">.ssh</span></code> in your home directory and open the file <code class="docutils literal notranslate"><span class="pre">config</span></code>
+(<code class="docutils literal notranslate"><span class="pre">~/.ssh/config</span></code>) in your favorite editor. If it does not exist, create it. Put the following lines
+in it (you can omit lines starting with <code class="docutils literal notranslate"><span class="pre">#</span></code>):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Host<span class="w"> </span>barnard
+<span class="w">  </span><span class="c1">#For login (shell access)</span>
+<span class="w">  </span>HostName<span class="w"> </span>login1.barnard.hpc.tu-dresden.de
+<span class="w">  </span><span class="c1">#Put your ZIH-Login after keyword &quot;User&quot;:</span>
+<span class="w">  </span>User<span class="w"> </span>marie
+<span class="w">  </span><span class="c1">#Path to private key:</span>
+<span class="w">  </span>IdentityFile<span class="w"> </span>~/.ssh/id_ed25519
+<span class="w">  </span><span class="c1">#Don&#39;t try other keys if you have more:</span>
+<span class="w">  </span>IdentitiesOnly<span class="w"> </span>yes
+<span class="w">  </span><span class="c1">#Enable X11 forwarding for graphical applications and compression. You don&#39;t need parameter -X and -C when invoking ssh then.</span>
+<span class="w">  </span>ForwardX11<span class="w"> </span>yes
+<span class="w">  </span>Compression<span class="w"> </span>yes
+
+Host<span class="w"> </span>dataport
+<span class="w">  </span><span class="c1">#For copying data without shell access</span>
+<span class="w">  </span>HostName<span class="w"> </span>dataport1.hpc.tu-dresden.de
+<span class="w">  </span><span class="c1">#Put your ZIH-Login after keyword &quot;User&quot;:</span>
+<span class="w">  </span>User<span class="w"> </span>marie
+<span class="w">  </span><span class="c1">#Path to private key:</span>
+<span class="w">  </span>IdentityFile<span class="w"> </span>~/.ssh/id_ed25519
+<span class="w">  </span><span class="c1">#Don&#39;t try other keys if you have more:</span>
+<span class="w">  </span>IdentitiesOnly<span class="w"> </span>yes
+</pre></div>
+</div>
+<p>Afterwards, you can connect to the ZIH system using:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@local$ </span>ssh<span class="w"> </span>barnard
+</pre></div>
+</div>
+<p>If you want to copy data from/to ZIH systems, please refer to the documentation
+<a class="reference internal" href="../data_transfer/dataport_nodes.html"><span class="doc std std-doc">Dataport Nodes: Transfer Data to/from ZIH’s Filesystems</span></a>
+for more information on Dataport nodes.</p>
+<p>!!! note “Gernalization to all HPC systems”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>In the above `.ssh/config` file, the HPC system `Barnard` is chosen as an example.
+The very same settings can be made for individuall or all ZIH systems, e.g. `Capella`, `Alpha`,
+ `Julia`, `Romeo` etc.
+</pre></div>
+</div>
+</section>
+</section>
+<section id="x11-forwarding">
+<h2>X11-Forwarding<a class="headerlink" href="#x11-forwarding" title="Permalink to this heading">#</a></h2>
+<p>If you plan to use an application with graphical user interface (GUI), you need to enable
+X11-forwarding for the connection. If you use the SSH configuration described above, everything is
+already prepared and you can simply use:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@local$ </span>ssh<span class="w"> </span>barnard
+</pre></div>
+</div>
+<p>If you have omitted the last two lines in the default configuration above, you need to add the
+option <code class="docutils literal notranslate"><span class="pre">-X</span></code> or <code class="docutils literal notranslate"><span class="pre">-XC</span></code> to your SSH command. The <code class="docutils literal notranslate"><span class="pre">-C</span></code> enables compression which usually improves
+usability in this case:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@local$ </span>ssh<span class="w"> </span>-XC<span class="w"> </span>barnard
+</pre></div>
+</div>
+<p>!!! info</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Also consider to use a [DCV session](desktop_cloud_visualization.md) for remote desktop
+visualization at ZIH systems.
+</pre></div>
+</div>
+</section>
+<section id="advanced-configuration">
+<h2>Advanced Configuration<a class="headerlink" href="#advanced-configuration" title="Permalink to this heading">#</a></h2>
+<section id="working-on-multiple-clusters">
+<h3>Working on Multiple Clusters<a class="headerlink" href="#working-on-multiple-clusters" title="Permalink to this heading">#</a></h3>
+<p>If you are working on multiple clusters or regularly switch between login nodes, you do not need
+to add a separate entry for each login node to your SSH configuration.
+Instead, you can use <a class="reference external" href="https://www.man7.org/linux/man-pages/man5/ssh_config.5.html#PATTERNS">patterns</a>
+inside your SSH configuration to group multiple related entries together.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># defaults to login1 node for each cluster</span>
+<span class="c1"># %h in HostName is replaced with the given host</span>
+Host<span class="w"> </span>alpha<span class="w"> </span>barnard<span class="w"> </span>romeo<span class="w"> </span>capella
+<span class="w">  </span>HostName<span class="w"> </span>login1.%h.hpc.tu-dresden.de
+<span class="w">  </span>User<span class="w"> </span>marie
+<span class="w">  </span>IdentityFile<span class="w"> </span>~/.ssh/id_ed25519
+<span class="w">  </span>IdentitiesOnly<span class="w"> </span>yes
+
+Host<span class="w"> </span>julia<span class="w"> </span>dataport1<span class="w"> </span>dataport2
+<span class="w">  </span>Hostname<span class="w"> </span>%h.hpc.tu-dresden.de
+<span class="w">  </span>User<span class="w"> </span>marie
+<span class="w">  </span>IdentityFile<span class="w"> </span>~/.ssh/id_ed25519
+<span class="w">  </span>IdentitiesOnly<span class="w"> </span>yes
+
+<span class="c1"># cover all login nodes</span>
+<span class="c1"># ? in host is a placeholder for one character</span>
+<span class="c1"># 2.barnard -&gt; login2.barnard.hpc-tu-dresden.de</span>
+Host<span class="w"> </span>?.alpha<span class="w"> </span>?.barnard<span class="w"> </span>?.romeo<span class="w"> </span>?.capella
+<span class="w">  </span>HostName<span class="w"> </span>login%h.hpc.tu-dresden.de
+<span class="w">  </span>User<span class="w"> </span>marie
+<span class="w">  </span>IdentityFile<span class="w"> </span>~/.ssh/id_ed25519
+<span class="w">  </span>IdentitiesOnly<span class="w"> </span>yes
+</pre></div>
+</div>
+<p>Now you can reach any login node by running <code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">&lt;number&gt;.&lt;cluster&gt;</span></code>, where <code class="docutils literal notranslate"><span class="pre">&lt;number&gt;</span></code> is the
+number of the login node and <code class="docutils literal notranslate"><span class="pre">&lt;cluster&gt;</span></code> is the name of your target cluster.
+For example <code class="docutils literal notranslate"><span class="pre">2.capella</span></code> will be resolved to <code class="docutils literal notranslate"><span class="pre">login2.capella.hpc.tu-dresden.de</span></code>.</p>
+</section>
+<section id="working-on-compute-nodes">
+<h3>Working on Compute Nodes<a class="headerlink" href="#working-on-compute-nodes" title="Permalink to this heading">#</a></h3>
+<p>To connect to a compute node with a running or an <span class="xref myst">interactive job</span>,
+you normally have to first connect to a login node and then to the desired compute node.
+This can be quite tedious, or is not even an option with some tools.</p>
+<p>Luckily, you can just add an entry to your ssh-config, to connect to a compute node with a single
+command. With that your used application does not need to directly support ssh hops.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Host entry to catch the ProxyCommand hosts</span>
+Host<span class="w"> </span>*.hpc.tu-dresden.de
+<span class="w">  </span>User<span class="w"> </span>marie
+<span class="w">  </span>IdentityFile<span class="w"> </span>~/.ssh/id_ed25519
+<span class="w">  </span>IdentitiesOnly<span class="w"> </span>yes
+
+<span class="c1"># Barnard compute nodes</span>
+Host<span class="w"> </span>n????
+<span class="w">  </span><span class="c1"># This specifies the jump host (connection to the login node)</span>
+<span class="w">  </span>ProxyJump<span class="w"> </span>login1.barnard.hpc.tu-dresden.de
+<span class="w">  </span>User<span class="w"> </span>marie
+<span class="w">  </span>IdentityFile<span class="w"> </span>~/.ssh/id_ed25519
+<span class="w">  </span>IdentitiesOnly<span class="w"> </span>yes
+
+<span class="c1"># Alpha compute nodes</span>
+Host<span class="w"> </span>i80??
+<span class="w">  </span>ProxyJump<span class="w"> </span>login1.alpha.hpc.tu-dresden.de
+<span class="w">  </span>User<span class="w"> </span>marie
+<span class="w">  </span>IdentityFile<span class="w"> </span>~/.ssh/id_ed25519
+<span class="w">  </span>IdentitiesOnly<span class="w"> </span>yes
+
+<span class="c1"># Capella compute nodes</span>
+Host<span class="w"> </span>c?<span class="w"> </span>c??<span class="w"> </span>c???
+<span class="w">  </span>ProxyJump<span class="w"> </span>login1.capella.hpc.tu-dresden.de
+<span class="w">  </span>User<span class="w"> </span>marie
+<span class="w">  </span>IdentityFile<span class="w"> </span>~/.ssh/id_ed25519
+<span class="w">  </span>IdentitiesOnly<span class="w"> </span>yes
+
+<span class="c1"># Romeo compute nodes</span>
+Host<span class="w"> </span>i7???
+<span class="w">  </span>ProxyJump<span class="w"> </span>login1.romeo.hpc.tu-dresden.de
+<span class="w">  </span>User<span class="w"> </span>marie
+<span class="w">  </span>IdentityFile<span class="w"> </span>~/.ssh/id_ed25519
+<span class="w">  </span>IdentitiesOnly<span class="w"> </span>yes
+</pre></div>
+</div>
+</section>
+<section id="connecting-via-visual-studio-code">
+<h3>Connecting via Visual Studio Code<a class="headerlink" href="#connecting-via-visual-studio-code" title="Permalink to this heading">#</a></h3>
+<p>Some users like to use Visual Studio Code (VS-Code) to work on their projects,
+allowing them to run workloads on a compute node using the comfort of their local editor.</p>
+<p>!!! warning “Please, do not run Visual Studio Code Server on login nodes.”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Due to capacity reasons, we might be forced to terminate Visual Studio Code Server sessions without prior notice.
+Use compute nodes instead.
+</pre></div>
+</div>
+<p>In the following example, our job runs on the <code class="docutils literal notranslate"><span class="pre">Barnard</span></code> compute node <code class="docutils literal notranslate"><span class="pre">n1720</span></code>.</p>
+<ol class="arabic">
+<li><p>Adapt your ssh-config for <span class="xref myst">Working on Compute Nodes</span></p>
+<p>??? info “Example: Configuration for Barnard”
+```bash
+Host *.hpc.tu-dresden.de
+User marie
+IdentityFile ~/.ssh/id_ed25519
+IdentitiesOnly yes</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span> Host n????
+   ProxyJump login1.barnard.hpc.tu-dresden.de
+   User marie
+   IdentityFile ~/.ssh/id_ed25519
+   IdentitiesOnly yes
+ ```
+</pre></div>
+</div>
+</li>
+<li><p>Install the <a class="reference external" href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh">Remote SSH</a>
+extension.</p>
+<ol class="arabic simple">
+<li><p>Select Extensions on the sidebar on the left or press <code class="docutils literal notranslate"><span class="pre">Ctrl+Shift+X</span></code>.</p></li>
+<li><p>Type <code class="docutils literal notranslate"><span class="pre">Remote</span> <span class="pre">-</span> <span class="pre">SSH</span></code> into the search bar.</p></li>
+<li><p>Click the <code class="docutils literal notranslate"><span class="pre">Install</span></code> button on the <code class="docutils literal notranslate"><span class="pre">Remote</span> <span class="pre">-</span> <span class="pre">SSH</span></code> extension.</p></li>
+</ol>
+<p><img alt="VS-Code plugin installation" src="../../../../../_images/vscode1_plugin_install.png" />
+{.align-center}</p>
+</li>
+<li><p>Start your <span class="xref myst">interactive job</span>.</p>
+<ul class="simple">
+<li><p>Once your job has been allocated, make sure to down the hostname and fingerprint.</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>marie@n1720$<span class="w"> </span>hostname
+n1720
+marie@n1720$<span class="w"> </span>ssh-keygen<span class="w"> </span>-l<span class="w"> </span>-f<span class="w"> </span>/etc/ssh/ssh_host_ed25519_key.pub
+<span class="m">256</span><span class="w"> </span>SHA256:CxLv2qYktKNkK11p5l8t9Rho8VL+mV9oPMKpgKASUPY<span class="w"> </span>no<span class="w"> </span>comment<span class="w"> </span><span class="o">(</span>ECDSA<span class="o">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>Click the <code class="docutils literal notranslate"><span class="pre">Connect</span> <span class="pre">to...</span></code> button or press <code class="docutils literal notranslate"><span class="pre">Ctrl+Alt+O</span></code></p>
+<p><img alt="VS-Code connection initialization" src="../../../../../_images/vscode2_connect_init.png" />
+{.align-center}</p>
+</li>
+<li><p>Select <code class="docutils literal notranslate"><span class="pre">Connect</span> <span class="pre">to</span> <span class="pre">Host</span></code>.</p>
+<p><img alt="VS-Code connect to host" src="../../../../../_images/vscode3_connect_host.png" />
+{.align-center}</p>
+</li>
+<li><p>Enter the hostname of your compute node (in our example that is <code class="docutils literal notranslate"><span class="pre">n1720</span></code>).</p>
+<p><img alt="VS-Code node name" src="../../../../../_images/vscode4_node_name.png" />
+{.align-center}</p>
+</li>
+<li><p>Validate the fingerprint for the compute node with the one you wrote down earlier and click <code class="docutils literal notranslate"><span class="pre">Continue</span></code>.</p>
+<p><img alt="VS-Code check fingerprint" src="../../../../../_images/vscode5_fingerprint.png" />
+{.align-center}</p>
+</li>
+<li><p>Verify that you are connected by checking the indicator in the lower left corner
+(<code class="docutils literal notranslate"><span class="pre">SSH:</span> <span class="pre">&lt;nodename&gt;</span></code>)</p>
+<p><img alt="VS-Code plugin installation" src="../../../../../_images/vscode6_connected.png" />
+{.align-center}</p>
+</li>
+</ol>
+<p>Further information can be found in the official VS-Code documentation on
+<a class="reference external" href="https://code.visualstudio.com/docs/remote/ssh">Remote Development using SSH</a>.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/access"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#before-your-first-connection">
+   Before Your First Connection
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#configuring-default-parameters-for-ssh">
+     Configuring Default Parameters for SSH
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#x11-forwarding">
+   X11-Forwarding
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#advanced-configuration">
+   Advanced Configuration
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#working-on-multiple-clusters">
+     Working on Multiple Clusters
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#working-on-compute-nodes">
+     Working on Compute Nodes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#connecting-via-visual-studio-code">
+     Connecting via Visual Studio Code
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-23.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

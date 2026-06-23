@@ -1,0 +1,1216 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Performance Engineering Overview &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/performance_engineering_overview';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Preparation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../00_preparation/readme.html">Preparation of the session</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/performance_engineering_overview.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../../../../_sources/04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/performance_engineering_overview.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Performance Engineering Overview</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#objectives">
+   Objectives
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#installed-tools-in-a-nutshell">
+   Installed Tools in a Nutshell
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#approach-and-terminology">
+   Approach and Terminology
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#instrumentation">
+     Instrumentation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#measurement">
+     Measurement
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#profile">
+       Profile
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trace">
+       Trace
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#analysis">
+     Analysis
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#presentation">
+     Presentation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#evaluation">
+     Evaluation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#installed-tools-summary">
+   Installed Tools Summary
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#lo2s">
+     lo2s
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#must">
+     MUST
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#papi">
+     PAPI
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#perf-tools">
+     Perf Tools
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pika">
+     PIKA
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#score-p">
+     Score-P
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#vampir">
+     Vampir
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="performance-engineering-overview">
+<h1>Performance Engineering Overview<a class="headerlink" href="#performance-engineering-overview" title="Permalink to this heading">#</a></h1>
+<p>!!! cite “Walter J. Doherty, 1970 <a class="footnote-reference brackets" href="#id4" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Fundamentally, performance is the degree to which a computing system meets the expectations of
+the person involved with it.
+</pre></div>
+</div>
+<p>Performance engineering encompasses the techniques applied during a systems development life cycle
+to ensure the non-functional requirements for performance (such as throughput, latency, or memory
+usage) will be met.
+Often, it is also referred to as systems performance engineering within systems engineering, and
+software performance engineering or application performance engineering within software engineering
+<a class="reference external" href="https://en.wikipedia.org/wiki/Performance_engineering">[Wikipedia]</a>.</p>
+<section id="objectives">
+<h2>Objectives<a class="headerlink" href="#objectives" title="Permalink to this heading">#</a></h2>
+<p>??? hint “Some good reasons to think about performance in HPC”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>- Increase research output by ensuring the system can process transactions within the requisite time
+  frame
+- Eliminate system failure requiring scrapping and writing off the system development effort due to
+  performance objective failure
+- Eliminate avoidable system tuning efforts
+- Avoid additional and unnecessary hardware acquisition costs
+- Reduce increased software maintenance costs due to performance problems in production
+- Reduce additional operational overhead for handling system issues due to performance problems
+- Identify future bottlenecks by simulation over prototype
+</pre></div>
+</div>
+</section>
+<section id="installed-tools-in-a-nutshell">
+<h2>Installed Tools in a Nutshell<a class="headerlink" href="#installed-tools-in-a-nutshell" title="Permalink to this heading">#</a></h2>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Tool</p></th>
+<th class="head"><p>Task</p></th>
+<th class="head"><p>Easiness</p></th>
+<th class="head"><p>Details</p></th>
+<th class="head"><p>Overhead</p></th>
+<th class="head"><p>Re-compilation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="xref myst">lo2s</span></p></td>
+<td><p>Create performance <span class="xref myst">trace</span></p></td>
+<td><p>easy</p></td>
+<td><p>medium</p></td>
+<td><p>low</p></td>
+<td><p>(no)<a class="footnote-reference brackets" href="#id5" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="xref myst">MUST</span></p></td>
+<td><p>Check MPI correctness</p></td>
+<td><p>medium</p></td>
+<td><p>medium</p></td>
+<td><p>variable</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="xref myst">PAPI</span></p></td>
+<td><p>Read portable CPU counters</p></td>
+<td><p>advanced</p></td>
+<td><p>medium</p></td>
+<td><p>variable</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="xref myst">Perf</span></p></td>
+<td><p>Produce and visualize <span class="xref myst">profile</span></p></td>
+<td><p>easy</p></td>
+<td><p>medium</p></td>
+<td><p>low</p></td>
+<td><p>(no)<a class="footnote-reference brackets" href="#id5" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="xref myst">PIKA</span></p></td>
+<td><p>Show performance <span class="xref myst">profile</span> and <span class="xref myst">trace</span></p></td>
+<td><p>very easy</p></td>
+<td><p>low</p></td>
+<td><p>very low</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="xref myst">Score-P</span></p></td>
+<td><p>Create performance <span class="xref myst">trace</span></p></td>
+<td><p>complex</p></td>
+<td><p>high</p></td>
+<td><p>variable</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="xref myst">Vampir</span></p></td>
+<td><p>Visualize performance <span class="xref myst">trace</span></p></td>
+<td><p>complex</p></td>
+<td><p>high</p></td>
+<td><p>n.a.</p></td>
+<td><p>n.a.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="approach-and-terminology">
+<h2>Approach and Terminology<a class="headerlink" href="#approach-and-terminology" title="Permalink to this heading">#</a></h2>
+<p>Performance engineering typically is a cyclic process.
+The following figure shows such a process and its potential stages.</p>
+<p><img alt="Performance engineering cycle" src="../../../../../_images/performance_engineering_cycle.svg" /></p>
+<section id="instrumentation">
+<h3>Instrumentation<a class="headerlink" href="#instrumentation" title="Permalink to this heading">#</a></h3>
+<p>!!! hint “Instrumentation is a common term for preparing the performance measurement”</p>
+<p>The engineering process typically begins with the original application in its unmodified state.
+First, this application needs to be instrumented, i.e. it must be prepared to enable the
+measurement of the performance properties.
+There are different ways to do this, including manual instrumentation of the source code by the
+user, automatic instrumentation by the compiler, linking against pre-instrumented libraries, or
+interrupt-driven sampling during run time.</p>
+</section>
+<section id="measurement">
+<h3>Measurement<a class="headerlink" href="#measurement" title="Permalink to this heading">#</a></h3>
+<p>!!! note “During measurement, raw performance data is collected”</p>
+<p>When an instrumented application is executed, the additional instructions introduced during the
+instrumentation phase collect and record the data required to evaluate the performance properties
+of the code.
+Unfortunately, the measurement itself has a certain influence on the performance of the instrumented
+code.
+Whether the perturbations introduced have a significant effect on the behavior depends on the
+specific structure of the code to be investigated.
+In many cases, the perturbations will be rather small, so that the overall results can be considered
+to be a realistic approximation of the corresponding properties of the non-instrumented code.
+Yet, it is always advisable to compare the runtime of instrumented applications with their original
+non-instrumented counterpart.</p>
+<section id="profile">
+<h4>Profile<a class="headerlink" href="#profile" title="Permalink to this heading">#</a></h4>
+<p>!!! hint “Performance profiles hold aggregated data (e.g. total time spent in function <code class="docutils literal notranslate"><span class="pre">foo()</span></code>)”</p>
+<p>A performance profile provides aggregated metrics like <em>time</em> or <em>number of calls</em> for a list of
+functions, loops or similar as depicted in the following table:</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head text-right"><p>Total Time</p></th>
+<th class="head text-right"><p>Calls</p></th>
+<th class="head text-right"><p>Percentage</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">main()</span></code></p></td>
+<td class="text-right"><p>2 s</p></td>
+<td class="text-right"><p>1</p></td>
+<td class="text-right"><p>1%</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">foo()</span></code></p></td>
+<td class="text-right"><p>80 s</p></td>
+<td class="text-right"><p>100</p></td>
+<td class="text-right"><p>40%</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bar()</span></code></p></td>
+<td class="text-right"><p>118 s</p></td>
+<td class="text-right"><p>9000</p></td>
+<td class="text-right"><p>59%</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="trace">
+<h4>Trace<a class="headerlink" href="#trace" title="Permalink to this heading">#</a></h4>
+<!-- markdownlint-disable-next-line line-length -->
+<p>!!! hint “Traces consist of a sorted list of timed application events/samples (e.g. enter function <code class="docutils literal notranslate"><span class="pre">foo()</span></code> at 0.11 s).”</p>
+<p>In contrast to performance <span class="xref myst">profiles</span>, performance traces consist of individual
+application samples or events that are recorded with a timestamp.
+A trace that corresponds to the profile recording above could look as follows:</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-right"><p>Timestamp</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Parameter</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-right"><p>0.10 s</p></td>
+<td><p>Enter Function</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">main()</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-right"><p>0.11 s</p></td>
+<td><p>Enter Function</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">foo()</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-right"><p>0.12 s</p></td>
+<td><p>Enter Function</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bar()</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-right"><p>0.15 s</p></td>
+<td><p>Exit Function</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bar()</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-right"><p>0.16 s</p></td>
+<td><p>Enter Function</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bar()</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-right"><p>0.17 s</p></td>
+<td><p>Exit Function</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bar()</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-right"><p></p></td>
+<td><p><em>many more events…</em></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td class="text-right"><p>200.00 s</p></td>
+<td><p>Exit Function</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">main()</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<!-- markdownlint-disable-next-line line-length -->
+<p>!!! hint “Traces enable more sophisticated analysis at the cost of potentially very large amounts of raw data.”</p>
+<p>Apparently, the size of a performance trace depends on the recorded time whereas a profile does not.
+Likewise, a trace can tell you when a specific action in your application happened whereas a profile
+will tell you how much time in total a class of actions takes.</p>
+</section>
+</section>
+<section id="analysis">
+<h3>Analysis<a class="headerlink" href="#analysis" title="Permalink to this heading">#</a></h3>
+<p>!!! note “Well defined performance metrics are derived from raw performance data during analysis”</p>
+<p>The collected raw data is typically processed by a analysis tool (profiler, consistency checker, you
+name it) to derive meaningful, well-defined performance metrics like data rates, data dependencies,
+performance events of interest, etc.
+This step is typically hidden to the user and taken care of automatically once the raw data was
+collected.
+Some tools, however, provide an independent analysis front-end that allows specifying the type of
+analysis to carry out on the raw data.</p>
+</section>
+<section id="presentation">
+<h3>Presentation<a class="headerlink" href="#presentation" title="Permalink to this heading">#</a></h3>
+<p>!!! note “Presenting performance metrics graphically fosters human intuition”</p>
+<p>After processing the raw performance data, the resulting metrics are usually presented in the form
+of a report that makes use of tables or charts known from programs like Excel.
+In this step, the reduction of the data complexity simplifies the evaluation of the data by software
+developers.
+Yet, data reductions have the potential to hide important facts or details.</p>
+</section>
+<section id="evaluation">
+<h3>Evaluation<a class="headerlink" href="#evaluation" title="Permalink to this heading">#</a></h3>
+<p>!!! note “The evaluation of performance metrics requires tools and lots of thinking”</p>
+<p>During the evaluation phase, the metrics and findings in a performance report are compared to the
+behavior/performance as expected by software developers.
+This step typically requires a fair amount of knowledge about the application under test or software
+performance in general.
+The application is considered to behave sufficiently well or weaknesses have been identified which
+potentially can be improved.
+An application or its configuration is changed in the later case.
+After evaluating an application’s performance, the cyclic engineering process is either completed or
+restarted from beginning.</p>
+</section>
+</section>
+<section id="installed-tools-summary">
+<h2>Installed Tools Summary<a class="headerlink" href="#installed-tools-summary" title="Permalink to this heading">#</a></h2>
+<p>At ZIH, the following performance engineering tools are installed and maintained:</p>
+<section id="lo2s">
+<h3>lo2s<a class="headerlink" href="#lo2s" title="Permalink to this heading">#</a></h3>
+<p>!!! hint “Easy to use application and system performance trace recorder supporting Vampir”</p>
+<p><a class="reference internal" href="lo2s.html"><span class="doc std std-doc">lo2s</span></a> records the status of an application at fixed intervals (statistical sampling).
+It does not require any <span class="xref myst">instrumentation</span>.
+The <span class="xref myst">measurement</span> of a given application is done by pre-fixing the application’s
+executable with <code class="docutils literal notranslate"><span class="pre">lo2s</span></code>.
+The data analysis of the fixed metrics is fully integrated and does not require any user actions.
+Performance data is written to a <span class="xref myst">traces</span> repository at the current directory.
+See <a class="reference internal" href="lo2s.html"><span class="doc std std-doc">lo2s</span></a> for further details.
+Once the data have been recorded, the tool <a class="reference internal" href="vampir.html"><span class="doc std std-doc">Vampir</span></a> needs to be invoked to study the data
+graphically.</p>
+</section>
+<section id="must">
+<h3>MUST<a class="headerlink" href="#must" title="Permalink to this heading">#</a></h3>
+<!-- markdownlint-disable-next-line line-length -->
+<p>!!! hint “Advanced communication error detection for applications using the Message Passing Interface (MPI) standard.”</p>
+<p><a class="reference internal" href="mpi_usage_error_detection.html"><span class="doc std std-doc">MUST</span></a> checks your application for communication errors if the MPI
+library is used.
+It does not require any <span class="xref myst">instrumentation</span>.
+The checks of a given MPI application are done by simply replacing <code class="docutils literal notranslate"><span class="pre">srun</span></code> with <code class="docutils literal notranslate"><span class="pre">mustrun</span></code> when the
+application is started.
+The data analysis of the fixed metrics is fully integrated and does not require any user actions.
+The correctness results are written to an HTML-formatted output file, which can be inspected with a
+web browser.</p>
+</section>
+<section id="papi">
+<h3>PAPI<a class="headerlink" href="#papi" title="Permalink to this heading">#</a></h3>
+<p>!!! hint “Portable reading of CPU performance metrics like FLOPS”</p>
+<p>The <a class="reference internal" href="papi.html"><span class="doc std std-doc">PAPI</span></a> library allows software developers to read CPU performance counters in a
+platform-independent way.
+Native usage of the library requires to manually <span class="xref myst">instrument</span> an application by
+adding library calls to the source code of the application under investigation.
+Data <span class="xref myst">measurement</span> happens whenever the PAPI library is called.
+The data obtained is raw data.
+Software developers have to process the data by themselves to obtain meaningful metrics.
+Tools like <span class="xref myst">Score-P</span> have built-in support for PAPI.
+Therefore, native usage of the PAPI library is usually not needed.</p>
+</section>
+<section id="perf-tools">
+<h3>Perf Tools<a class="headerlink" href="#perf-tools" title="Permalink to this heading">#</a></h3>
+<p>!!! hint “Easy to use Linux-integrated performance data recording and analysis”</p>
+<p><a class="reference internal" href="perf_tools.html"><span class="doc std std-doc">Linux perf</span></a> reads and analyses CPU performance counters for any given application.
+It does not require any <span class="xref myst">instrumentation</span>.
+The <span class="xref myst">measurement</span> of a given application is done by simply prefixing the application
+executable with <code class="docutils literal notranslate"><span class="pre">perf</span></code>.
+Perf has two modes of operation (<code class="docutils literal notranslate"><span class="pre">perf</span> <span class="pre">stat</span></code>, <code class="docutils literal notranslate"><span class="pre">perf</span> <span class="pre">record</span></code>), which both record <span class="xref myst">profile</span>
+raw data.
+While the first mode is very basic, the second mode records more data.
+Use <code class="docutils literal notranslate"><span class="pre">perf</span> <span class="pre">report</span></code> to analyze the raw output data of <code class="docutils literal notranslate"><span class="pre">perf</span> <span class="pre">record</span></code> and produce a performance report.
+See <a class="reference internal" href="perf_tools.html"><span class="doc std std-doc">Linux perf</span></a> for further details.</p>
+</section>
+<section id="pika">
+<h3>PIKA<a class="headerlink" href="#pika" title="Permalink to this heading">#</a></h3>
+<p>!!! hint “Very easy to use performance visualization of entire batch jobs”</p>
+<p><a class="reference internal" href="pika.html"><span class="doc std std-doc">PIKA</span></a> allows users to study their active and completed
+<a class="reference internal" href="../jobs_and_resources/slurm.html"><span class="doc std std-doc">batch jobs</span></a>.
+It does not require any <span class="xref myst">instrumentation</span>.
+The <span class="xref myst">measurement</span> of batch jobs happens automatically in the background for all batch
+jobs.
+The data analysis of the given set of metrics is fully integrated and does not require any user
+actions.
+Performance metrics are accessible via the
+<a class="reference external" href="https://pika.zih.tu-dresden.de/">PIKA web service</a>.</p>
+</section>
+<section id="score-p">
+<h3>Score-P<a class="headerlink" href="#score-p" title="Permalink to this heading">#</a></h3>
+<p>!!! hint “Complex and powerful performance data recording and analysis of parallel applications”</p>
+<p><a class="reference internal" href="scorep.html"><span class="doc std std-doc">Score-P</span></a> is an advanced tool that measures configurable performance event data.
+It generates both <span class="xref myst">profiles</span> and detailed <span class="xref myst">traces</span> for subsequent analysis.
+It supports automated <span class="xref myst">instrumentation</span> of an application (involves
+re-compilation) prior to the <span class="xref myst">measurement</span> step.
+The data analysis of the raw performance data can be carried out with the tools <code class="docutils literal notranslate"><span class="pre">scalasca</span></code>
+(advanced MPI metrics), <code class="docutils literal notranslate"><span class="pre">cube</span></code> (<span class="xref myst">profile</span> viewer), <code class="docutils literal notranslate"><span class="pre">scorep-score</span></code> (<span class="xref myst">profile</span>
+command line viewer), or <span class="xref myst">Vampir</span> (<span class="xref myst">trace</span> viewer).
+Many raw data sources are supported by Score-P.
+It requires some time, training, and practice to fully benefit from the tool’s features.
+See <a class="reference internal" href="scorep.html"><span class="doc std std-doc">Score-P</span></a> for further details.</p>
+</section>
+<section id="vampir">
+<h3>Vampir<a class="headerlink" href="#vampir" title="Permalink to this heading">#</a></h3>
+<p>!!! hint “Complex and powerful performance data visualization of parallel applications”</p>
+<p><a class="reference internal" href="vampir.html"><span class="doc std std-doc">Vampir</span></a> is a graphical analysis tool that provides a large set of different chart
+representations for performance data <span class="xref myst">traces</span> generated by tools such as
+<a class="reference internal" href="scorep.html"><span class="doc std std-doc">Score-P</span></a> or <a class="reference internal" href="lo2s.html"><span class="doc std std-doc">lo2s</span></a>.
+Complex statistics, timelines, and state diagrams can be used by software developers to obtain a
+better understanding of the inner working of a parallel application.
+The tool requires some time, training, and practice to fully benefit from its rich set of features.</p>
+<hr class="footnotes docutils" />
+<aside class="footnote brackets" id="id4" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Scheduling TSS/360 for responsiveness. In: AFIPS ‘70 (Fall): Proceedings of the November
+17-19, 1970, fall joint computer conference, November 1970, Pages 97–111</p>
+</aside>
+<aside class="footnote brackets" id="id5" role="note">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id2">1</a>,<a role="doc-backlink" href="#id3">2</a>)</span>
+<p>Re-compilation is not required. Yet, to obtain more details it is recommended to re-compile with the <code class="docutils literal notranslate"><span class="pre">-g</span></code> compiler option, which adds debugging information to the executable of an application.</p>
+</aside>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#objectives">
+   Objectives
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#installed-tools-in-a-nutshell">
+   Installed Tools in a Nutshell
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#approach-and-terminology">
+   Approach and Terminology
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#instrumentation">
+     Instrumentation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#measurement">
+     Measurement
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#profile">
+       Profile
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trace">
+       Trace
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#analysis">
+     Analysis
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#presentation">
+     Presentation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#evaluation">
+     Evaluation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#installed-tools-summary">
+   Installed Tools Summary
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#lo2s">
+     lo2s
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#must">
+     MUST
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#papi">
+     PAPI
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#perf-tools">
+     Perf Tools
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pika">
+     PIKA
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#score-p">
+     Score-P
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#vampir">
+     Vampir
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-23.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

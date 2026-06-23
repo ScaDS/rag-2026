@@ -1,0 +1,1173 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>GPU Programming &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/gpu_programming';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Preparation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../00_preparation/readme.html">Preparation of the session</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/gpu_programming.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../../../../_sources/04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/gpu_programming.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>GPU Programming</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#available-gpus">
+   Available GPUs
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#using-gpus-with-slurm">
+   Using GPUs with Slurm
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#directive-based-gpu-programming">
+   Directive Based GPU Programming
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#openacc">
+     OpenACC
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#introduction">
+       Introduction
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#using-openacc-with-nvidia-hpc-compilers">
+       Using OpenACC with NVIDIA HPC Compilers
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#using-openacc-with-mpi">
+       Using OpenACC with MPI
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#openmp-target-offloading">
+     OpenMP Target Offloading
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#using-openmp-target-offloading-with-nvidia-hpc-compilers">
+       Using OpenMP Target Offloading with NVIDIA HPC Compilers
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#native-gpu-programming">
+   Native GPU Programming
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cuda">
+     CUDA
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#using-the-cuda-compiler">
+       Using the CUDA Compiler
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#performance-analysis">
+   Performance Analysis
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#nvidia-nvprof-and-visual-profiler">
+     NVIDIA nvprof and Visual Profiler
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#nvidia-nsight-systems">
+     NVIDIA Nsight Systems
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#nvidia-nsight-compute">
+     NVIDIA Nsight Compute
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="gpu-programming">
+<h1>GPU Programming<a class="headerlink" href="#gpu-programming" title="Permalink to this heading">#</a></h1>
+<section id="available-gpus">
+<h2>Available GPUs<a class="headerlink" href="#available-gpus" title="Permalink to this heading">#</a></h2>
+<p>The full hardware specifications of the GPU-compute nodes may be found in the
+<span class="xref myst">HPC Resources</span> page.
+The clusters may have different software <span class="xref myst">modules</span>
+available:</p>
+<p>E.g. the available CUDA versions can be listed with</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>marie@login$<span class="w"> </span>module<span class="w"> </span>spider<span class="w"> </span>CUDA
+</pre></div>
+</div>
+<p>Note that some modules use a specific CUDA version which is visible in the module name,
+e.g. <code class="docutils literal notranslate"><span class="pre">GDRCopy/2.1-CUDA-11.1.1</span></code> or <code class="docutils literal notranslate"><span class="pre">Horovod/0.28.1-CUDA-11.7.0-TensorFlow-2.11.0</span></code>.</p>
+<p>This especially applies to the optimized CUDA libraries like <code class="docutils literal notranslate"><span class="pre">cuDNN</span></code>, <code class="docutils literal notranslate"><span class="pre">NCCL</span></code> and <code class="docutils literal notranslate"><span class="pre">magma</span></code>.</p>
+<p>!!! important “CUDA-aware MPI”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>When running CUDA applications using MPI for interprocess communication you need to additionally
+load the modules that enable CUDA-aware MPI which may provide improved performance. Those are
+`UCX-CUDA` and `UCC-CUDA` which supplement the `UCX` and `UCC` modules respectively. Some
+modules, like `NCCL`, load those automatically.
+</pre></div>
+</div>
+</section>
+<section id="using-gpus-with-slurm">
+<h2>Using GPUs with Slurm<a class="headerlink" href="#using-gpus-with-slurm" title="Permalink to this heading">#</a></h2>
+<p>For general information on how to use the batch system Slurm, read the respective
+<a class="reference internal" href="../jobs_and_resources/slurm.html"><span class="doc std std-doc">page in this compendium</span></a>.
+When allocating resources on a GPU-node, you must specify the number of requested GPUs by using the
+<code class="docutils literal notranslate"><span class="pre">--gres=gpu:&lt;N&gt;</span></code> option, like this:</p>
+<p>=== “Cluster <code class="docutils literal notranslate"><span class="pre">Alpha</span></code> and <code class="docutils literal notranslate"><span class="pre">Capella</span></code>”
+```bash
+#!/bin/bash                           # Batch script starts with shebang line</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#SBATCH --nodes=1                    # All #SBATCH lines have to follow uninterrupted
+#SBATCH --ntasks=1
+#SBATCH --time=01:00:00               # after the shebang line
+#SBATCH --account=p_number_crunch     # Comments start with # and do not count as interruptions
+#SBATCH --job-name=fancyExp
+#SBATCH --output=simulation-%j.out
+#SBATCH --error=simulation-%j.err
+#SBATCH --gres=gpu:1                  # request GPU(s) from Slurm
+
+module purge                          # Set up environment, e.g., clean modules environment
+module load module/version module2    # and load necessary modules
+
+srun ./application [options]          # Execute parallel application with srun
+```
+</pre></div>
+</div>
+<p>Alternatively, you can work on the clusters interactively:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>marie@login$ srun --nodes=1 --gres=gpu:&lt;N&gt; --time=00:30:00 --pty bash
+marie@compute$ module purge; module switch release/&lt;env&gt;
+</pre></div>
+</div>
+</section>
+<section id="directive-based-gpu-programming">
+<h2>Directive Based GPU Programming<a class="headerlink" href="#directive-based-gpu-programming" title="Permalink to this heading">#</a></h2>
+<p>Directives are special compiler commands in your C/C++ or Fortran source code. They tell the
+compiler how to parallelize and offload work to a GPU. This section explains how to use this
+technique.</p>
+<section id="openacc">
+<h3>OpenACC<a class="headerlink" href="#openacc" title="Permalink to this heading">#</a></h3>
+<p><a class="reference external" href="https://www.openacc.org">OpenACC</a> is a directive based GPU programming model. It currently
+only supports NVIDIA GPUs as a target.</p>
+<p>Please use the following information as a start on OpenACC:</p>
+<section id="introduction">
+<h4>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h4>
+<p>OpenACC can be used with the NVIDIA HPC compilers “NVHPC” (former PGI), which are shipped
+as part of the <a class="reference external" href="https://docs.nvidia.com/hpc-sdk/index.html">NVIDIA HPC SDK</a>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">nvc</span></code> is the NVIDIA C compiler (don’t mix with <code class="docutils literal notranslate"><span class="pre">nvcc</span></code>, which is used for CUDA).</p>
+</section>
+<section id="using-openacc-with-nvidia-hpc-compilers">
+<h4>Using OpenACC with NVIDIA HPC Compilers<a class="headerlink" href="#using-openacc-with-nvidia-hpc-compilers" title="Permalink to this heading">#</a></h4>
+<ul class="simple">
+<li><p>See NVIDIA’s
+<a class="reference external" href="https://docs.nvidia.com/hpc-sdk/compilers/openacc-gs/index.html">OpenACC getting started guide</a>
+for related information.</p></li>
+<li><p>Switch into the correct module environment for your selected compute nodes
+(see <span class="xref myst">list of available GPUs</span>).</p></li>
+<li><p>Load the <code class="docutils literal notranslate"><span class="pre">NVHPC</span></code> module for the correct module environment.
+Either load the default (<code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">load</span> <span class="pre">NVHPC</span></code>) or search for a specific version.</p></li>
+<li><p>Use the correct compiler for your code: <code class="docutils literal notranslate"><span class="pre">nvc</span></code> for C, <code class="docutils literal notranslate"><span class="pre">nvc++</span></code> for C++ and <code class="docutils literal notranslate"><span class="pre">nvfortran</span></code> for Fortran.</p></li>
+<li><p>Use the <code class="docutils literal notranslate"><span class="pre">-acc</span></code> and
+<a class="reference external" href="https://docs.nvidia.com/hpc-sdk/compilers/hpc-compilers-ref-guide/index.html#cmdln-m-opts-misc-minfo"><code class="docutils literal notranslate"><span class="pre">-Minfo</span></code></a>
+flags.</p></li>
+<li><p>To create optimized code for both the A100 and H100 GPUs, use <code class="docutils literal notranslate"><span class="pre">-gpu=cc80,cc90</span></code>.</p></li>
+<li><p>Further information on this compiler is provided in the
+<a class="reference external" href="https://docs.nvidia.com/hpc-sdk/compilers/hpc-compilers-user-guide/index.html">user guide</a> and the
+<a class="reference external" href="https://docs.nvidia.com/hpc-sdk/compilers/hpc-compilers-ref-guide/index.html">reference guide</a>,
+which includes descriptions of available
+<a class="reference external" href="https://docs.nvidia.com/hpc-sdk/compilers/hpc-compilers-ref-guide/index.html#cmdln-options-ref">command line options</a>
+.</p></li>
+</ul>
+</section>
+<section id="using-openacc-with-mpi">
+<h4>Using OpenACC with MPI<a class="headerlink" href="#using-openacc-with-mpi" title="Permalink to this heading">#</a></h4>
+<p>To use a MPI + OpenACC programming model, you have to use a MPI module that is built with an
+OpenACC compiler. For example, a GCC-built MPI won’t work with OpenACC.
+The <code class="docutils literal notranslate"><span class="pre">NVHPC</span></code> module ships an OpenMPI as the so called HPC-X suite, but it has to be
+activated before it can be used (refer to
+<a class="reference external" href="https://docs.nvidia.com/networking/display/hpcxv215/installing+and+loading+hpc-x#src-119764112_InstallingandLoadingHPCX-LoadingHPC-XEnvironmentfromModules">loading HPC-X</a>
+). On the other hand, we provide an OpenMPI module that has been built with the NVHPC compilers
+for this special case. It is available on our Alpha Centauri and Capella systems.</p>
+<ul class="simple">
+<li><p>Load available NVHPC and MPI modules <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">load</span> <span class="pre">release/24.04</span> <span class="pre">NVHPC</span> <span class="pre">OpenMPI</span></code>.</p></li>
+<li><p>Alternative: Use HPC-X shipped with the <code class="docutils literal notranslate"><span class="pre">NVHPC</span></code> module - ask for support on how to load it.</p></li>
+</ul>
+</section>
+</section>
+<section id="openmp-target-offloading">
+<h3>OpenMP Target Offloading<a class="headerlink" href="#openmp-target-offloading" title="Permalink to this heading">#</a></h3>
+<p><a class="reference external" href="https://www.openmp.org/">OpenMP</a> supports target offloading as of version 4.0. A dedicated set of
+compiler directives can be used to annotate code-sections that are intended for execution on the
+GPU (i.e., target offloading). Not all OpenMP compilers support target offloading, refer to
+the <a class="reference external" href="https://www.openmp.org/resources/openmp-compilers-tools/">official list</a> for details.
+Note: Experience has shown that the performance for target offloading with GCC is very poor (i.e.
+slower than pure CPU code). We recommend to use Nvidia compilers (see below) or
+<a class="reference external" href="https://clang.llvm.org/docs/OffloadingDesign.html">Clang</a> for this
+programming model. Also consider consulting our performance experts if you have a use case.</p>
+<section id="using-openmp-target-offloading-with-nvidia-hpc-compilers">
+<h4>Using OpenMP Target Offloading with NVIDIA HPC Compilers<a class="headerlink" href="#using-openmp-target-offloading-with-nvidia-hpc-compilers" title="Permalink to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Load the module environments and the NVIDIA HPC SDK as described in the
+<span class="xref myst">OpenACC section</span>.</p></li>
+<li><p>Use the <code class="docutils literal notranslate"><span class="pre">-mp=gpu</span></code> flag to enable OpenMP with offloading.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Minfo</span></code> tells you what the compiler is actually doing to your code.</p></li>
+<li><p>The same compiler options as mentioned in the
+<span class="xref myst">OpenACC section</span>
+are available for OpenMP, including the <code class="docutils literal notranslate"><span class="pre">-gpu=ccXY</span></code> flag.</p></li>
+<li><p>OpenMP-specific advice may also be found in the respective section of NVIDIA’s
+<a class="reference external" href="https://docs.nvidia.com/hpc-sdk/compilers/hpc-compilers-user-guide/#openmp-use">user guide</a>.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="native-gpu-programming">
+<h2>Native GPU Programming<a class="headerlink" href="#native-gpu-programming" title="Permalink to this heading">#</a></h2>
+<section id="cuda">
+<h3>CUDA<a class="headerlink" href="#cuda" title="Permalink to this heading">#</a></h3>
+<p>Native <a class="reference external" href="http://www.nvidia.com/cuda">CUDA</a> programs can sometimes offer a better performance.
+NVIDIA provides some <a class="reference external" href="https://developer.nvidia.com/how-to-cuda-c-cpp">introductory material and links</a>.
+An <a class="reference external" href="https://developer.nvidia.com/blog/even-easier-introduction-cuda/">introduction to CUDA</a> is
+provided as well. The <a class="reference external" href="https://docs.nvidia.com/cuda/index.html">toolkit documentation page</a> links to
+the <a class="reference external" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html">programming guide</a> and the
+<a class="reference external" href="https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html">best practice guide</a>.
+Optimization guides for supported NVIDIA architectures are available, including for
+<a class="reference external" href="https://docs.nvidia.com/cuda/ampere-tuning-guide/index.html">Ampere (A100)</a> and
+<a class="reference external" href="https://docs.nvidia.com/cuda/hopper-tuning-guide/index.html">Hopper (H100)</a>.</p>
+<p>In order to compile an application with CUDA use the <code class="docutils literal notranslate"><span class="pre">nvcc</span></code> compiler command, which is described in
+detail in the <a class="reference external" href="https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html">nvcc documentation</a>.
+This compiler is available via several <code class="docutils literal notranslate"><span class="pre">CUDA</span></code> packages, a default version can be loaded via
+<code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">load</span> <span class="pre">CUDA</span></code>. Additionally, the <code class="docutils literal notranslate"><span class="pre">NVHPC</span></code> modules provide CUDA tools as well.</p>
+<p>For using CUDA with Open MPI across multiple nodes, the <code class="docutils literal notranslate"><span class="pre">OpenMPI</span></code> module that is loaded should have
+been compiled with CUDA support. If you aren’t sure whether the module you are using
+has support for it, you can check it as follows:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ompi_info --parsable --all | grep mpi_built_with_cuda_support:value | awk -F&quot;:&quot; &#39;{print &quot;Open MPI supports CUDA:&quot;,$7}&#39;</span>
+</pre></div>
+</div>
+<section id="using-the-cuda-compiler">
+<h4>Using the CUDA Compiler<a class="headerlink" href="#using-the-cuda-compiler" title="Permalink to this heading">#</a></h4>
+<p>The simple invocation <code class="docutils literal notranslate"><span class="pre">nvcc</span> <span class="pre">&lt;code.cu&gt;</span></code> will compile a valid CUDA program. <code class="docutils literal notranslate"><span class="pre">nvcc</span></code> differentiates
+between the device and the host code, which will be compiled in separate phases. Therefore, compiler
+options can be defined specifically for the device as well as for the host code. By default, the GCC
+is used as the host compiler. The following flags may be useful:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--generate-code</span></code> (<code class="docutils literal notranslate"><span class="pre">-gencode</span></code>): generate optimized code for a target GPU (caution: these binaries
+cannot be used with GPUs of other generations).</p>
+<ul>
+<li><p>For Ampere (A100): <code class="docutils literal notranslate"><span class="pre">--generate-code</span> <span class="pre">arch=compute_80,code=sm_80</span></code></p></li>
+<li><p>For Hopper (H100): <code class="docutils literal notranslate"><span class="pre">--generate-code</span> <span class="pre">arch=compute_90,code=sm_90</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Xcompiler</span></code>: pass flags to the host compiler. E.g., generate OpenMP-parallel host code:
+<code class="docutils literal notranslate"><span class="pre">-Xcompiler</span> <span class="pre">-fopenmp</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">-Xcompiler</span></code> flag has to be invoked for each host-flag.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="performance-analysis">
+<h2>Performance Analysis<a class="headerlink" href="#performance-analysis" title="Permalink to this heading">#</a></h2>
+<p>Consult NVIDIA’s <a class="reference external" href="https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html">Best Practices Guide</a>
+and the <a class="reference external" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#performance-guidelines">performance guidelines</a>
+for possible steps to take for the performance analysis and optimization.</p>
+<p>Multiple tools can be used for the performance analysis.
+For the analysis of applications on the newer GPUs (A100 and H100),
+we recommend the use of the newer NVIDIA Nsight tools, <a class="reference external" href="https://developer.nvidia.com/nsight-systems">Nsight Systems</a>
+for a system-wide sampling and tracing and <a class="reference external" href="https://developer.nvidia.com/nsight-compute">Nsight Compute</a>
+for a detailed analysis of individual kernels.</p>
+<p>??? note
+The <a class="reference external" href="https://pika.zih.tu-dresden.de/">PIKA</a> monitoring system uses
+<a class="reference external" href="https://developer.nvidia.com/dcgm">NVIDIA DCGM</a> to collect GPU metrics such as utilization
+and memory consumption.
+When using NVIDIA tools like <code class="docutils literal notranslate"><span class="pre">nvprof</span></code>, <code class="docutils literal notranslate"><span class="pre">Nsight</span> <span class="pre">Systems</span></code>, or <code class="docutils literal notranslate"><span class="pre">Nsight</span> <span class="pre">Compute</span></code>, conflicts may
+occur due to overlapping access to GPU telemetry.
+Therefore, PIKA should be disabled when running these tools.
+Disabling PIKA is achieved by specifying a dedicated Slurm flag and is only permitted when
+exclusive access to the node has been granted.
+For further information, please see how to
+<span class="xref myst">disable PIKA monitoring</span> for exclusive jobs.</p>
+<section id="nvidia-nvprof-and-visual-profiler">
+<h3>NVIDIA nvprof and Visual Profiler<a class="headerlink" href="#nvidia-nvprof-and-visual-profiler" title="Permalink to this heading">#</a></h3>
+<p>!!! warning “Deprecation warning for nvprof and Visual Profiler”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Please note that the legacy tools nvprof and nvvp (Visual profiler) are deprecated and removed
+from CUDA 13.0.
+It is recommended to use next-generation tools [NVIDIA Nsight Compute](#nvidia-nsight-compute)
+for GPU kernel profiling and [NVIDIA Nsight Systems](#nvidia-nsight-systems) for GPU and CPU
+sampling and tracing.
+</pre></div>
+</div>
+<p>The nvprof command line and the Visual Profiler are available once a CUDA module has been loaded.
+For a simple analysis, you can call <code class="docutils literal notranslate"><span class="pre">nvprof</span></code> without any options, like such:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>marie@compute$<span class="w"> </span>nvprof<span class="w"> </span>./application<span class="w"> </span><span class="o">[</span>options<span class="o">]</span>
+</pre></div>
+</div>
+<p>For a more in-depth analysis, we recommend you use the command line tool first to generate a report
+file, which you can later analyze in the Visual Profiler. In order to collect a set of general
+metrics for the analysis in the Visual Profiler, use the <code class="docutils literal notranslate"><span class="pre">--analysis-metrics</span></code> flag to collect
+metrics and <code class="docutils literal notranslate"><span class="pre">--export-profile</span></code> to generate a report file, like this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>marie@compute$<span class="w"> </span>nvprof<span class="w"> </span>--analysis-metrics<span class="w"> </span>--export-profile<span class="w">  </span>&lt;output&gt;.nvvp<span class="w"> </span>./application<span class="w"> </span><span class="o">[</span>options<span class="o">]</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="../data_transfer/dataport_nodes.html"><span class="doc std std-doc">Transfer the report file to your local system</span></a> and analyze it in
+the Visual Profiler (<code class="docutils literal notranslate"><span class="pre">nvvp</span></code>) locally. This will give the smoothest user experience. Alternatively,
+you can use <a class="reference internal" href="../access/ssh_login.html"><span class="doc std std-doc">X11-forwarding</span></a>. Refer to the documentation for details about
+the individual <a class="reference external" href="https://docs.nvidia.com/cuda/profiler-users-guide/index.html#visual-views">features and views of the Visual Profiler</a>.</p>
+<p>Besides these generic analysis methods, you can profile specific aspects of your GPU kernels.
+<code class="docutils literal notranslate"><span class="pre">nvprof</span></code> can profile specific events. For this, use</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>marie@compute$<span class="w"> </span>nvprof<span class="w"> </span>--query-events
+</pre></div>
+</div>
+<p>to get a list of available events.
+Analyze one or more events by using specifying one or more events, separated by comma:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>marie@compute$<span class="w"> </span>nvprof<span class="w"> </span>--events<span class="w"> </span>&lt;event_1&gt;<span class="o">[</span>,&lt;event_2&gt;<span class="o">[</span>,...<span class="o">]]</span><span class="w"> </span>./application<span class="w"> </span><span class="o">[</span>options<span class="o">]</span>
+</pre></div>
+</div>
+<p>Additionally, you can analyze specific metrics.
+Similar to the profiling of events, you can get a list of available metrics:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>marie@compute$<span class="w"> </span>nvprof<span class="w"> </span>--query-metrics
+</pre></div>
+</div>
+<p>One or more metrics can be profiled at the same time:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>marie@compute$<span class="w"> </span>nvprof<span class="w"> </span>--metrics<span class="w"> </span>&lt;metric_1&gt;<span class="o">[</span>,&lt;metric_2&gt;<span class="o">[</span>,...<span class="o">]]</span><span class="w"> </span>./application<span class="w"> </span><span class="o">[</span>options<span class="o">]</span>
+</pre></div>
+</div>
+<p>If you want to limit the profiler’s scope to one or more kernels, you can use the
+<code class="docutils literal notranslate"><span class="pre">--kernels</span> <span class="pre">&lt;kernel_1&gt;[,&lt;kernel_2&gt;]</span></code> flag. For further command line options, refer to the
+<a class="reference external" href="https://docs.nvidia.com/cuda/profiler-users-guide/index.html#nvprof-command-line-options">documentation on command line options</a>.</p>
+</section>
+<section id="nvidia-nsight-systems">
+<h3>NVIDIA Nsight Systems<a class="headerlink" href="#nvidia-nsight-systems" title="Permalink to this heading">#</a></h3>
+<p>Use <a class="reference external" href="https://developer.nvidia.com/nsight-systems">NVIDIA Nsight Systems</a> for a system-wide sampling
+of your code. Refer to the
+<a class="reference external" href="https://docs.nvidia.com/nsight-systems/UserGuide/index.html">NVIDIA Nsight Systems User Guide</a> for
+details. With this, you can identify parts of your code that take a long time to run and are
+suitable optimization candidates.</p>
+<p>Use the command-line version to sample your code and create a report file for later analysis:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>marie@compute$<span class="w"> </span>nsys<span class="w"> </span>profile<span class="w"> </span><span class="o">[</span>--stats<span class="o">=</span>true<span class="o">]</span><span class="w"> </span>./application<span class="w"> </span><span class="o">[</span>options<span class="o">]</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">--stats=true</span></code> flag is optional and will create a summary on the command line. Depending on your
+needs, this analysis may be sufficient to identify optimizations targets.</p>
+<p>The graphical user interface version can be used for a thorough analysis of your previously
+generated report file. For an optimal user experience, we recommend a local installation of NVIDIA
+Nsight Systems. In this case, you can
+<a class="reference internal" href="../data_transfer/dataport_nodes.html"><span class="doc std std-doc">transfer the report file to your local system</span></a>.
+Alternatively, you can use <a class="reference internal" href="../access/ssh_login.html"><span class="doc std std-doc">X11-forwarding</span></a>. The graphical user interface is
+usually available as <code class="docutils literal notranslate"><span class="pre">nsys-ui</span></code>.</p>
+<p>Furthermore, you can use the command line interface for further analysis. Refer to the
+documentation for a
+<a class="reference external" href="https://docs.nvidia.com/nsight-systems/UserGuide/index.html#cli-options">list of available command line options</a>.</p>
+</section>
+<section id="nvidia-nsight-compute">
+<h3>NVIDIA Nsight Compute<a class="headerlink" href="#nvidia-nsight-compute" title="Permalink to this heading">#</a></h3>
+<p>Nsight Compute is used for the analysis of individual GPU-kernels. It supports GPUs from the Volta
+architecture onward (on the ZIH system: A100 and H100). If you are familiar with nvprof,
+you may want to consult the <a class="reference external" href="https://docs.nvidia.com/nsight-compute/NsightComputeCli/index.html#nvprof-guide">Nvprof Transition Guide</a>,
+as Nsight Compute uses a new scheme for metrics.
+We recommend those kernels as optimization targets that require a large portion of you run time,
+according to Nsight Systems. Nsight Compute is particularly useful for CUDA code, as you have much
+greater control over your code compared to the directive based approaches.</p>
+<p>Nsight Compute comes as a <a class="reference external" href="https://docs.nvidia.com/nsight-compute/NsightComputeCli/index.html">command line</a>
+and a <a class="reference external" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html">graphical</a> version.
+Refer to the
+<a class="reference external" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html">Kernel Profiling Guide</a>
+to get an overview of the functionality of these tools.</p>
+<p>You can call the command line version (<code class="docutils literal notranslate"><span class="pre">ncu</span></code>) without further options to get a broad overview of
+your kernel’s performance:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>marie@compute$<span class="w"> </span>ncu<span class="w"> </span>./application<span class="w"> </span><span class="o">[</span>options<span class="o">]</span>
+</pre></div>
+</div>
+<p>As with the other profiling tools, the Nsight Compute profiler can generate report files like this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>marie@compute$<span class="w"> </span>ncu<span class="w"> </span>--export<span class="w"> </span>&lt;report&gt;<span class="w"> </span>./application<span class="w"> </span><span class="o">[</span>options<span class="o">]</span>
+</pre></div>
+</div>
+<p>The report file will automatically get the file ending <code class="docutils literal notranslate"><span class="pre">.ncu-rep</span></code>, you do not need to specify this
+manually.</p>
+<p>This report file can be analyzed in the graphical user interface profiler. Again, we recommend you
+generate a report file on a compute node and
+<a class="reference internal" href="../data_transfer/dataport_nodes.html"><span class="doc std std-doc">transfer the report file to your local system</span></a>.
+Alternatively, you can use <a class="reference internal" href="../access/ssh_login.html"><span class="doc std std-doc">X11-forwarding</span></a>. The graphical user interface is
+usually available as <code class="docutils literal notranslate"><span class="pre">ncu-ui</span></code> or <code class="docutils literal notranslate"><span class="pre">nv-nsight-cu</span></code>.</p>
+<p>Similar to the <code class="docutils literal notranslate"><span class="pre">nvprof</span></code> profiler, you can analyze specific metrics. NVIDIA provides a
+<a class="reference external" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-guide">Metrics Guide</a>. Use
+<code class="docutils literal notranslate"><span class="pre">--query-metrics</span></code> to get a list of available metrics, listing them by base name. Individual metrics
+can be collected by using</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>marie@compute$<span class="w"> </span>ncu<span class="w"> </span>--metrics<span class="w"> </span>&lt;metric_1&gt;<span class="o">[</span>,&lt;metric_2&gt;,...<span class="o">]</span><span class="w"> </span>./application<span class="w"> </span><span class="o">[</span>options<span class="o">]</span>
+</pre></div>
+</div>
+<p>Collection of events is no longer possible with Nsight Compute. Instead, many nvprof events can be
+<a class="reference external" href="https://docs.nvidia.com/nsight-compute/NsightComputeCli/index.html#nvprof-event-comparison">measured with metrics</a>.</p>
+<p>You can collect metrics for individual kernels by specifying the <code class="docutils literal notranslate"><span class="pre">--kernel-name</span></code> flag.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#available-gpus">
+   Available GPUs
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#using-gpus-with-slurm">
+   Using GPUs with Slurm
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#directive-based-gpu-programming">
+   Directive Based GPU Programming
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#openacc">
+     OpenACC
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#introduction">
+       Introduction
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#using-openacc-with-nvidia-hpc-compilers">
+       Using OpenACC with NVIDIA HPC Compilers
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#using-openacc-with-mpi">
+       Using OpenACC with MPI
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#openmp-target-offloading">
+     OpenMP Target Offloading
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#using-openmp-target-offloading-with-nvidia-hpc-compilers">
+       Using OpenMP Target Offloading with NVIDIA HPC Compilers
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#native-gpu-programming">
+   Native GPU Programming
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cuda">
+     CUDA
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#using-the-cuda-compiler">
+       Using the CUDA Compiler
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#performance-analysis">
+   Performance Analysis
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#nvidia-nvprof-and-visual-profiler">
+     NVIDIA nvprof and Visual Profiler
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#nvidia-nsight-systems">
+     NVIDIA Nsight Systems
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#nvidia-nsight-compute">
+     NVIDIA Nsight Compute
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-23.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

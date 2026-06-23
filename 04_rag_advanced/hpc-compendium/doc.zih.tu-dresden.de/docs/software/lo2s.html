@@ -1,0 +1,858 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Record Course of Events with lo2s &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/lo2s';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Preparation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../00_preparation/readme.html">Preparation of the session</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/lo2s.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../../../../_sources/04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/lo2s.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Record Course of Events with lo2s</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#usage">
+   Usage
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#required-permissions">
+   Required Permissions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#memory-requirements">
+   Memory Requirements
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#advanced-topic-system-monitoring">
+   Advanced Topic: System Monitoring
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#advanced-topic-metric-plugins">
+   Advanced Topic: Metric Plugins
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="record-course-of-events-with-lo2s">
+<h1>Record Course of Events with lo2s<a class="headerlink" href="#record-course-of-events-with-lo2s" title="Permalink to this heading">#</a></h1>
+<p>Lightweight node-level performance monitoring tool <code class="docutils literal notranslate"><span class="pre">lo2s</span></code> creates parallel OTF2 traces with a focus
+on both application and system view. The traces can contain any of the following information:</p>
+<ul class="simple">
+<li><p>From running threads</p>
+<ul>
+<li><p>Calling context samples based on instruction overflows</p></li>
+<li><p>The calling context samples are annotated with the disassembled assembler instruction string</p></li>
+<li><p>The frame pointer-based call-path for each calling context sample</p></li>
+<li><p>Per-thread performance counter readings</p></li>
+<li><p>Which thread was scheduled on which CPU at what time</p></li>
+</ul>
+</li>
+<li><p>From the system</p>
+<ul>
+<li><p>Metrics from tracepoints (e.g., the selected C-state or P-state)</p></li>
+<li><p>The node-level system tree (CPUs (HW-threads), cores, packages)</p></li>
+<li><p>CPU power measurements (x86_energy)</p></li>
+<li><p>Microarchitecture specific metrics (x86_adapt, per package or core)</p></li>
+<li><p>Arbitrary metrics through plugins (Score-P compatible)</p></li>
+</ul>
+</li>
+</ul>
+<p>In general, <code class="docutils literal notranslate"><span class="pre">lo2s</span></code> operates either in <strong>process monitoring</strong> or <strong>system monitoring</strong> mode.</p>
+<p>With <strong>process monitoring</strong>, all information is grouped by each thread of a monitored process
+group - it shows you <em>on which CPU is each monitored thread running</em>. <code class="docutils literal notranslate"><span class="pre">lo2s</span></code> either acts as a
+prefix command to run the process (and also tracks its children) or <code class="docutils literal notranslate"><span class="pre">lo2s</span></code> attaches to a running
+process.</p>
+<p>In the <strong>system monitoring</strong> mode, information is grouped by logical CPU - it shows you
+<em>which thread was running on a given CPU</em>. Metrics are also shown per CPU.</p>
+<p>In both modes, <code class="docutils literal notranslate"><span class="pre">lo2s</span></code> always groups system-level metrics (e.g., tracepoints) by their respective
+system hardware component.</p>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
+<p>Only the basic usage is shown in this Wiki. For a more detailed explanation, refer to the
+<a class="reference external" href="https://github.com/tud-zih-energy/lo2s">Lo2s website</a>.</p>
+<p>Before using <code class="docutils literal notranslate"><span class="pre">lo2s</span></code>, set up the correct environment with</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>module<span class="w"> </span>load<span class="w"> </span>lo2s
+</pre></div>
+</div>
+<p>As <code class="docutils literal notranslate"><span class="pre">lo2s</span></code> is built upon <a class="reference internal" href="perf_tools.html"><span class="doc std std-doc">perf</span></a>, its usage and limitations are very similar to that.
+In particular, you can use <code class="docutils literal notranslate"><span class="pre">lo2s</span></code> as a prefix command just like <code class="docutils literal notranslate"><span class="pre">perf</span></code>. Even some of the command
+line arguments are inspired by <code class="docutils literal notranslate"><span class="pre">perf</span></code>. The main difference to <code class="docutils literal notranslate"><span class="pre">perf</span></code> is that <code class="docutils literal notranslate"><span class="pre">lo2s</span></code> will output
+a <a class="reference internal" href="vampir.html"><span class="doc std std-doc">Vampir trace</span></a>, which allows a full-blown performance analysis almost like
+<a class="reference internal" href="scorep.html"><span class="doc std std-doc">Score-P</span></a>.</p>
+<p>To record the behavior of an application, prefix the application run with <code class="docutils literal notranslate"><span class="pre">lo2s</span></code>. We recommend
+using the double dash <code class="docutils literal notranslate"><span class="pre">--</span></code> to prevent mixing command line arguments between <code class="docutils literal notranslate"><span class="pre">lo2s</span></code> and the user
+application. In the following example, we run <code class="docutils literal notranslate"><span class="pre">lo2s</span></code> on the application <code class="docutils literal notranslate"><span class="pre">sleep</span> <span class="pre">2</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@compute$ </span>lo2s<span class="w"> </span>--no-kernel<span class="w"> </span>--<span class="w"> </span>sleep<span class="w"> </span><span class="m">2</span>
+<span class="go">[ lo2s: sleep 2  (0), 1 threads, 0.014082s CPU, 2.03315s total ]</span>
+<span class="go">[ lo2s: 5 wakeups, wrote 2.48 KiB lo2s_trace_2021-10-12T12-39-06 ]</span>
+</pre></div>
+</div>
+<p>This will record the application in the <code class="docutils literal notranslate"><span class="pre">process</span> <span class="pre">monitoring</span> <span class="pre">mode</span></code>. This means, the applications
+process, its forked processes, and threads are recorded and can be analyzed using Vampir.
+The main view will represent each process and thread over time. There will be a metric “CPU”
+indicating for each process, on which CPU it was executed during the runtime.</p>
+</section>
+<section id="required-permissions">
+<h2>Required Permissions<a class="headerlink" href="#required-permissions" title="Permalink to this heading">#</a></h2>
+<p>By design, <code class="docutils literal notranslate"><span class="pre">lo2s</span></code> almost exclusively utilizes Linux Kernel facilities such as perf and tracepoints
+to perform the application measurements. For security reasons, these facilities require special
+permissions, in particular <code class="docutils literal notranslate"><span class="pre">perf_event_paranoid</span></code> and read permissions to the <code class="docutils literal notranslate"><span class="pre">debugfs</span></code> under
+<code class="docutils literal notranslate"><span class="pre">/sys/kernel/debug</span></code>.</p>
+<p>Luckily, for the <code class="docutils literal notranslate"><span class="pre">process</span> <span class="pre">monitoring</span> <span class="pre">mode</span></code> the default settings allow you to run <code class="docutils literal notranslate"><span class="pre">lo2s</span></code> just fine.
+All you need to do is pass the <code class="docutils literal notranslate"><span class="pre">--no-kernel</span></code> parameter like in the example above.</p>
+<p>For the <code class="docutils literal notranslate"><span class="pre">system</span> <span class="pre">monitoring</span> <span class="pre">mode</span></code> you can get the required permission with the Slurm parameter
+<code class="docutils literal notranslate"><span class="pre">--exclusive</span></code>. (Note: Regardless of the actual requested processes per node, you will accrue
+cpu-hours as if you had reserved all cores on the node.)</p>
+</section>
+<section id="memory-requirements">
+<h2>Memory Requirements<a class="headerlink" href="#memory-requirements" title="Permalink to this heading">#</a></h2>
+<p>When requesting memory for your jobs, you need to take into account that <code class="docutils literal notranslate"><span class="pre">lo2s</span></code> needs a substantial
+amount of memory for its operation. Unfortunately, the amount of memory depends on the application.
+The amount mainly scales with the number of processes spawned by the traced application. For each
+processes, there is a fixed-sized buffer. This should be fine for a typical HPC application, but
+can lead to extreme cases there the buffers are orders of magnitude larger than the resulting trace.
+For instance, recording a CMake run, which spawns hundreds of processes, each running only for
+a few milliseconds, leaving each buffer almost empty. Still, the buffers needs to be allocated
+and thus require a lot of memory.</p>
+<p>Given such a case, we recommend to use the <code class="docutils literal notranslate"><span class="pre">system</span> <span class="pre">monitoring</span> <span class="pre">mode</span></code> instead, as the memory in this
+mode scales with the number of logical CPUs instead of the number of processes.</p>
+</section>
+<section id="advanced-topic-system-monitoring">
+<h2>Advanced Topic: System Monitoring<a class="headerlink" href="#advanced-topic-system-monitoring" title="Permalink to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">system</span> <span class="pre">monitoring</span> <span class="pre">mode</span></code> gives a different view. As the name implies, the focus isn’t on
+processes anymore, but the system as a whole. In particular, a trace recorded in this mode will show
+a timeline for each logical CPU of the system. To enable this mode, you need to pass <code class="docutils literal notranslate"><span class="pre">-a</span></code> parameter.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@compute$ </span>lo2s<span class="w"> </span>-a
+<span class="go">^C[ lo2s (system mode): monitored processes: 0, 0.136623s CPU, 13.7872s total ]</span>
+<span class="go">[ lo2s (system mode): 36 wakeups, wrote 301.39 KiB lo2s_trace_2021-11-01T09-44-31 ]</span>
+</pre></div>
+</div>
+<p>Note: As you can read in the above example, <code class="docutils literal notranslate"><span class="pre">lo2s</span></code> monitored zero processes even though it was run
+in the <code class="docutils literal notranslate"><span class="pre">system</span> <span class="pre">monitoring</span> <span class="pre">mode</span></code>. Certainly, there are more than none processes running on a system.
+However, as the user accounts on our HPC systems are limited to only see their own processes and
+<code class="docutils literal notranslate"><span class="pre">lo2s</span></code> records in the scope of the user, it will only see the users own processes. Hence, in the
+example above, there are no other processes running.</p>
+<p>When using the <code class="docutils literal notranslate"><span class="pre">system</span> <span class="pre">monitoring</span> <span class="pre">mode</span></code> without passing a program, <code class="docutils literal notranslate"><span class="pre">lo2s</span></code> will run indefinitely.
+You can stop the measurement by sending <code class="docutils literal notranslate"><span class="pre">lo2s</span></code> a <code class="docutils literal notranslate"><span class="pre">SIGINT</span></code> signal or hit <code class="docutils literal notranslate"><span class="pre">ctrl+C</span></code>. However, if you
+pass a program, <code class="docutils literal notranslate"><span class="pre">lo2s</span></code> will start that program and run the measurement until the started process
+finishes.  Of course, the process and any of its child processes and threads will be visible in the
+resulting trace.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@compute$ </span>lo2s<span class="w"> </span>-a<span class="w"> </span>--<span class="w"> </span>sleep<span class="w"> </span><span class="m">10</span>
+<span class="go">[ lo2s (system mode): sleep 10  (0), 1 threads, monitored processes: 1, 0.133598s CPU, 10.3996s total ]</span>
+<span class="go">[ lo2s (system mode): 39 wakeups, wrote 280.39 KiB lo2s_trace_2021-11-01T09-55-04 ]</span>
+</pre></div>
+</div>
+<p>Like in the <code class="docutils literal notranslate"><span class="pre">process</span> <span class="pre">monitoring</span> <span class="pre">mode</span></code>, <code class="docutils literal notranslate"><span class="pre">lo2s</span></code> can also sample instructions in the system monitoring
+mode.  You can enable the instruction sampling by passing the parameter <code class="docutils literal notranslate"><span class="pre">--instruction-sampling</span></code> to
+<code class="docutils literal notranslate"><span class="pre">lo2s</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@compute$ </span>lo2s<span class="w"> </span>-a<span class="w"> </span>--instruction-sampling<span class="w"> </span>--<span class="w"> </span>make<span class="w"> </span>-j
+<span class="go">[ lo2s (system mode): make -j  (0), 268 threads, monitored processes: 286, 258.789s CPU, 445.076s total ]</span>
+<span class="go">[ lo2s (system mode): 3815 wakeups, wrote 39.24 MiB lo2s_trace_2021-10-29T15-08-44 ]</span>
+</pre></div>
+</div>
+</section>
+<section id="advanced-topic-metric-plugins">
+<h2>Advanced Topic: Metric Plugins<a class="headerlink" href="#advanced-topic-metric-plugins" title="Permalink to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Lo2s</span></code> is compatible with <a class="reference internal" href="scorep.html"><span class="doc std std-doc">Score-P</span></a> metric plugins, but only a subset will work.
+In particular, <code class="docutils literal notranslate"><span class="pre">lo2s</span></code> only supports asynchronous plugins with the per host or once scope.
+You can find a large set of plugins in the
+<a class="reference external" href="https://github.com/score-p">Score-P Organization on GitHub</a>.</p>
+<p>To activate plugins, you can use the same environment variables as with Score-P, or with <code class="docutils literal notranslate"><span class="pre">LO2S</span></code> as
+prefix:</p>
+<ul class="simple">
+<li><p>LO2S_METRIC_PLUGINS</p></li>
+<li><p>LO2S_METRIC_PLUGIN</p></li>
+<li><p>LO2S_METRIC_PLUGIN_PLUGIN</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#usage">
+   Usage
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#required-permissions">
+   Required Permissions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#memory-requirements">
+   Memory Requirements
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#advanced-topic-system-monitoring">
+   Advanced Topic: System Monitoring
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#advanced-topic-metric-plugins">
+   Advanced Topic: Metric Plugins
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-23.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

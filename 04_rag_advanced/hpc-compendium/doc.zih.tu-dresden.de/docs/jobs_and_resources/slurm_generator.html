@@ -1,0 +1,2170 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Slurm Job File Generator &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/jobs_and_resources/slurm_generator';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Preparation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../00_preparation/readme.html">Preparation of the session</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/jobs_and_resources/slurm_generator.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../../../../_sources/04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/jobs_and_resources/slurm_generator.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Slurm Job File Generator</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="slurm-job-file-generator">
+<h1>Slurm Job File Generator<a class="headerlink" href="#slurm-job-file-generator" title="Permalink to this heading">#</a></h1>
+<p>This page provides a generator for Slurm job files covering</p>
+<ul class="simple">
+<li><p>basic Slurm options for resource specification and job management,</p></li>
+<li><p>data life cycle handling using workspaces,</p></li>
+<li><p>and a skeleton for setting up the computational environment using modules.</p></li>
+</ul>
+<p>It is intended as a starting point for beginners and thus, does not cover all available Slurm
+options.</p>
+<p>If you are interested in providing this job file generator for your HPC users, you can find the
+project at
+<a class="reference external" href="https://gitlab.hrz.tu-chemnitz.de/zih/hpcsupport/slurm-jobfile-generator">https://gitlab.hrz.tu-chemnitz.de/zih/hpcsupport/slurm-jobfile-generator</a>.</p>
+<!--
+This file is part of sgen software.
+Slurm Jobfile Generator
+
+Copyright (c) 2022,
+    Technische Universitaet Dresden, Germany
+
+sgen is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Foobar is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with sgen.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <title>Slurm-Job-Generator</title>
+    <!-- <link type="text/css" href="../misc/style.css" rel="stylesheet"> -->
+    <!-- <script src="jquery-3.6.0.min.js"> </script> -->
+  </head>
+  <body>
+    <div class="header">
+      <label class="header">TU Dresden Slurm Job Generator</label>
+    </div>
+    <button type="button" class="collapsible">General</button>
+    <div class="content">
+      <div class="row">
+        <label class="cell-name">Job name (<tt>-J, --job-name</tt>) </label>
+        <div class="cell-tooltip">
+          <img id="job-name-info" class="info-img" src="../misc/info.png" title="help"
+          alt="Information sign">
+        </div>
+        <input id="job-name" class="cell-input" type="text">
+      </div>
+      <div class="row">
+        <label class="cell-name">Project (<tt>-A, --account</tt>)</label>
+        <div class="cell-tooltip">
+          <img id="account-info" class="info-img" src="../misc/info.png" title="help"
+               alt="Information sign">
+        </div>
+        <input id="account" class="cell-input" type="text">
+      </div>
+      <div class="row">
+        <label class="cell-name">Email (<tt>--mail-user, --mail-type</tt>)</label>
+        <div class="cell-tooltip">
+          <img id="mail-info" class="info-img" src="../misc/info.png" title="help"
+               alt="Information sign">
+        </div>
+        <div class="cell-input">
+          <input id="mail" class="mail" type="mail">
+          <input id="mail-all" type="checkbox">
+          <label for="all">All</label>
+          <input id="mail-begin" type="checkbox">
+          <label for="begin">Begin</label>
+          <input id="mail-end" type="checkbox">
+          <label for="end">End</label>
+          <input id="mail-fail" type="checkbox">
+          <label for="fail">Fail</label>
+        </div>
+      </div>
+    </div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;button type=&quot;button&quot; class=&quot;collapsible&quot;&gt;Resources&lt;/button&gt;
+&lt;div class=&quot;content&quot;&gt;
+  &lt;div class=&quot;partition-input&quot;&gt;
+    &lt;div class=&quot;row&quot;&gt;
+      &lt;label class=&quot;cell-name&quot;&gt;Time limit (&lt;tt&gt;-t, --time&lt;/tt&gt;)&lt;/label&gt;
+      &lt;div class=&quot;cell-tooltip&quot;&gt;
+        &lt;img id=&quot;time-info&quot; class=&quot;info-img&quot; src=&quot;../misc/info.png&quot; title=&quot;days-hours:minutes:seconds&quot; alt=&quot;Information sign&quot;&gt;
+      &lt;/div&gt;
+      &lt;input id=&quot;timelimit&quot; class=&quot;cell-input&quot; type=&quot;text&quot; placeholder=&quot;00-00:00:00&quot;&gt;
+      &lt;label id=&quot;time-text&quot; class=&quot;limits cell-input&quot;&gt;&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;row&quot;&gt;
+      &lt;label class=&quot;cell-name&quot;&gt;Partition (&lt;tt&gt;-p, --partition&lt;/tt&gt;)&lt;/label&gt;
+      &lt;div class=&quot;cell-tooltip&quot;&gt;
+        &lt;img id=&quot;partition-info&quot; class=&quot;info-img&quot; src=&quot;../misc/info.png&quot; title=&quot;help&quot; alt=&quot;Information sign&quot;&gt;
+      &lt;/div&gt;
+      &lt;select id=&quot;partition&quot; class=&quot;cell-input&quot;&gt;&lt;/select&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;row&quot;&gt;
+      &lt;label class=&quot;cell-name&quot;&gt;Nodes (&lt;tt&gt;-N, --nodes&lt;/tt&gt;)&lt;/label&gt;
+      &lt;div class=&quot;cell-tooltip&quot;&gt;
+        &lt;img id=&quot;nodes-info&quot; class=&quot;info-img&quot; src=&quot;../misc/info.png&quot; title=&quot;help&quot; alt=&quot;Information sign&quot;&gt;
+      &lt;/div&gt;
+      &lt;input id=&quot;nodes&quot; class=&quot;cell-input&quot; type=&quot;text&quot;&gt;
+      &lt;label id=&quot;nodes-text&quot; class=&quot;limits cell-input&quot;&gt;&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;row&quot;&gt;
+      &lt;label class=&quot;cell-name&quot;&gt;Tasks (&lt;tt&gt;-n, --ntasks&lt;/tt&gt;)&lt;/label&gt;
+      &lt;div class=&quot;cell-tooltip&quot;&gt;
+        &lt;img id=&quot;tasks-info&quot; class=&quot;info-img&quot; src=&quot;../misc/info.png&quot; title=&quot;help&quot; alt=&quot;Information sign&quot;&gt;
+      &lt;/div&gt;
+      &lt;input id=&quot;tasks&quot; class=&quot;cell-input&quot; type=&quot;text&quot;&gt;
+      &lt;label id=&quot;tasks-text&quot; class=&quot;limits cell-input&quot;&gt;&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;row&quot;&gt;
+      &lt;label class=&quot;cell-name&quot;&gt;Tasks per node (&lt;tt&gt;--tasks-per-node&lt;/tt&gt;)&lt;/label&gt;
+      &lt;div class=&quot;cell-tooltip&quot;&gt;
+        &lt;img id=&quot;tasks/node-info&quot; class=&quot;info-img&quot; src=&quot;../misc/info.png&quot; title=&quot;help&quot; alt=&quot;Information sign&quot;&gt;
+      &lt;/div&gt;
+      &lt;input id=&quot;tasks/node&quot; class=&quot;cell-input&quot; type=&quot;text&quot;&gt;
+      &lt;label id=&quot;tasks/node-text&quot; class=&quot;limits cell-input&quot;&gt;&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;row&quot;&gt;
+      &lt;label class=&quot;cell-name&quot;&gt;CPUs per task (&lt;tt&gt;-c, --cpus-per-task&lt;/tt&gt;)&lt;/label&gt;
+      &lt;div class=&quot;cell-tooltip&quot;&gt;
+        &lt;img id=&quot;cpus-info&quot; class=&quot;info-img&quot; src=&quot;../misc/info.png&quot; title=&quot;help&quot; alt=&quot;Information sign&quot;&gt;
+      &lt;/div&gt;
+      &lt;input id=&quot;cpus&quot; class=&quot;cell-input&quot; type=&quot;text&quot;&gt;
+      &lt;label id=&quot;cpus-text&quot; class=&quot;limits cell-input&quot;&gt;&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div id=&quot;div-thread&quot; class=&quot;row&quot;&gt;
+      &lt;span class=&quot;cell-name&quot;&gt;&lt;/span&gt;
+      &lt;div class=&quot;cell-tooltip&quot;&gt;
+        &lt;img id=&quot;nomultithread-info&quot; class=&quot;info-img&quot; src=&quot;../misc/info.png&quot; title=&quot;help&quot; alt=&quot;Information sign&quot;&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;cell-input&quot;&gt;
+        &lt;input id=&quot;nomultithread&quot; class=&quot;cell&quot; type=&quot;checkbox&quot;&gt;
+        &lt;label for=&quot;nomultithread&quot;&gt;No Multithreading&lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div id=&quot;div-gpu&quot; class=&quot;row&quot;&gt;
+      &lt;label class=&quot;cell-name&quot;&gt;GPUs per node (&lt;tt&gt;--gpus-per-node&lt;/tt&gt;)&lt;/label&gt;
+      &lt;div class=&quot;cell-tooltip&quot;&gt;
+        &lt;img id=&quot;gpus-info&quot; class=&quot;info-img&quot; src=&quot;../misc/info.png&quot; title=&quot;help&quot; alt=&quot;Information sign&quot;&gt;
+      &lt;/div&gt;
+      &lt;input id=&quot;gpus&quot; class=&quot;cell-input&quot; type=&quot;text&quot;&gt;
+      &lt;label id=&quot;gpus-text&quot; class=&quot;limits cell-input&quot;&gt;&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div id=&quot;div-gpu/task&quot; class=&quot;row&quot;&gt;
+      &lt;label class=&quot;cell-name&quot;&gt;GPUs per task (&lt;tt&gt;--gpus-per-task&lt;/tt&gt;)&lt;/label&gt;
+      &lt;div class=&quot;cell-tooltip&quot;&gt;
+        &lt;img id=&quot;gpus/task-info&quot; class=&quot;info-img&quot; src=&quot;../misc/info.png&quot; title=&quot;help&quot; alt=&quot;Information sign&quot;&gt;
+      &lt;/div&gt;
+      &lt;input id=&quot;gpus/task&quot; class=&quot;cell-input&quot; type=&quot;text&quot;&gt;
+      &lt;label id=&quot;gpus/task-text&quot; class=&quot;limits cell-input&quot;&gt;&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;row&quot;&gt;
+      &lt;label class=&quot;cell-name&quot;&gt;Memory per CPU (&lt;tt&gt;--mem-per-cpu&lt;/tt&gt;)&lt;/label&gt;
+      &lt;div class=&quot;cell-tooltip&quot;&gt;
+        &lt;img id=&quot;mem-info&quot; class=&quot;info-img&quot; src=&quot;../misc/info.png&quot; title=&quot;help&quot; alt=&quot;Information sign&quot;&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;cell-input&quot;&gt;
+        &lt;input id=&quot;mem&quot; type=&quot;text&quot;&gt;
+        &lt;select id=&quot;byte&quot;&gt;
+          &lt;option value=&quot;M&quot; title=&quot;placeholder&quot; selected=&quot;selected&quot;&gt;MiB&lt;/option&gt;
+          &lt;option value=&quot;G&quot; title=&quot;placeholder&quot;&gt;GiB&lt;/option&gt;
+        &lt;/select&gt;
+        &lt;label id=&quot;mem-text&quot; class=&quot;limits&quot;&gt;&lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;row&quot;&gt;
+      &lt;label class=&quot;cell-name&quot;&gt;Reservation (&lt;tt&gt;--reservation&lt;/tt&gt;)&lt;/label&gt;
+      &lt;div class=&quot;cell-tooltip&quot;&gt;
+        &lt;img id=&quot;reservation-info&quot; class=&quot;info-img&quot; src=&quot;../misc/info.png&quot; title=&quot;help&quot; alt=&quot;Information sign&quot;&gt;
+      &lt;/div&gt;
+      &lt;input id=&quot;reservation&quot; class=&quot;cell-input&quot; type=&quot;text&quot; alt=&quot;Information sign&quot;&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;row&quot;&gt;
+      &lt;label class=&quot;cell-name&quot;&gt;Exclusive (&lt;tt&gt;--exclusive&lt;/tt&gt;)&lt;/label&gt;
+      &lt;div class=&quot;cell-tooltip&quot;&gt;
+        &lt;img id=&quot;exclusive-info&quot; class=&quot;info-img&quot; src=&quot;../misc/info.png&quot; title=&quot;help&quot; alt=&quot;Information sign&quot;&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;cell-input&quot;&gt;
+        &lt;input id=&quot;exclusive&quot; type=&quot;checkbox&quot;&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;partition-info&quot;&gt;
+    &lt;pre id=&quot;info-panel-partition&quot; class=&quot;info-pre&quot;&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;button type=&quot;button&quot; class=&quot;collapsible&quot;&gt;Advanced&lt;/button&gt;
+&lt;div class=&quot;content&quot;&gt;
+  &lt;div class=&quot;row&quot;&gt;
+    &lt;label class=&quot;cell-name&quot;&gt;Array (&lt;tt&gt;-a, --array&lt;/tt&gt;)&lt;/label&gt;
+    &lt;div class=&quot;cell-tooltip&quot;&gt;
+      &lt;img id=&quot;array-info&quot; class=&quot;info-img&quot; src=&quot;../misc/info.png&quot; title=&quot;help&quot; alt=&quot;Information sign&quot;&gt;
+    &lt;/div&gt;
+    &lt;input id=&quot;array&quot; class=&quot;cell-input&quot; type=&quot;text&quot; placeholder=&quot;1-5&quot;&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;row&quot;&gt;
+    &lt;label class=&quot;cell-name&quot;&gt;Dependency (&lt;tt&gt;-d, --dependency&lt;/tt&gt;)&lt;/label&gt;
+    &lt;div class=&quot;cell-tooltip&quot;&gt;
+      &lt;img id=&quot;dependency-info&quot; class=&quot;info-img&quot; src=&quot;../misc/info.png&quot; title=&quot;help&quot; alt=&quot;Information sign&quot;&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;cell-input&quot;&gt;
+      &lt;select id=&quot;type-depend&quot;&gt;
+        &lt;option value=&quot;none&quot; title=&quot;placeholder&quot; selected=&quot;selected&quot;&gt;&lt;/option&gt;
+        &lt;option value=&quot;after&quot; title=&quot;placeholder&quot;&gt;after&lt;/option&gt;
+        &lt;option value=&quot;afterany&quot; title=&quot;placeholder&quot;&gt;afterany&lt;/option&gt;
+        &lt;option value=&quot;afterburstbuffer&quot; title=&quot;placeholder&quot;&gt;afterburstbuffer&lt;/option&gt;
+        &lt;option value=&quot;aftercorr&quot; title=&quot;placeholder&quot;&gt;aftercorr&lt;/option&gt;
+        &lt;option value=&quot;afternotok&quot; title=&quot;placeholder&quot;&gt;afternotok&lt;/option&gt;
+        &lt;option value=&quot;afterok&quot; title=&quot;placeholder&quot;&gt;afterok&lt;/option&gt;
+        &lt;option value=&quot;singleton&quot; title=&quot;placeholder&quot;&gt;singleton&lt;/option&gt;
+      &lt;/select&gt;
+      &lt;input id=&quot;jobid&quot; class=&quot;hidden&quot; type=&quot;text&quot; placeholder=&quot;jobid&quot;&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;button type=&quot;button&quot; class=&quot;collapsible&quot;&gt;Log Files&lt;/button&gt;
+&lt;div class=&quot;content&quot;&gt;
+  &lt;div class=&quot;row&quot;&gt;
+    &lt;label class=&quot;cell-name&quot;&gt;Single output file&lt;/label&gt;
+    &lt;div class=&quot;cell-tooltip&quot;&gt;
+      &lt;img id=&quot;one-output-info&quot; class=&quot;info-img&quot; src=&quot;../misc/info.png&quot; title=&quot;help&quot; alt=&quot;Information sign&quot;&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;cell-input&quot;&gt;
+      &lt;input id=&quot;one-output&quot; type=&quot;checkbox&quot;&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;row&quot;&gt;
+    &lt;label class=&quot;cell-name&quot;&gt;Output file (&lt;tt&gt;-o, --output&lt;/tt&gt;) &lt;/label&gt;
+    &lt;div class=&quot;cell-tooltip&quot;&gt;
+      &lt;img id=&quot;output-file-info&quot; class=&quot;info-img&quot; src=&quot;../misc/info.png&quot; title=&quot;help&quot; alt=&quot;Information sign&quot;&gt;
+    &lt;/div&gt;
+    &lt;input id=&quot;output-file&quot; class=&quot;cell-input&quot; type=&quot;text&quot; placeholder=&quot;slurm-%j.out&quot;&gt;
+  &lt;/div&gt;
+  &lt;div id=&quot;err-div&quot; class=&quot;row&quot;&gt;
+    &lt;label class=&quot;cell-name&quot;&gt;Error file (&lt;tt&gt;-e, --error&lt;/tt&gt;) &lt;/label&gt;
+    &lt;div class=&quot;cell-tooltip&quot;&gt;
+      &lt;img id=&quot;error-file-info&quot; class=&quot;info-img&quot; src=&quot;../misc/info.png&quot; title=&quot;help&quot; alt=&quot;Information sign&quot;&gt;
+    &lt;/div&gt;
+    &lt;input id=&quot;error-file&quot; class=&quot;cell-input&quot; type=&quot;text&quot; placeholder=&quot;slurm-%j.out&quot;&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;button type=&quot;button&quot; class=&quot;collapsible&quot;&gt;Application&lt;/button&gt;
+&lt;div class=&quot;content&quot;&gt;
+  &lt;div class=&quot;row&quot;&gt;
+    &lt;label class=&quot;cell-name&quot;&gt;Command (w. path and arguments) &lt;/label&gt;
+    &lt;div class=&quot;cell-tooltip&quot;&gt;
+      &lt;img id=&quot;executable-info&quot; class=&quot;info-img&quot; src=&quot;../misc/info.png&quot; title=&quot;help&quot; alt=&quot;Information sign&quot;&gt;
+    &lt;/div&gt;
+    &lt;input id=&quot;executable&quot; class=&quot;cell-input executable&quot; type=&quot;text&quot; placeholder=&quot;./a.out&quot;&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;button type=&quot;button&quot; class=&quot;collapsible&quot;&gt;Workspace&lt;/button&gt;
+&lt;div class=&quot;content&quot;&gt;
+  &lt;div class=&quot;partition-input&quot;&gt;
+    &lt;div class=&quot;row&quot;&gt;
+      &lt;label class=&quot;cell-name&quot;&gt;Allocate a workspace&lt;/label&gt;
+      &lt;div class=&quot;cell-tooltip&quot;&gt;
+        &lt;img id=&quot;ws-alloc-info&quot; class=&quot;info-img&quot; src=&quot;../misc/info.png&quot; title=&quot;help&quot; alt=&quot;Information sign&quot;&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;cell-input&quot;&gt;
+        &lt;input id=&quot;check-workspace&quot; type=&quot;checkbox&quot;&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;row hidden&quot;&gt;
+      &lt;label class=&quot;cell-name&quot;&gt;Filesystem&lt;/label&gt;
+      &lt;div class=&quot;cell-tooltip&quot;&gt;
+        &lt;img id=&quot;ws-filesystem-info&quot; class=&quot;info-img&quot; src=&quot;../misc/info.png&quot; title=&quot;help&quot; alt=&quot;Information sign&quot;&gt;
+      &lt;/div&gt;
+      &lt;select id=&quot;workspace-filesystem&quot; class=&quot;cell-input&quot;&gt;&lt;/select&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;row hidden&quot;&gt;
+      &lt;label class=&quot;cell-name&quot;&gt;Name&lt;/label&gt;
+      &lt;div class=&quot;cell-tooltip&quot;&gt;
+        &lt;img id=&quot;ws-name-info&quot; class=&quot;info-img&quot; src=&quot;../misc/info.png&quot; title=&quot;help&quot; alt=&quot;Information sign&quot;&gt;
+      &lt;/div&gt;
+      &lt;input id=&quot;ws-name&quot; class=&quot;cell-input&quot; type=&quot;text&quot;&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;row hidden&quot;&gt;
+      &lt;label class=&quot;cell-name&quot;&gt;Duration&lt;/label&gt;
+      &lt;div class=&quot;cell-tooltip&quot;&gt;
+        &lt;img id=&quot;ws-duration-info&quot; class=&quot;info-img&quot; src=&quot;../misc/info.png&quot; title=&quot;help&quot; alt=&quot;Information sign&quot;&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;cell-input&quot;&gt;
+        &lt;input id=&quot;duration&quot; type=&quot;text&quot; min=&quot;1&quot;&gt;
+        &lt;label id=&quot;duration-text&quot; class=&quot;limits&quot;&gt;&lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;row hidden&quot;&gt;
+      &lt;label class=&quot;cell-name&quot;&gt;Release workspace after job&lt;/label&gt;
+      &lt;div class=&quot;cell-tooltip&quot;&gt;
+        &lt;img id=&quot;ws-delete-info&quot; class=&quot;info-img&quot; src=&quot;../misc/info.png&quot; title=&quot;help&quot; alt=&quot;Information sign&quot;&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;cell-input&quot;&gt;
+        &lt;input id=&quot;check-delete&quot; type=&quot;checkbox&quot;&gt;
+      &lt;/div&gt;
+      &lt;label for=&quot;check-delete&quot;&gt;Delete after job&lt;/label&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;partition-info&quot;&gt;
+    &lt;pre id=&quot;info-panel-ws&quot; class=&quot;info-pre row hidden&quot;&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;output&quot;&gt;
+  &lt;button id=&quot;generate-button&quot; class=&quot;output&quot; type=&quot;button&quot;&gt;Generate&lt;/button&gt;
+  &lt;div class=&quot;code&quot;&gt;
+    &lt;label id=&quot;output-text&quot; class=&quot;limits&quot;&gt;Output requires update&lt;/label&gt;
+    &lt;pre id=&quot;output&quot;&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+  &lt;button id=&quot;copy-button&quot; class=&quot;output&quot; type=&quot;button&quot;&gt;Copy to Clipboard&lt;/button&gt;
+  &lt;button id=&quot;save-button&quot; class=&quot;output&quot; type=&quot;button&quot;&gt;Save as File&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+  // dictionary containing the limits for the different partitions
+  const limitsPartition = {
+    &#39;alpha&#39; : alpha = {
+      &#39;MaxTime&#39;: &#39;INFINITE&#39;,
+      &#39;DefaultTime&#39;: 480,
+      &#39;Sockets&#39;: 2,
+      &#39;CoresPerSocket&#39;: 24,
+      &#39;ThreadsPerCore&#39;: 2,
+      &#39;nodes&#39;: 37,
+      &#39;GPU&#39;: 8,
+      &#39;HTCores&#39;: 96,
+      &#39;Cores&#39;: 48,
+      &#39;MemoryPerNode&#39;: 990000,
+      &#39;MemoryPerCore&#39;: 10312
+    },
+    &#39;haswell&#39; : haswell = {
+      &#39;MaxTime&#39;: &#39;INFINITE&#39;,
+      &#39;DefaultTime&#39;: 480,
+      &#39;Sockets&#39;: 2,
+      &#39;CoresPerSocket&#39;: 12,
+      &#39;ThreadsPerCore&#39;: 1,
+      &#39;nodes&#39;: 609,
+      &#39;GPU&#39;: 0,
+      &#39;HTCores&#39;: 24,
+      &#39;Cores&#39;: 24,
+      &#39;MemoryPerNode&#39;: 61000,
+      &#39;MemoryPerCore&#39;: 2541
+    },
+    &#39;haswell64&#39; : haswell64 = {
+      &#39;MaxTime&#39;: &#39;INFINITE&#39;,
+      &#39;DefaultTime&#39;: 480,
+      &#39;Sockets&#39;: 2,
+      &#39;CoresPerSocket&#39;: 12,
+      &#39;ThreadsPerCore&#39;: 1,
+      &#39;nodes&#39;: 586,
+      &#39;GPU&#39;: 0,
+      &#39;HTCores&#39;: 24,
+      &#39;Cores&#39;: 24,
+      &#39;MemoryPerNode&#39;: 61000,
+      &#39;MemoryPerCore&#39;: 2541
+    },
+    &#39;haswell256&#39; : haswell256 = {
+      &#39;MaxTime&#39;: &#39;INFINITE&#39;,
+      &#39;DefaultTime&#39;: 480,
+      &#39;Sockets&#39;: 2,
+      &#39;CoresPerSocket&#39;: 12,
+      &#39;ThreadsPerCore&#39;: 1,
+      &#39;nodes&#39;: 18,
+      &#39;GPU&#39;: 0,
+      &#39;HTCores&#39;: 24,
+      &#39;Cores&#39;: 24,
+      &#39;MemoryPerNode&#39;: 254000,
+      &#39;MemoryPerCore&#39;: 10583
+    },
+    &#39;interactive&#39; : interactive = {
+      &#39;MaxTime&#39;: 480,
+      &#39;DefaultTime&#39;: 30,
+      &#39;Sockets&#39;: 2,
+      &#39;CoresPerSocket&#39;: 12,
+      &#39;ThreadsPerCore&#39;: 1,
+      &#39;nodes&#39;: 8,
+      &#39;GPU&#39;: 0,
+      &#39;HTCores&#39;: 24,
+      &#39;Cores&#39;: 24,
+      &#39;MemoryPerNode&#39;: 61000,
+      &#39;MemoryPerCore&#39;: 2541
+    },
+    &#39;smp2&#39; : smp2 = {
+      &#39;MaxTime&#39;: &#39;INFINITE&#39;,
+      &#39;DefaultTime&#39;: 480,
+      &#39;Sockets&#39;: 4,
+      &#39;CoresPerSocket&#39;: 14,
+      &#39;ThreadsPerCore&#39;: 1,
+      &#39;nodes&#39;: 5,
+      &#39;GPU&#39;: 0,
+      &#39;HTCores&#39;: 56,
+      &#39;Cores&#39;: 56,
+      &#39;MemoryPerNode&#39;: 2044000,
+      &#39;MemoryPerCore&#39;: 36500
+    },
+    &#39;hpdlf&#39; : hpdlf = {
+      &#39;MaxTime&#39;: &#39;INFINITE&#39;,
+      &#39;DefaultTime&#39;: 60,
+      &#39;Sockets&#39;: 2,
+      &#39;CoresPerSocket&#39;: 6,
+      &#39;ThreadsPerCore&#39;: 1,
+      &#39;nodes&#39;: 14,
+      &#39;GPU&#39;: 3,
+      &#39;HTCores&#39;: 12,
+      &#39;Cores&#39;: 12,
+      &#39;MemoryPerNode&#39;: 95000,
+      &#39;MemoryPerCore&#39;: 7916
+    },
+    &#39;romeo&#39; : romeo = {
+      &#39;MaxTime&#39;: &#39;INFINITE&#39;,
+      &#39;DefaultTime&#39;: 480,
+      &#39;Sockets&#39;: 2,
+      &#39;CoresPerSocket&#39;: 64,
+      &#39;ThreadsPerCore&#39;: 2,
+      &#39;nodes&#39;: 190,
+      &#39;GPU&#39;: 0,
+      &#39;HTCores&#39;: 256,
+      &#39;Cores&#39;: 128,
+      &#39;MemoryPerNode&#39;: 505000,
+      &#39;MemoryPerCore&#39;: 1972
+    },
+    &#39;romeo-interactive&#39;: {
+      &#39;MaxTime&#39;: 480,
+      &#39;DefaultTime&#39;: 10,
+      &#39;Sockets&#39;: 2,
+      &#39;CoresPerSocket&#39;: 64,
+      &#39;ThreadsPerCore&#39;: 2,
+      &#39;nodes&#39;: 2,
+      &#39;GPU&#39;: 0,
+      &#39;HTCores&#39;: 256,
+      &#39;Cores&#39;: 128,
+      &#39;MemoryPerNode&#39;: 505000,
+      &#39;MemoryPerCore&#39;: 1972
+    },
+    &#39;julia&#39; : julia = {
+      &#39;MaxTime&#39;: &#39;INFINITE&#39;,
+      &#39;DefaultTime&#39;: 480,
+      &#39;Sockets&#39;: 32,
+      &#39;CoresPerSocket&#39;: 28,
+      &#39;ThreadsPerCore&#39;: 1,
+      &#39;nodes&#39;: 1,
+      &#39;GPU&#39;: 0,
+      &#39;HTCores&#39;: 896,
+      &#39;Cores&#39;: 896,
+      &#39;MemoryPerNode&#39;: 48390000,
+      &#39;MemoryPerCore&#39;: 54006
+    },
+    &#39;alpha&#39; : alpha = {
+      &#39;MaxTime&#39;: &#39;INFINITE&#39;,
+      &#39;DefaultTime&#39;: 480,
+      &#39;Sockets&#39;: 2,
+      &#39;CoresPerSocket&#39;: 24,
+      &#39;ThreadsPerCore&#39;: 2,
+      &#39;nodes&#39;: 32,
+      &#39;GPU&#39;: 8,
+      &#39;HTCores&#39;: 96,
+      &#39;Cores&#39;: 48,
+      &#39;MemoryPerNode&#39;: 990000,
+      &#39;MemoryPerCore&#39;: 10312
+    },
+    &#39;alpha-interactive&#39;: {
+      &#39;MaxTime&#39;: &#39;INFINITE&#39;,
+      &#39;DefaultTime&#39;: 480,
+      &#39;Sockets&#39;: 2,
+      &#39;CoresPerSocket&#39;: 24,
+      &#39;ThreadsPerCore&#39;: 2,
+      &#39;nodes&#39;: 2,
+      &#39;GPU&#39;: 8,
+      &#39;HTCores&#39;: 96,
+      &#39;Cores&#39;: 48,
+      &#39;MemoryPerNode&#39;: 990000,
+      &#39;MemoryPerCore&#39;: 10312
+    }      };
+
+  // dictionary containing the limits for the different workspaces
+  const limitsWorkspace = {
+    &#39;scratch&#39; : scratch = {
+      &#39;info&#39; : &#39;&#39;,
+      &#39;duration&#39; : 100,
+      &#39;extensions&#39; : 10
+    },
+    &#39;warm_archive&#39; : warm_archive = {
+      &#39;info&#39; : &#39;&#39;,
+      &#39;duration&#39; : 365,
+      &#39;extensions&#39; : 2
+    },
+    &#39;ssd&#39; : ssd = {
+      &#39;info&#39; : &#39;&#39;,
+      &#39;duration&#39; : 30,
+      &#39;extensions&#39; : 2
+    },
+    &#39;beegfs&#39; : beegfs = {
+      &#39;info&#39; : &#39;&#39;,
+      &#39;duration&#39; : 30,
+      &#39;extensions&#39; : 2
+    }
+  };
+
+  // dictionary containing the texts and link for the info icons
+  const info = {
+    &#39;job-name&#39;: {
+      &#39;text&#39;: &#39;Specify a name for the job allocation. The specified name will appear along with the job id number when querying running jobs on the system. (default: name of the job file)&#39;,
+      &#39;link&#39;: &#39;https://slurm.schedmd.com/sbatch.html#OPT_job-name&#39;
+    },
+    &#39;account&#39;: {
+      &#39;text&#39;: &#39;Charge resources used by this job to specified project.&#39;,
+      &#39;link&#39;: &#39;https://slurm.schedmd.com/sbatch.html#OPT_account&#39;
+    },
+    &#39;mail&#39;: {
+      &#39;text&#39;: &#39;Specify which user is send a email notification of state changes as defined by --mail-type.&#39;,
+      &#39;link&#39;: &#39;https://slurm.schedmd.com/sbatch.html#OPT_mail-user&#39;
+    },
+    &#39;time&#39;: {
+      &#39;text&#39;: &#39;Set the total run time limit of the job allocation. When the time limit is reached, each task in each job step is sent SIGTERM followed by SIGKILL. The default time limit is the partition\&#39;s default time limit. (currently only supports ddd-hh:mm:ss and hh:mm:ss)&#39;,
+      &#39;link&#39;: &#39;https://slurm.schedmd.com/sbatch.html#OPT_time&#39;
+    },
+    &#39;partition&#39;: {
+      &#39;text&#39;: &#39;Request a specific partition for the resource allocation. If the job can use more than one partition, specify their names in a comma separate list and the one offering earliest initiation will be used with no regard given to the partition name ordering. (default: default paritition of the system)&#39;,
+      &#39;link&#39;: &#39;https://slurm.schedmd.com/sbatch.html#OPT_partition&#39;
+    },
+    &#39;nodes&#39;: {
+      &#39;text&#39;: &#39;Request that number of nodes be allocated to this job.&#39;,
+      &#39;link&#39;: &#39;https://slurm.schedmd.com/sbatch.html#OPT_nodes&#39;
+    },
+    &#39;tasks&#39;: {
+      &#39;text&#39;: &#39;Request that many MPI tasks (default: one task per node)&#39;,
+      &#39;link&#39;: &#39;https://slurm.schedmd.com/sbatch.html#OPT_ntasks&#39;
+    },
+    &#39;tasks/node&#39;: {
+      &#39;text&#39;: &#39;Allocate that many tasks per node. If used with the --ntasks option, the --ntasks option will take precedence and the --ntasks-per-node will be treated as a maximum count of tasks per node. Meant to be used with the --nodes option.&#39;,
+      &#39;link&#39;: &#39;https://slurm.schedmd.com/sbatch.html#OPT_ntasks-per-node&#39;
+    },
+    &#39;cpus&#39;: {
+      &#39;text&#39;: &#39;Request that number of processors per MPI task. This is needed for multithreaded (e.g. OpenMP) jobs; typically &lt;N&gt; should be equal to OMP_NUM_THREADS&#39;,
+      &#39;link&#39;: &#39;https://slurm.schedmd.com/sbatch.html#OPT_cpus-per-task&#39;
+    },
+    &#39;nomultithread&#39;: {
+      &#39;text&#39;: &#39;[don\&#39;t] use extra threads with in-core multi-threading which can benefit communication intensive applications.&#39;,
+      &#39;link&#39;: &#39;https://slurm.schedmd.com/sbatch.html#OPT_[no]multithread&#39;
+    },
+    &#39;gpus&#39;: {
+      &#39;text&#39;: &#39;help text for gpus&#39;,
+      &#39;link&#39;: &#39;https://slurm.schedmd.com/sbatch.html#OPT_gpus&#39;
+    },
+    &#39;gpus/task&#39;: {
+      &#39;text&#39;: &#39;help text for gpus/task&#39;,
+      &#39;link&#39;: &#39;test&#39;
+    },
+    &#39;mem&#39;: {
+      &#39;text&#39;: &#39;Specify the real memory required per node.&#39;,
+      &#39;link&#39;: &#39;https://slurm.schedmd.com/sbatch.html#OPT_output&#39;
+    },
+    &#39;reservation&#39;: {
+      &#39;text&#39;: &#39;Allocate resources for the job from the named reservation.&#39;,
+      &#39;link&#39;: &#39;https://slurm.schedmd.com/sbatch.html#OPT_reservation&#39;
+    },
+    &#39;exclusive&#39;: {
+      &#39;text&#39;: &#39;The job allocation can not share nodes with other running job. Exclusive usage of compute nodes; you will be charged for all CPUs/cores on the node&#39;,
+      &#39;link&#39;: &#39;https://slurm.schedmd.com/sbatch.html#OPT_exclusive&#39;
+    },
+    &#39;executable&#39;: {
+      &#39;text&#39;: &#39;help text for executable&#39;,
+      &#39;link&#39;: &#39;test&#39;
+    },
+    &#39;one-output&#39;: {
+      &#39;text&#39;: &#39;help text for one-output&#39;,
+      &#39;link&#39;: &#39;test&#39;
+    },
+    &#39;output-file&#39;: {
+      &#39;text&#39;: &#39;File to save all normal output (stdout) (default: slurm-%j.out)&#39;,
+      &#39;link&#39;: &#39;https://slurm.schedmd.com/sbatch.html#OPT_output&#39;
+    },
+    &#39;error-file&#39;: {
+      &#39;text&#39;: &#39;File to save all error output (stderr) (default: slurm-%j.out)&#39;,
+      &#39;link&#39;: &#39;https://slurm.schedmd.com/sbatch.html#OPT_error&#39;
+    },
+    &#39;array&#39;: {
+      &#39;text&#39;: &#39;help text for array&#39;,
+      &#39;link&#39;: &#39;test&#39;
+    },
+    &#39;dependency&#39;: {
+      &#39;text&#39;: &#39;help text for dependency&#39;,
+      &#39;link&#39;: &#39;test&#39;
+    },
+    &#39;ws-alloc&#39;: {
+      &#39;text&#39;: &#39;help text for allocate workspace&#39;,
+      &#39;link&#39;: &#39;test&#39;
+    },
+    &#39;ws-filesystem&#39;: {
+      &#39;text&#39;: &#39;help text for filesystem&#39;,
+      &#39;link&#39;: &#39;test&#39;
+    },
+    &#39;ws-name&#39;: {
+      &#39;text&#39;: &#39;Valid characters for workspace names are only alphanumeric characters, -, ., and _. Workspace name has to start with an alphanumeric character.&#39;,
+      &#39;link&#39;: &#39;test&#39;
+    },
+    &#39;ws-duration&#39;: {
+      &#39;text&#39;: &#39;help text for duration&#39;,
+      &#39;link&#39;: &#39;test&#39;
+    },
+    &#39;ws-delete&#39;: {
+      &#39;text&#39;: &#39;help text for delete workspace&#39;,
+      &#39;link&#39;: &#39;test&#39;
+    }
+  };
+
+  // dictionary for the max values
+  var maxValues = {
+    &#39;nodes&#39; : 1,
+    &#39;tasks&#39; : 1,
+    &#39;tasks/node&#39; : 1,
+    &#39;cpus&#39; : 1,
+    &#39;gpus&#39; : 0,
+    &#39;gpus/task&#39; : 0,
+    &#39;mem&#39; : 1,
+    &#39;duration&#39;: 1
+  };
+
+  // dictionary for the min values
+  var minValues = {
+    &#39;nodes&#39; : 1,
+    &#39;tasks&#39; : 1,
+    &#39;tasks/node&#39; : 1,
+    &#39;cpus&#39; : 1,
+    &#39;gpus&#39; : 0,
+    &#39;gpus/task&#39; : 0,
+    &#39;mem&#39; : 1,
+    &#39;duration&#39;: 1
+  };
+
+  /**
+   *  Function to generate the output text
+   */
+  var generateOutput = function() {
+    let outputText = document.getElementById(&#39;output&#39;)
+    outputText.innerText = &#39;#!/bin/bash\n&#39;;
+    if (document.getElementById(&#39;job-name&#39;).value !== &#39;&#39;) {
+      outputText.innerText += &#39;\n#SBATCH --job-name=\&quot;&#39;
+      + document.getElementById(&#39;job-name&#39;).value + &#39;\&quot;&#39;;
+    }
+    if (document.getElementById(&#39;account&#39;).value !== &#39;&#39;) {
+      outputText.innerText += &#39;\n#SBATCH --account=\&quot;&#39;
+      + document.getElementById(&#39;account&#39;).value + &#39;\&quot;&#39;;
+    }
+    if (document.getElementById(&#39;mail&#39;).value !== &#39;&#39;) {
+      outputText.innerText += &#39;\n#SBATCH --mail-user=&#39;
+      + document.getElementById(&#39;mail&#39;).value;
+      if (document.getElementById(&#39;mail-all&#39;).checked === true) {
+        outputText.innerText += &#39;\n#SBATCH --mail-type=ALL&#39;;
+      } else {
+        let mailtype = &quot;&quot;
+        let mailtype_wanted = false
+        if (document.getElementById(&#39;mail-begin&#39;).checked === true) {
+          mailtype_wanted = true
+          mailtype = &quot;BEGIN&quot;
+          // outputText.innerText += &#39;\n#SBATCH --mail-type=BEGIN&#39;;
+        }
+        if (document.getElementById(&#39;mail-end&#39;).checked === true) {
+          if (mailtype_wanted === true) {
+            mailtype += &quot;,END&quot;
+          } else {
+            mailtype += &quot;END&quot;
+          }
+          mailtype_wanted = true
+          // outputText.innerText += &#39;\n#SBATCH --mail-type=END&#39;;
+        }
+        if (document.getElementById(&#39;mail-fail&#39;).checked === true) {
+          if (mailtype_wanted === true) {
+            mailtype += &quot;,FAIL&quot;
+          } else {
+            mailtype += &quot;FAIL&quot;
+          }
+          mailtype_wanted = true
+          // outputText.innerText += &#39;\n#SBATCH --mail-type=FAIL&#39;;
+        }
+        if (mailtype_wanted === true) {
+          outputText.innerText += &#39;\n#SBATCH --mail-type=&#39; + mailtype
+        }
+      }
+    }
+    if (document.getElementById(&#39;timelimit&#39;).value !== &#39;&#39;) {
+      outputText.innerText += &#39;\n#SBATCH --time=&#39;
+      + document.getElementById(&#39;timelimit&#39;).value;
+    } else {
+      outputText.innerText += &#39;\n#SBATCH --time=&#39;
+      + limitsPartition[document.getElementById(&#39;partition&#39;).value][&#39;DefaultTime&#39;];
+    }
+    outputText.innerText += &#39;\n#SBATCH --partition=&#39;
+    + document.getElementById(&#39;partition&#39;).value;
+    if (document.getElementById(&#39;nodes&#39;).value !== &#39;&#39;) {
+      outputText.innerText += &#39;\n#SBATCH --nodes=&#39; + document.getElementById(&#39;nodes&#39;).value;
+    }
+    if (document.getElementById(&#39;tasks&#39;).value !== &#39;&#39;) {
+      outputText.innerText += &#39;\n#SBATCH --ntasks=&#39;
+      + document.getElementById(&#39;tasks&#39;).value;
+    }
+    if (document.getElementById(&#39;tasks/node&#39;).value !== &#39;&#39; &amp;&amp; document.getElementById(&#39;gpus&#39;).value === &#39;&#39;) {
+      outputText.innerText += &#39;\n#SBATCH --ntasks-per-node=&#39;
+      + document.getElementById(&#39;tasks/node&#39;).value;
+    } else if (document.getElementById(&#39;tasks/node&#39;).value !== &#39;&#39;) {
+      outputText.innerText += &#39;\n#SBATCH --mincpus=&#39;
+      + document.getElementById(&#39;tasks/node&#39;).value;
+    }
+    if (document.getElementById(&#39;cpus&#39;).value !== &#39;&#39;) {
+      outputText.innerText += &#39;\n#SBATCH --cpus-per-task=&#39;
+      + document.getElementById(&#39;cpus&#39;).value;
+    }
+    if (document.getElementById(&#39;gpus&#39;).value !== &#39;&#39;) {
+      outputText.innerText += &#39;\n#SBATCH --gres=gpu:&#39;
+      + document.getElementById(&#39;gpus&#39;).value;
+    }
+    if (document.getElementById(&#39;gpus/task&#39;).value !== &#39;&#39;) {
+      outputText.innerText += &#39;\n#SBATCH --gpus-per-task=&#39;
+      + document.getElementById(&#39;gpus/task&#39;).value;
+    }
+    if (document.getElementById(&#39;mem&#39;).value !== &#39;&#39;) {
+      outputText.innerText += &#39;\n#SBATCH --mem-per-cpu=&#39;
+      + document.getElementById(&#39;mem&#39;).value
+      + document.getElementById(&#39;byte&#39;).value;
+    }
+    if (document.getElementById(&#39;reservation&#39;).value !== &#39;&#39;) {
+      outputText.innerText += &#39;\n#SBATCH --reservation=&#39;
+      + document.getElementById(&#39;reservation&#39;).value;
+    }
+    if (document.getElementById(&#39;exclusive&#39;).checked === true) {
+      outputText.innerText += &#39;\n#SBATCH --exclusive&#39;;
+    }
+    if (document.getElementById(&#39;nomultithread&#39;).checked === true) {
+      outputText.innerText += &#39;\n#SBATCH --hint=nomultithread&#39;;
+    }
+    if (document.getElementById(&#39;output-file&#39;).value !== &#39;&#39;) {
+      outputText.innerText += &#39;\n#SBATCH --output=&#39;
+      + document.getElementById(&#39;output-file&#39;).value;
+    }
+    if (document.getElementById(&#39;error-file&#39;).value !== &#39;&#39;) {
+      outputText.innerText += &#39;\n#SBATCH --error=&#39;
+      + document.getElementById(&#39;error-file&#39;).value;
+    }
+    if (document.getElementById(&#39;array&#39;).value !== &#39;&#39;) {
+      outputText.innerText += &#39;\n#SBATCH --array=&#39;
+      + document.getElementById(&#39;array&#39;).value;
+    }
+    if (document.getElementById(&#39;type-depend&#39;).value !== &#39;none&#39;) {
+      outputText.innerText += &#39;\n#SBATCH --dependency=&#39;
+      + document.getElementById(&#39;type-depend&#39;).value;
+      if (document.getElementById(&#39;type-depend&#39;).value !== &#39;singleton&#39;) {
+        outputText.innerText += &#39;:&#39; + document.getElementById(&#39;jobid&#39;).value;
+      }
+    }
+
+    outputText.innerText += &#39;\n\n# Setup computational environment, i.e, load desired modules&#39;;
+    outputText.innerText += &#39;\n# module purge&#39;;
+    outputText.innerText += &#39;\n# module load &lt;module name&gt;&#39;;
+    outputText.innerText += &#39;\n\n&#39;;
+
+    if (document.getElementById(&#39;check-workspace&#39;).checked) {
+      outputText.innerText += &#39;\n# Allocate workspace as working directory&#39;;
+      outputText.innerText += &#39;\nWSNAME=&#39;
+      + document.getElementById(&#39;ws-name&#39;).value.trim() + &#39;_${SLURM_JOB_ID}&#39;;
+      outputText.innerText += &#39;\nexport WSDIR=$(ws_allocate -F &#39;
+      + document.getElementById(&#39;workspace-filesystem&#39;).value
+      + &#39; -n ${WSNAME}&#39;;
+      if (document.getElementById(&#39;duration&#39;).value) {
+        outputText.innerText += &#39; -d &#39; + document.getElementById(&#39;duration&#39;).value
+      }
+      outputText.innerText += &#39;)&#39;;
+      outputText.innerText += &#39;\necho &quot;Workspace: ${WSDIR}&quot;&#39;;
+
+      outputText.innerText += &#39;\n# Check allocation&#39;;
+      outputText.innerText += &#39;\n[ -z &quot;${WSDIR}&quot; ] &amp;&amp; echo &quot;Error: Cannot allocate workspace {$WSNAME}&quot; &amp;&amp; exit 1&#39;;
+
+      outputText.innerText += &#39;\n\n# Change to workspace directory&#39;;
+      outputText.innerText += &#39;\ncd ${WSDIR}&#39;;
+    }
+
+    if (document.getElementById(&#39;check-workspace&#39;).checked &amp;&amp; document.getElementById(&#39;check-delete&#39;).checked) {
+      outputText.innerText += &#39;\n\n# The workspace where results from multiple experiments will be saved for later analysis.&#39;;
+      outputText.innerText += &#39;\n# Remark: Make sure RESULT_WSDIR exists!&#39;;
+      outputText.innerText += &#39;\nRESULT_WSDIR=&quot;/path/to/workspace-experiments-results&quot;&#39;
+      outputText.innerText += &#39;\ntest -z &quot;${RESULT_WSDIR}&quot; &amp;&amp; echo &quot;Error: Cannot find workspace ${RESULT_WSDIR}&quot; &amp;&amp; exit 1&#39;;
+    }
+
+    if (document.getElementById(&#39;executable&#39;).value !== &#39;&#39;) {
+      outputText.innerText += &#39;\n\n# Execute parallel application &#39;;
+      outputText.innerText += &#39;\nsrun &#39;
+      + document.getElementById(&#39;executable&#39;).value;
+    } else {
+      outputText.innerText += &#39;\n\n# Execute parallel application &#39;;
+      outputText.innerText += &#39;\n# srun &lt;application&gt;&#39;;
+    }
+
+    if (document.getElementById(&#39;check-workspace&#39;).checked &amp;&amp; document.getElementById(&#39;check-delete&#39;).checked) {
+      outputText.innerText += &#39;\n\n# Save your results to the general workspace RESULT_WSDIR (s.a.).&#39;;
+      outputText.innerText += &#39;\n# Compress results with bzip2 (which includes CRC32 checksums)&#39;;
+      outputText.innerText += &#39;\n# Remark: Assume all result and log files of interest are in the directory `results`.&#39;;
+      outputText.innerText += &#39;\nbzip2 --compress --stdout -4 &quot;${WSDIR}/results&quot; &gt; ${RESULT_WSDIR}/${SLURM_JOB_ID}.bz2&#39;;
+      outputText.innerText += &#39;\nRETURN_CODE=$?&#39;;
+      outputText.innerText += &#39;\nCOMPRESSION_SUCCESS=&quot;$(if test ${RETURN_CODE} -eq 0; then echo&#39;
+                              +&#39; \&#39;TRUE\&#39;; else echo \&#39;FALSE\&#39;; fi)&quot;&#39;;
+
+      outputText.innerText += &#39;\n\n# Clean up workspace&#39;;
+      outputText.innerText += &#39;\nif [ &quot;TRUE&quot; = ${COMPRESSION_SUCCESS} ]; then&#39;;
+      outputText.innerText += &#39;\n    if [ -d ${WSDIR} ] &amp;&amp; rm -rf ${WSDIR}/*&#39;;
+      outputText.innerText += &#39;\n    # Reduce grace period to 1 day&#39;;
+      outputText.innerText += &#39;\n    ws_release -F &#39;
+                              + document.getElementById(&#39;workspace-filesystem&#39;).value
+                              + &#39; ${WSNAME}&#39;;
+      outputText.innerText += &#39;\nelse&#39;
+      outputText.innerText += &#39;\n    echo &quot;Error with compression and writing of results&quot;&#39;
+      outputText.innerText += &#39;\n    echo &quot;Please check the folder \&quot;${WSDIR}\&quot; for any&#39;
+                              + &#39; partial(?) results.n&#39;;
+      outputText.innerText += &#39;\n    exit 1&#39;;
+      outputText.innerText += &#39;\nfi&#39;;
+    }
+  }
+
+  function validateTimelimit() {
+    // walltime: Check if value is set
+    let elem = document.getElementById(&#39;timelimit&#39;)
+    elem.style.backgroundColor = &#39;&#39;;
+    let walltime = elem.value.trim()
+    if (walltime) {
+      // minutes, minutes:seconds, hours:minutes:seconds
+      let re_minutes = /^([0-9]+:)?[0-9]+(:[0-9]+)?$/;
+      // days-hours, days-hours:minutes and days-hours:minutes:seconds
+      let re_days = /^[0-9]+-[0-9]+(:[0-9]+){0,2}$/;
+      if (!re_minutes.test(walltime) &amp;&amp;
+          !re_days.test(walltime)) {
+        elem.style.backgroundColor = &#39;rgb(255, 121, 121)&#39;;
+        return false;
+      }
+    }
+    return true;
+  }
+
+  const validateEmailString = (email) =&gt; {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^&lt;&gt;()[\]\\.,;:\s@&quot;]+(\.[^&lt;&gt;()[\]\\.,;:\s@&quot;]+)*)|(&quot;.+&quot;))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+
+  function validateEmail() {
+    let elem = document.getElementById(&#39;mail&#39;)
+    elem.style.backgroundColor = &#39;&#39;;
+    let email = elem.value.trim()
+    if (document.getElementById(&#39;mail-all&#39;).checked === true
+        || document.getElementById(&#39;mail-begin&#39;).checked === true
+        || document.getElementById(&#39;mail-end&#39;).checked === true
+        || document.getElementById(&#39;mail-fail&#39;).checked === true) {
+      // if checked type but empty email or invalid email
+      if (! email || !validateEmailString(email)) {
+        elem.style.backgroundColor = &#39;rgb(255, 121, 121)&#39;;
+        return false;
+      }
+    } else {
+      // If email is given but no Type is selected
+      if (email) {
+        elem.style.backgroundColor = &#39;rgb(255, 121, 121)&#39;;
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function validateArray() {
+    // walltime: Check if value is set
+    let elem = document.getElementById(&#39;array&#39;)
+    elem.style.backgroundColor = &#39;&#39;;
+    let array = elem.value.trim()
+    let reArray = /^[0-9]+(-[0-9]+)?(,[0-9]+(-[0-9]+)?)*(:[0-9]+)?(%[0-9]+)?$/;
+    // If array is filled, check validity
+    if (array) {
+      if (!reArray.test(array)) {
+        elem.style.backgroundColor = &#39;rgb(255, 121, 121)&#39;;
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function validateWorkspace() {
+    // Workspace name can consist of alphanumeric characters, -, ., and _.
+    // Has to start with alphanumerical character.
+    let elem = document.getElementById(&#39;ws-name&#39;)
+    elem.style.backgroundColor = &#39;&#39;;
+    let ws_name = elem.value.trim()
+    let re_allowed = /^[a-zA-Z0-9][a-zA-Z0-9\-\.\_]*$/;
+    if (!re_allowed.test(ws_name)) {
+      elem.style.backgroundColor = &#39;rgb(255, 121, 121)&#39;;
+      return false;
+    }
+    return true;
+  }
+
+  function validateNumericField(field) {
+    // remove all leading zeros
+    let elem = document.getElementById(field);
+    let elem_label = document.getElementById(field + &#39;-text&#39;);
+    elem.style.backgroundColor = &#39;&#39;;
+    elem_label.style.display = &#39;none&#39;;
+    let val_str = elem.value.trim();
+    if (val_str) {
+      // Check if value is not a number
+      if (isNaN(val_str)) {
+        elem.style.backgroundColor = &#39;rgb(255, 121, 121)&#39;
+        return false;
+      }
+      // Ensure it is an integer
+      let val_num = Number(val_str);
+      if (!Number.isInteger(val_num)) {
+        elem.style.backgroundColor = &#39;rgb(255, 121, 121)&#39;
+        return false;
+      }
+      let min = minValues[field];
+      let max = maxValues[field];
+      if (val_num &lt; min || val_num &gt; max) {
+        elem.style.backgroundColor = &#39;rgb(255, 121, 121)&#39;;
+        elem_label.style.display = &#39;inline&#39;;
+        return false;
+      }
+    }
+    // If value is empty or only spaces, its ok
+    return true;
+  }
+
+  function validateNumericFieldFactory(field) {
+    return function() {
+      validateNumericField(field);
+    }
+  }
+
+  /**
+   * Proof if all values are correct, if yes it prints the output, else it highlights incorrect values
+   */
+  var validateAllFields = function() {
+    let allFieldsValid = true;
+    if (!validateTimelimit()) {
+      allFieldsValid = false;
+    }
+    if (!validateEmail()) {
+      allFieldsValid = false;
+    }
+    if (!validateArray()) {
+      allFieldsValid = false;
+    }
+
+    // Build list of numerical fields
+    let fields = [&#39;nodes&#39;, &#39;tasks&#39;, &#39;tasks/node&#39;, &#39;cpus&#39;, &#39;gpus&#39;, &#39;gpus/task&#39;, &#39;mem&#39;];
+    for (let index = 0; index &lt; fields.length; index++) {
+      if (!validateNumericField(fields[index])) {
+        allFieldsValid = false;
+      }
+    }
+    //fields.forEach(field =&gt; validateNumericField(field))
+
+    if (document.getElementById(&#39;check-workspace&#39;).checked === true) {
+      if (!validateNumericField(&#39;duration&#39;)) {
+        allFieldsValid = false;
+      }
+      if (!validateWorkspace()) {
+        allFieldsValid = false;
+      }
+    }
+
+    if (allFieldsValid === true) {
+      document.getElementById(&#39;output-text&#39;).style.display = &#39;none&#39;;
+      generateOutput();
+    } else {
+      document.getElementById(&#39;output-text&#39;).style.display = &#39;block&#39;;
+    }
+  }
+
+  // copy to clipboard
+  document.getElementById(&#39;copy-button&#39;).addEventListener(&#39;click&#39;, function () {
+    let code = document.getElementById(&#39;output&#39;);
+
+    // select the text
+    let range = document.createRange();
+    range.selectNodeContents(code);
+    let selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+
+    // copy to clipboard
+    navigator.clipboard.writeText(code.innerText);
+
+    // remove selection
+    selection.removeAllRanges();
+  });
+
+  // save as file
+  document.getElementById(&#39;save-button&#39;).addEventListener(&#39;click&#39;, function () {
+    // create file informations
+    var file = new Blob([document.getElementById(&#39;output&#39;).innerText], {type: &#39;text/plain&#39;});
+    // create url and link
+    var url = URL.createObjectURL(file);
+    var a = document.createElement(&#39;a&#39;);
+    a.href = url;
+    if (document.getElementById(&#39;job-name&#39;).value !== &#39;&#39;) {
+      a.download = document.getElementById(&#39;job-name&#39;).value + &quot;.sh&quot;
+    }
+    else {
+      a.download = &#39;sbatchfile.sh&#39;;
+    }
+    document.body.appendChild(a);
+    // activate the link
+    a.click();
+    // remove link after some time
+    setTimeout(function() {
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+    }, 0);
+  });
+
+  // remove the error field, if checkbox is active
+  document.getElementById(&#39;one-output&#39;).addEventListener(&#39;change&#39;, function () {
+    if (document.getElementById(&#39;one-output&#39;).checked) {
+      document.getElementById(&#39;err-div&#39;).style.display = &#39;none&#39;;
+      document.getElementById(&#39;err-div&#39;).value = &#39;&#39;;
+    } else {
+      document.getElementById(&#39;err-div&#39;).style.display = &#39;&#39;;
+    }
+  });
+
+  // show workspace div, if checkbox is active
+  document.getElementById(&#39;check-workspace&#39;).addEventListener(&#39;change&#39;, function () {
+    let hidden = document.getElementsByClassName(&#39;row hidden&#39;);
+    [].forEach.call(hidden, function (row) {
+      if (document.getElementById(&#39;check-workspace&#39;).checked === true) {
+        row.style.cssText = &#39;display:flex !important&#39;;
+      } else {
+        row.style.cssText = &#39;display:none !important&#39;;
+      }
+    })
+  });
+
+  /**
+   * Function to fill the information panel about the currently selected partition
+   */
+  var fillPartitionInfo = function() {
+    let panelText = document.getElementById(&#39;info-panel-partition&#39;);
+    let partitionLimits = limitsPartition[document.getElementById(&#39;partition&#39;).value];
+
+    panelText.innerText = &quot;Partition &quot; + document.getElementById(&#39;partition&#39;).value;
+    if (partitionLimits[&#39;Description&#39;]) {
+      panelText.innerText += &quot;: &quot; + partitionLimits[&#39;Description&#39;];
+    }
+    panelText.innerText += &#39;\nNodes: &#39; + partitionLimits[&#39;nodes&#39;];
+    panelText.innerText += &#39;\nCores per node: &#39; + partitionLimits[&#39;Cores&#39;];
+    panelText.innerText += &#39;\nHyper threading: &#39; + partitionLimits[&#39;HTCores&#39;];
+    panelText.innerText += &#39;\nRAM per core: &#39; + partitionLimits[&#39;MemoryPerCore&#39;] + &#39; MB&#39;;
+    panelText.innerText += &#39;\nRAM per node: &#39; + partitionLimits[&#39;MemoryPerNode&#39;] + &#39; MB&#39;;
+    panelText.innerText += &#39;\nGPUs per node: &#39; + partitionLimits[&#39;GPU&#39;];
+  }
+
+  /**
+   * Function to fill the information panel about the currently selected partition
+   */
+  var fillWorkspaceInfo = function() {
+    let panelText = document.getElementById(&#39;info-panel-ws&#39;);
+    let workspaceLimits = limitsWorkspace[document.getElementById(&#39;workspace-filesystem&#39;).value];
+
+    panelText.innerText = workspaceLimits[&#39;info&#39;];
+    panelText.innerText += &#39;\nDuration: &#39; + workspaceLimits[&#39;duration&#39;];
+    panelText.innerText += &#39;\nExtensions: &#39; + workspaceLimits[&#39;extensions&#39;];
+  }
+
+  /**
+   * Function to fill the tooltip about the partitions
+   */
+  var fillTooltips = function() {
+    for (const [key, value] of Object.entries(limitsPartition)) {
+      let panelText = document.getElementById(key);
+      let partitionLimits = limitsPartition[key];
+
+      panelText.title = partitionLimits[&#39;Description&#39;];
+      panelText.title += &#39;\nNodes: &#39; + partitionLimits[&#39;nodes&#39;];
+      panelText.title += &#39;\nCores per node: &#39; + partitionLimits[&#39;Cores&#39;];
+      panelText.title += &#39;\nHyper threading: &#39; + partitionLimits[&#39;HTCores&#39;];
+      panelText.title += &#39;\nRAM per core: &#39; + partitionLimits[&#39;MemoryPerCore&#39;] + &#39; MB&#39;;
+      panelText.title += &#39;\nRAM per node: &#39; + partitionLimits[&#39;MemoryPerNode&#39;] + &#39; MB&#39;;
+      panelText.title += &#39;\nGPUs per node: &#39; + partitionLimits[&#39;GPU&#39;];
+    }
+  }
+
+  /**
+   * Function to fill the tooltip about the workspaces
+   */
+   var fillTooltipsWorkspace = function() {
+    for (const [key, value] of Object.entries(limitsWorkspace)) {
+      let panelText = document.getElementById(key);
+      let partitionLimits = limitsWorkspace[key];
+
+      panelText.title = partitionLimits[&#39;info&#39;];
+      panelText.title += &#39;\nDuration: &#39; + partitionLimits[&#39;duration&#39;];
+      panelText.title += &#39;\nExtensions: &#39; + partitionLimits[&#39;extensions&#39;];
+    }
+  }
+
+  /**
+   * Function to fill the tooltip about limits of the field
+   *
+   * @param {string} field The id for the field to set the tooltip
+   */
+  var setTooltips = function(field) {
+    let panelText = document.getElementById(field);
+
+    panelText.title = &#39;Limits by current setting:&#39;;
+    panelText.title += &#39;\nmin: &#39; + minValues[field];
+    panelText.title += &#39;\nmax: &#39; + maxValues[field];
+    panelText.title += &#39;\nEmpty the field if unneeded&#39;;
+
+    // set limit labels
+    let limitText = document.getElementById(field + &#39;-text&#39;);
+    limitText.innerText = &#39;min: &#39; + minValues[field];
+    limitText.innerText += &#39; max: &#39; + maxValues[field];
+  }
+
+  /**
+   * Get the value of a field, or its maximum
+   */
+  var getValue = function(field, type) {
+    let number = 0;
+    // get field value
+    rawNodes = document.getElementById(field).value;
+    // set to maximum if value is undefined or out of range
+    if (
+      rawNodes !== &#39;&#39;
+      &amp;&amp; Number(rawNodes) &gt;= minValues[field]
+      &amp;&amp; Number(rawNodes) &lt;= maxValues[field]
+    ) {
+      number = Number(document.getElementById(field).value);
+    } else {
+      number = type === &#39;min&#39; ? minValues[field] : maxValues[field];
+    }
+    return number;
+  }
+
+  /**
+   * Set the limits for the nodes field
+   */
+   var setLimitNodes = function() {
+    // get partition limits from dictionary
+    let partitionLimits = limitsPartition[document.getElementById(&#39;partition&#39;).value];
+
+    // set max for nodes
+    maxValues[&#39;nodes&#39;] = partitionLimits[&#39;nodes&#39;];
+
+    // set min for nodes
+    if (
+      document.getElementById(&#39;tasks&#39;).value !== &#39;&#39;
+      &amp;&amp; document.getElementById(&#39;tasks/node&#39;).value !== &#39;&#39;
+      ) {
+      let tasks = getValue(&#39;tasks&#39;, &#39;min&#39;);
+      let tasksPerNode = getValue(&#39;tasks/node&#39;, &#39;min&#39;);
+      minValues[&#39;nodes&#39;] = Math.ceil(tasks / tasksPerNode);
+    } else {
+      minValues[&#39;nodes&#39;] = 1;
+    }
+
+    // set min for nodes
+    setTooltips(&#39;nodes&#39;);
+  }
+
+  /**
+   * Set the limits for the tasks field
+   */
+  var setLimitTasks = function() {
+    // get partition limits from dictionary
+    let partitionLimits = limitsPartition[document.getElementById(&#39;partition&#39;).value];
+
+    // set max
+    let nodes = getValue(&#39;nodes&#39;, &#39;max&#39;);
+    let taskPerNode = getValue(&#39;tasks/node&#39;, &#39;max&#39;);
+    // multithreading
+    let limit = document.getElementById(&#39;nomultithread&#39;).checked === true ? &#39;Cores&#39; : &#39;HTCores&#39;;
+    maxValues[&#39;tasks&#39;] = nodes * partitionLimits[limit];
+    // limit if nodes and tasks/node
+    if (
+      document.getElementById(&#39;tasks/node&#39;).value !== &#39;&#39;
+      &amp;&amp; document.getElementById(&#39;nodes&#39;).value !== &#39;&#39;
+    ) {
+      maxValues[&#39;tasks&#39;] = taskPerNode * nodes;
+    } else {
+      minValues[&#39;tasks/node&#39;] = 1;
+    }
+
+    // set min
+    nodes = getValue(&#39;nodes&#39;, &#39;min&#39;);
+    minValues[&#39;tasks&#39;] = nodes;
+    setTooltips(&#39;tasks&#39;);
+  }
+
+  /**
+   * Set the limits for tasks per node field
+   */
+  var setLimitTasksPerNode = function() {
+    // get partition limits from dictionary
+    let partitionLimits = limitsPartition[document.getElementById(&#39;partition&#39;).value];
+
+    // set max
+    let nodes = getValue(&#39;nodes&#39;, &#39;max&#39;);
+    let tasks = getValue(&#39;tasks&#39;, &#39;max&#39;);
+
+    // multithreading
+    let limit = document.getElementById(&#39;nomultithread&#39;).checked === true ? &#39;Cores&#39; : &#39;HTCores&#39;;
+    maxValues[&#39;tasks/node&#39;] = partitionLimits[limit];
+    //set min
+    nodes = getValue(&#39;nodes&#39;, &#39;min&#39;);
+    tasks = getValue(&#39;tasks&#39;, &#39;min&#39;);
+    if (
+      document.getElementById(&#39;tasks&#39;).value !== &#39;&#39;
+      &amp;&amp; document.getElementById(&#39;nodes&#39;).value !== &#39;&#39;
+    ) {
+      minValues[&#39;tasks/node&#39;] = Math.ceil(tasks / nodes);
+    } else {
+      minValues[&#39;tasks/node&#39;] = 1;
+    }
+
+    // set min and max for --mincpus if gpus are allocated
+    if (
+      document.getElementById(&#39;gpus&#39;).value !== &#39;&#39;
+      &amp;&amp; document.getElementById(&#39;nodes&#39;).value !== &#39;&#39;
+      &amp;&amp; document.getElementById(&#39;tasks&#39;).value !== &#39;&#39;
+    ) {
+      minValues[&#39;tasks/node&#39;] = Math.ceil(tasks / nodes);
+      nodes = getValue(&#39;nodes&#39;, &#39;max&#39;);
+      tasks = getValue(&#39;tasks&#39;, &#39;max&#39;);
+      maxValues[&#39;tasks/node&#39;] = Math.floor(tasks / nodes);
+    }
+    // set tooltips
+    setTooltips(&#39;tasks/node&#39;);
+  }
+
+  /**
+   * Set the limits for cpu per task field
+   */
+   var setLimitCpu = function() {
+    // get partition limits from dictionary
+    let partitionLimits = limitsPartition[document.getElementById(&#39;partition&#39;).value];
+
+    // set max
+    // multithreading
+    let limit = document.getElementById(&#39;nomultithread&#39;).checked === true ? &#39;Cores&#39; : &#39;HTCores&#39;;
+    let nodes = getValue(&#39;nodes&#39;, &#39;max&#39;);
+    let tasks = getValue(&#39;tasks&#39;, &#39;max&#39;);
+    let tasksPerNode = getValue(&#39;tasks/node&#39;, &#39;max&#39;);
+    let maxValue = [partitionLimits[limit]];
+    maxValue.push(Math.floor(partitionLimits[limit] / Math.ceil(tasks / nodes)));
+    maxValue.push(Math.floor(partitionLimits[limit] / tasksPerNode));
+    maxValues[&#39;cpus&#39;] = Math.min.apply(null, maxValue);
+    // set max for cpus if gpus are set
+    if (
+      document.getElementById(&#39;gpus&#39;).value !== &#39;&#39;
+      &amp;&amp; document.getElementById(&#39;gpus&#39;).value !== &#39;0&#39;
+      &amp;&amp; document.getElementById(&#39;exclusive&#39;).checked !== true
+    ) {
+      let gpus = getValue(&#39;gpus&#39;, &#39;max&#39;);
+      maxValues[field] = Math.floor(gpus / partitionLimits[&#39;GPU&#39;] * partitionLimits[limit]);
+    }
+    //set min
+    minValues[&#39;cpus&#39;] = 1;
+    // set tooltips
+    setTooltips(&#39;cpus&#39;);
+  }
+
+  /**
+   * Set the limits for gpu per node field
+   */
+   var setLimitGpu = function() {
+    // get partition limits from dictionary
+    let partitionLimits = limitsPartition[document.getElementById(&#39;partition&#39;).value];
+
+    // set max for gpus
+    maxValues[&#39;gpus&#39;] = partitionLimits[&#39;GPU&#39;];
+    setTooltips(&#39;gpus&#39;);
+    //set min
+    if (document.getElementById(&#39;gpus/task&#39;).value !== &#39;&#39;) {
+      let tasks = getValue(&#39;tasks&#39;, &#39;min&#39;);
+      let nodes = getValue(&#39;nodes&#39;, &#39;min&#39;);
+      let gpusPerTask = getValue(&#39;gpus/task&#39;, &#39;min&#39;);
+      minValues[&#39;gpus&#39;] = Math.ceil(tasks / nodes * gpusPerTask);
+    } else {
+      minValues[&#39;gpus&#39;] = 0;
+    }
+    // set tooltips
+    setTooltips(&#39;gpus&#39;);
+  }
+
+  /**
+   * Set the limits for the gpus per task field
+   */
+  var setLimitGpuPerTask = function() {
+    // get partition limits from dictionary
+    let partitionLimits = limitsPartition[document.getElementById(&#39;partition&#39;).value];
+
+    // get value from base
+    let tasks = getValue(&#39;tasks&#39;, &#39;max&#39;);
+    let tasksNode = getValue(&#39;tasks/node&#39;, &#39;max&#39;);
+    let nodes = getValue(&#39;nodes&#39;, &#39;max&#39;);
+
+    // set new max
+    let maxValue = [partitionLimits[&#39;GPU&#39;]];
+    if (tasks !== &#39;&#39;) {
+      maxValue.push(Math.floor(partitionLimits[&#39;GPU&#39;] / Math.ceil(Number(tasks) / Number(nodes))));
+    }
+    if (tasksNode !== &#39;&#39;) {
+      maxValue.push(Math.floor(partitionLimits[&#39;GPU&#39;] / Number(document.getElementById(&#39;tasks/node&#39;).value)));
+    }
+    maxValues[&#39;gpus/task&#39;] = Math.min.apply(null, maxValue);
+    // set tooltips for new limits
+    setTooltips(&#39;gpus/task&#39;);
+  }
+
+  /**
+   * Update the max for memory per cpu values
+   */
+  var setLimitMem = function() {
+    // get partition limits from dictionary
+    let partitionLimits = limitsPartition[document.getElementById(&#39;partition&#39;).value];
+    maxValues[&#39;mem&#39;] = partitionLimits[&#39;MemoryPerCore&#39;];
+    if (document.getElementById(&#39;nomultithread&#39;).checked === true) {
+      maxValues[&#39;mem&#39;] *= partitionLimits[&#39;ThreadsPerCore&#39;];
+    }
+    if (document.getElementById(&#39;byte&#39;).value === &#39;G&#39;) {
+      maxValues[&#39;mem&#39;] = Math.floor(maxValues[&#39;mem&#39;] / 1024);
+    }
+    setTooltips(&#39;mem&#39;);
+  }
+
+  /**
+   * Set the limits for the duration field
+   */
+  var setLimitDuration = function() {
+    // get partition limits from dictionary
+    let workspaceLimits = limitsWorkspace[document.getElementById(&#39;workspace-filesystem&#39;).value];
+    // set new max
+    maxValues[&#39;duration&#39;] = workspaceLimits[&#39;duration&#39;];
+
+    //set min
+    // get days and hours from walltime
+    let reArray = /^(([0-9]{1,3})-)?([0-9]{2}):([0-9]{2}):([0-9]{2})$/;
+    let match = reArray.exec(document.getElementById(&#39;timelimit&#39;).value);
+    if (match === null) {
+      setTooltips(&#39;duration&#39;);
+      return;
+    }
+    // if days are defined or not
+    if (match[2]) {
+      minValues[&#39;duration&#39;] = Number(match[2]);
+    }
+    minValues[&#39;duration&#39;] += Math.ceil(Number(match[3]) / 24);
+    if ((Number(match[4]) !== 0 || Number(match[5]) !== 0) &amp;&amp; Number(match[3]) % 24 === 0) {
+      minValues[&#39;duration&#39;] += 1;
+    }
+    // set tooltips for new limits
+    setTooltips(&#39;duration&#39;);
+  }
+
+  /**
+   * Update the value und max for CPU and GPU values
+   */
+  var LimitChange = function() {
+    setLimitNodes();
+    setLimitTasks();
+    setLimitTasksPerNode();
+    setLimitCpu();
+    if (document.getElementById(&#39;div-gpu&#39;).style.display !== &#39;none&#39;) {
+      setLimitGpu();
+      setLimitGpuPerTask();
+    }
+    setLimitMem();
+    setLimitDuration();
+  }
+
+  /**
+   * Function to trigger updates, if parttion was changed
+   */
+  var partitionLimitChange = function() {
+    // get partition limits from dictionary
+    let partitionLimits = limitsPartition[document.getElementById(&#39;partition&#39;).value];
+    // hide the GPU field, if partition do not have GPUs
+    if (partitionLimits[&#39;GPU&#39;] === 0) {
+      document.getElementById(&#39;div-gpu&#39;).style.display = &#39;none&#39;;
+      document.getElementById(&#39;div-gpu/task&#39;).style.display = &#39;none&#39;;
+      document.getElementById(&#39;gpus&#39;).value = &#39;&#39;;
+      document.getElementById(&#39;gpus/task&#39;).value = &#39;&#39;;
+    } else {
+      document.getElementById(&#39;div-gpu&#39;).style.display = &#39;&#39;;
+      document.getElementById(&#39;div-gpu/task&#39;).style.display = &#39;&#39;;
+    }
+    // hide the multithreading field if it isnt supported
+    if (partitionLimits[&#39;ThreadsPerCore&#39;] === 1) {
+      document.getElementById(&#39;div-thread&#39;).style.display = &#39;none&#39;;
+      document.getElementById(&#39;nomultithread&#39;).checked = false;
+    } else {
+      document.getElementById(&#39;div-thread&#39;).style.display = &#39;&#39;;
+    }
+    // update other values
+    LimitChange();
+  }
+
+  // set up event listeners, if field change
+  document.getElementById(&#39;partition&#39;).addEventListener(&#39;change&#39;, partitionLimitChange);
+  document.getElementById(&#39;partition&#39;).addEventListener(&#39;change&#39;, fillPartitionInfo);
+  document.getElementById(&#39;nodes&#39;).addEventListener(&#39;change&#39;, LimitChange);
+  document.getElementById(&#39;tasks&#39;).addEventListener(&#39;change&#39;, LimitChange);
+  document.getElementById(&#39;tasks/node&#39;).addEventListener(&#39;change&#39;, LimitChange);
+  document.getElementById(&#39;cpus&#39;).addEventListener(&#39;change&#39;, LimitChange);
+  document.getElementById(&#39;gpus&#39;).addEventListener(&#39;change&#39;, LimitChange);
+  document.getElementById(&#39;gpus/task&#39;).addEventListener(&#39;change&#39;, LimitChange);
+  document.getElementById(&#39;mem&#39;).addEventListener(&#39;change&#39;, LimitChange);
+  document.getElementById(&#39;byte&#39;).addEventListener(&#39;change&#39;, setLimitMem);
+  document.getElementById(&#39;exclusive&#39;).addEventListener(&#39;change&#39;, LimitChange);
+  document.getElementById(&#39;nomultithread&#39;).addEventListener(&#39;change&#39;, LimitChange);
+  document.getElementById(&#39;workspace-filesystem&#39;).addEventListener(&#39;change&#39;, setLimitDuration);
+  document.getElementById(&#39;workspace-filesystem&#39;).addEventListener(&#39;change&#39;, fillWorkspaceInfo);
+  // Set up field validator events
+  document.getElementById(&#39;nodes&#39;).addEventListener(&#39;change&#39;, validateNumericFieldFactory(&#39;nodes&#39;));
+  document.getElementById(&#39;tasks&#39;).addEventListener(&#39;change&#39;, validateNumericFieldFactory(&#39;tasks&#39;));
+  document.getElementById(&#39;tasks/node&#39;).addEventListener(&#39;change&#39;, validateNumericFieldFactory(&#39;tasks/node&#39;));
+  document.getElementById(&#39;cpus&#39;).addEventListener(&#39;change&#39;, validateNumericFieldFactory(&#39;cpus&#39;));
+  document.getElementById(&#39;gpus&#39;).addEventListener(&#39;change&#39;, validateNumericFieldFactory(&#39;gpus&#39;));
+  document.getElementById(&#39;gpus/task&#39;).addEventListener(&#39;change&#39;, validateNumericFieldFactory(&#39;gpus/task&#39;));
+  document.getElementById(&#39;mem&#39;).addEventListener(&#39;change&#39;, validateNumericFieldFactory(&#39;mem&#39;));
+  document.getElementById(&#39;array&#39;).addEventListener(&#39;change&#39;, validateArray);
+  document.getElementById(&#39;ws-name&#39;).addEventListener(&#39;change&#39;, validateWorkspace);
+  document.getElementById(&#39;timelimit&#39;).addEventListener(&#39;change&#39;, validateTimelimit);
+  // We do not validate Email on change since the validateEmail checks if mail is correct + a box is selected.
+  // In the user workflow, this would trigger a red field when they enter a correct Email, but have not selected a checkbox
+  // To avoid confusion, we only check on generate.
+
+  // hide jobid field if unneeded
+  document.getElementById(&#39;type-depend&#39;).addEventListener(&#39;change&#39;, function() {
+    if (
+      document.getElementById(&#39;type-depend&#39;).value === &#39;none&#39; ||
+      document.getElementById(&#39;type-depend&#39;).value === &#39;singleton&#39;
+    ) {
+      document.getElementById(&#39;jobid&#39;).style.cssText = &#39;display:none !important&#39;;
+    } else {
+      document.getElementById(&#39;jobid&#39;).style.cssText = &#39;display:inline !important&#39;;
+    }
+  });
+
+  document.getElementById(&#39;generate-button&#39;).addEventListener(&#39;click&#39;, validateAllFields);
+
+  // initialize webpage
+
+  // set up the collapsible fields
+  let colls = document.getElementsByClassName(&#39;collapsible&#39;);
+  [].forEach.call(colls, function (coll) {
+    // add event listeners
+    coll.addEventListener(&#39;click&#39;, function() {
+      this.classList.toggle(&#39;active&#39;);
+      let content = this.nextElementSibling;
+      if (content.style.display === &#39;block&#39;) {
+        content.style.display = &#39;none&#39;;
+      } else {
+        content.style.display = &#39;block&#39;;
+      }
+    });
+
+    // extended at beginning
+    let content = coll.nextElementSibling;
+    content.style.display = &#39;block&#39;;
+    coll.classList.toggle(&#39;active&#39;);
+  })
+
+  // set up of partition options
+  let select = document.getElementById(&#39;partition&#39;);
+
+  for (const [key, value] of Object.entries(limitsPartition)) {
+    let option = document.createElement(&#39;option&#39;);
+    option.id = key;
+    option.value = key;
+    option.innerText = key;
+    if (key === &#39;haswell64&#39;) {
+      option.selected = &#39;selected&#39;;
+    }
+    select.appendChild(option);
+  }
+
+  // set up of workspace options
+  select = document.getElementById(&#39;workspace-filesystem&#39;);
+
+  for (const [key, value] of Object.entries(limitsWorkspace)) {
+    let option = document.createElement(&#39;option&#39;);
+    option.id = key;
+    option.value = key;
+    option.innerText = key;
+    if (key === &#39;scratch&#39;) {
+      option.selected = &#39;selected&#39;;
+    }
+    select.appendChild(option);
+  }
+
+  // set up info texts
+  for (const [key, value] of Object.entries(info)) {
+    document.getElementById(key + &#39;-info&#39;).title = value[&#39;text&#39;];
+  }
+
+  // initialize UI
+  partitionLimitChange();
+  fillPartitionInfo();
+  fillWorkspaceInfo();
+  fillTooltips();
+  fillTooltipsWorkspace();
+&lt;/script&gt;
+</pre></div>
+</div>
+  </body>
+</html>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/jobs_and_resources"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-23.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

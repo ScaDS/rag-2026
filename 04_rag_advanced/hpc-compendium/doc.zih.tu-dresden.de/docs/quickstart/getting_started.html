@@ -1,0 +1,1250 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Quick Start &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/quickstart/getting_started';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Preparation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../00_preparation/readme.html">Preparation of the session</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/quickstart/getting_started.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../../../../_sources/04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/quickstart/getting_started.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Quick Start</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introductory-instructions">
+   Introductory Instructions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#obtaining-access">
+   Obtaining Access
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#accessing-zih-hpc-systems">
+   Accessing ZIH HPC Systems
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#jupyterhub">
+     JupyterHub
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ssh-connection-command-line">
+     SSH Connection (Command Line)
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#data-transfer-and-data-management">
+   Data Transfer and Data Management
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#allocate-a-workspace">
+     Allocate a Workspace
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#transferring-data-within-zih-hpc-systems">
+     Transferring Data
+     <em>
+      Within
+     </em>
+     ZIH HPC Systems
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#transferring-data-to-from-zih-hpc-systems">
+     Transferring Data
+     <em>
+      To/From
+     </em>
+     ZIH HPC Systems
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#permission-rights">
+     Permission Rights
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#software-environment">
+   Software Environment
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#running-a-program-job">
+   Running a Program/Job
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="quick-start">
+<h1>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this heading">#</a></h1>
+<p>This page will give new users guidance through the steps needed to submit a High Performance
+Computing (HPC) job:</p>
+<ul class="simple">
+<li><p>Applying for the ZIH HPC login</p></li>
+<li><p>Accessing the ZIH HPC systems</p></li>
+<li><p>Transferring code/data to ZIH HPC systems</p></li>
+<li><p>Accessing software</p></li>
+<li><p>Running a parallel HPC job</p></li>
+</ul>
+<section id="introductory-instructions">
+<h2>Introductory Instructions<a class="headerlink" href="#introductory-instructions" title="Permalink to this heading">#</a></h2>
+<p>The ZIH HPC systems are Linux systems (as most HPC systems). Basic Linux knowledge will
+be needed. Being familiar with this <a class="reference external" href="https://hpc-wiki.info/hpc/Shell">collection</a>
+of the most important Linux commands is helpful.</p>
+<p>To work on the ZIH HPC systems and to follow the instructions on this page as well as other
+compendium pages, it is important to be familiar with the
+<a class="reference external" href="https://hpc-wiki.info/hpc/HPC-Dictionary">basic terminology</a> in HPC such as
+<a class="reference external" href="https://hpc-wiki.info/hpc/SSH">SSH</a>, <a class="reference external" href="https://hpc-wiki.info/hpc/HPC-Dictionary#Cluster">cluster</a>,
+<a class="reference external" href="https://hpc-wiki.info/hpc/HPC-Dictionary#Login_Node">login node</a>,
+<a class="reference external" href="https://hpc-wiki.info/hpc/HPC-Dictionary#Backend_Node">compute node</a>,
+<a class="reference external" href="https://hpc-wiki.info/hpc/HPC-Dictionary#File_System">local and shared filesystem</a>,
+<a class="reference external" href="https://hpc-wiki.info/hpc/Shell">command line (CLI) or shell</a>.</p>
+<p>If you are new to HPC, we recommend visiting the introductory article about HPC at
+<a class="reference external" href="https://hpc-wiki.info/hpc/Getting_Started">https://hpc-wiki.info/hpc/Getting_Started</a>.</p>
+<p>Throughout the compendium, <code class="docutils literal notranslate"><span class="pre">marie&#64;login</span></code> is used as an indication of working on the ZIH HPC command
+line and <code class="docutils literal notranslate"><span class="pre">marie&#64;local</span></code> as working on your local machine’s command line. <code class="docutils literal notranslate"><span class="pre">marie</span></code> stands-in for your
+username.</p>
+</section>
+<section id="obtaining-access">
+<h2>Obtaining Access<a class="headerlink" href="#obtaining-access" title="Permalink to this heading">#</a></h2>
+<p>A ZIH HPC login is needed to use the systems. It is different from the ZIH login (which
+members of the TU Dresden have), but has the same credentials. Apply for it via the
+<a class="reference external" href="https://selfservice.zih.tu-dresden.de/index.php/hpclogin/noLogin">HPC login application form</a>.</p>
+<p>Since HPC is structured in projects, there are two possibilities to work on the ZIH HPC systems:</p>
+<ul class="simple">
+<li><p>Creating a
+<a class="reference external" href="https://tu-dresden.de/zih/hochleistungsrechnen/zugang/projektantrag#section-3">new project</a></p></li>
+<li><p>Joining an existing project: e.g. new researchers in an existing project, students in projects for
+teaching purposes. The details will be provided to you by the project administrator.</p></li>
+</ul>
+<p>A HPC project on the ZIH HPC systems includes: a project directory, project group, project members
+(at least admin and manager), and resource quotas for compute time (CPU/GPU hours) and storage.</p>
+<p>It is essential to grant appropriate file permissions so that newly added users can access a
+project appropriately.</p>
+</section>
+<section id="accessing-zih-hpc-systems">
+<h2>Accessing ZIH HPC Systems<a class="headerlink" href="#accessing-zih-hpc-systems" title="Permalink to this heading">#</a></h2>
+<p>ZIH provides five homogeneous compute systems, called clusters. These can only be accessed
+within the TU Dresden campus networks. Access from outside is possible by establishing a
+<a class="reference external" href="https://tu-dresden.de/zih/dienste/service-katalog/arbeitsumgebung/zugang_datennetz/vpn#section-4">VPN connection</a>.
+Each of these clusters can be accessed in the three ways described below, depending on the user’s
+needs and previous knowledge:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../access/jupyterhub.html"><span class="doc std std-doc">JupyterHub</span></a>: browser based connection, easiest way for beginners</p></li>
+<li><p><a class="reference internal" href="../access/ssh_login.html"><span class="doc std std-doc">SSH connection</span></a> (command line/terminal/console): “classical” connection,
+command line knowledge is required</p></li>
+<li><p><a class="reference internal" href="../access/desktop_cloud_visualization.html"><span class="doc std std-doc">Desktop Visualization</span></a>,
+<a class="reference internal" href="../access/graphical_applications_with_webvnc.html"><span class="doc std std-doc">Graphical User Interfaces (GUIs)</span></a> and similar:
+e.g. commercial software such as Ansys, LS-DYNA (are not covered here).</p></li>
+</ul>
+<p>Next, the mentioned access methods are described step by step.</p>
+<p>??? info “VPN connection”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The ZIH
+ [FAQ and service catalog page](https://tu-dresden.de/zih/dienste/service-katalog/arbeitsumgebung/zugang_datennetz/vpn)
+  provides information about how to set up the VPN connection
+   and solutions for most common issues.
+</pre></div>
+</div>
+<section id="jupyterhub">
+<h3>JupyterHub<a class="headerlink" href="#jupyterhub" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Access JupyterHub at
+<a class="reference external" href="https://jupyterhub.hpc.tu-dresden.de">https://jupyterhub.hpc.tu-dresden.de</a>.</p></li>
+<li><p>Log in with your ZIH-login credentials.</p></li>
+<li><p>Choose a profile (system and resources):
+<img alt="Simple form" src="../../../../../_images/jupyterhub-spawner-options.jpg" />
+{: align=”center”}</p></li>
+<li><p>You will see the following - wait until resources are allocated:
+<img alt="Spawning" src="../../../../../_images/jupyterhub-spawning.jpg" /></p></li>
+<li><p>Once JupyterLab is loaded, you will see all available kernels on the system you chose,
+categorized by <code class="docutils literal notranslate"><span class="pre">Notebook</span></code>, <code class="docutils literal notranslate"><span class="pre">Console</span></code> and <code class="docutils literal notranslate"><span class="pre">Other</span></code>, with which you can start right away. If you miss
+software packages that you wish to use, you can
+<a class="reference internal" href="../access/jupyterhub_custom_environments.html"><span class="doc std std-doc">build your own environment and jupyter kernel</span></a>.
+Note that you will now be working in your home directory as opposed to a specific workspace
+(see <span class="xref myst">Data Management and Data Transfer</span>
+section below for more details).</p></li>
+</ol>
+<p>!!! caution “Stopping your Jupyter session”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Once you are done, you have to explicitly stop the Jupyter session by clicking
+`File` &amp;#8594 `Hub Control Panel` &amp;#8594 `Stop My Server`.
+Otherwise it will run for the amount of hours you chose with the spawning profile.
+Logging out will not stop your server.
+</pre></div>
+</div>
+<p>Explore the <a class="reference internal" href="../access/jupyterhub.html"><span class="doc std std-doc">JupyterHub</span></a> page for more information.</p>
+</section>
+<section id="ssh-connection-command-line">
+<h3>SSH Connection (Command Line)<a class="headerlink" href="#ssh-connection-command-line" title="Permalink to this heading">#</a></h3>
+<p>The more “classical” way to work with HPC is based on the command line. After following
+the instructions below, you will be on one of the login nodes.
+This is the starting point for many tasks such as launching jobs and doing data management.</p>
+<p>!!! hint “Using SSH key pair”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>We recommend to create an SSH key pair by following the
+[instructions here](../access/ssh_login.md#before-your-first-connection).
+Using an SSH key pair is beneficial for security reasons, although it is not necessary to work
+with ZIH HPC systems.
+</pre></div>
+</div>
+<p>=== “Windows 10 and higher/Mac/Linux users”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Windows users might need to install [Windows Terminal](https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701?activetab=pivot:overviewtab).
+
+1. Open a terminal/shell/console and type in
+```console
+marie@local$ ssh marie@login2.barnard.hpc.tu-dresden.de
+```
+
+1. After typing in your password, you end up seeing something like the following image.
+
+![Successful SSH login](misc/ssh-success-login.png)
+{: align=&quot;center&quot;}
+</pre></div>
+</div>
+<p>=== “Users of older versions of Windows”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Install and set up [MobaXTerm](../access/ssh_mobaxterm.md) or [PuTTY](../access/ssh_putty.md).
+</pre></div>
+</div>
+<p>For more information explore the <a class="reference internal" href="../access/ssh_login.html"><span class="doc std std-doc">access compendium page</span></a>.
+<span class="xref myst">Configuring default parameters</span>
+makes connecting more comfortable.</p>
+</section>
+</section>
+<section id="data-transfer-and-data-management">
+<h2>Data Transfer and Data Management<a class="headerlink" href="#data-transfer-and-data-management" title="Permalink to this heading">#</a></h2>
+<p>First, it is shown how to allocate a workspace, then how to transfer data within and to/from the ZIH
+HPC system. Also keep in mind to set the file permissions when collaborating with other researchers.</p>
+<section id="allocate-a-workspace">
+<h3>Allocate a Workspace<a class="headerlink" href="#allocate-a-workspace" title="Permalink to this heading">#</a></h3>
+<p>There are different places for storing your data on ZIH HPC systems, called <a class="reference internal" href="../data_lifecycle/file_systems.html"><span class="doc std std-doc">Filesystems</span></a>.
+You need to allocate a <a class="reference internal" href="../data_lifecycle/workspaces.html"><span class="doc std std-doc">workspace</span></a> for your data on one of these
+(see example below).</p>
+<p>The filesystems have different <a class="reference internal" href="../data_lifecycle/file_systems.html"><span class="doc std std-doc">properties</span></a> (available space,
+storage time limit, permission rights). Therefore, choose the one that fits your project best.
+To start we recommend the Lustre filesystem <strong>horse</strong>.</p>
+<p>!!! example “Creating a workspace on Lustre filesystem horse”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The following command allocates a workspace
+
+```console
+marie@login$ ws_allocate -F horse -r 7 -m marie@tu-dresden.de -n number_crunch -d 90
+Info: creating workspace.
+/data/horse/ws/marie-number_crunch
+remaining extensions  : 10
+remaining time in days: 90
+```
+
+To explain:
+
+- `ws_allocate` - command to allocate
+- `-F horse` - on the horse filesystem
+- `-r 7 -m marie@tu-dresden.de` - send a reminder to `marie@tu-dresden.de` 7 days before expiration
+- `-n number_crunch` - workspace name
+- `-d 90` - a life time of 90 days
+
+The path to this workspace is `/data/horse/ws/marie-number_crunch`. You will need it when
+transferring data or running jobs.
+</pre></div>
+</div>
+<p>Find more <a class="reference internal" href="../data_lifecycle/workspaces.html"><span class="doc std std-doc">information on workspaces in the compendium</span></a>.</p>
+</section>
+<section id="transferring-data-within-zih-hpc-systems">
+<h3>Transferring Data <em>Within</em> ZIH HPC Systems<a class="headerlink" href="#transferring-data-within-zih-hpc-systems" title="Permalink to this heading">#</a></h3>
+<p>The approach depends on the data volume: up to 100 MB or above.</p>
+<p>???+ example “<code class="docutils literal notranslate"><span class="pre">cp</span></code>/<code class="docutils literal notranslate"><span class="pre">mv</span></code> for small data (up to 100 MB)”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Use the command `cp` to copy the file `example.R` from your ZIH home directory to a workspace:
+
+ ```console
+ marie@login$ cp /home/marie/example.R /data/horse/ws/marie-number_crunch
+ ```
+
+Analogously use command `mv` to move a file.
+
+Find more examples for the `cp` command on [bropages.org](http://bropages.org/cp) or use
+manual pages with `man cp`.
+</pre></div>
+</div>
+<p>???+ example “<code class="docutils literal notranslate"><span class="pre">dtcp</span></code>/<code class="docutils literal notranslate"><span class="pre">dtmv</span></code> for medium to large data (above 100 MB)”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Use the command `dtcp` to copy the directory `/walrus/ws/large-dataset` from one
+filesystem location to another:
+
+```console
+marie@login$ dtcp -r /walrus/ws/large-dataset /data/horse/ws/marie-number_crunch/data
+```
+Analogously use the command `dtmv` to move a file or folder.
+
+More details on the [datamover](../data_transfer/datamover.md) are available in the data
+transfer section.
+</pre></div>
+</div>
+</section>
+<section id="transferring-data-to-from-zih-hpc-systems">
+<h3>Transferring Data <em>To/From</em> ZIH HPC Systems<a class="headerlink" href="#transferring-data-to-from-zih-hpc-systems" title="Permalink to this heading">#</a></h3>
+<p>???+ example “<code class="docutils literal notranslate"><span class="pre">scp</span></code> for transferring data to ZIH HPC systems”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Copy the file `example.R` from your local machine to a workspace on the ZIH systems:
+
+```console
+marie@local$ scp /home/marie/Documents/example.R marie@dataport1.hpc.tu-dresden.de:/data/horse/ws/marie-number_crunch/
+Password:
+example.R                                                     100%  312    32.2KB/s   00:00
+```
+
+Note, the target path contains `dataport1.hpc.tu-dresden.de`, which is one of the
+so called [dataport nodes](../data_transfer/dataport_nodes.md) that allows for data transfer
+from/to the outside.
+</pre></div>
+</div>
+<p>???+ example “<code class="docutils literal notranslate"><span class="pre">scp</span></code> to transfer data from ZIH HPC systems to local machine”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Copy the file `results.csv` from a workspace on the ZIH HPC systems to your local machine:
+
+```console
+marie@local$ scp marie@dataport1.hpc.tu-dresden.de:/data/horse/ws/marie-number_crunch/results.csv /home/marie/Documents/
+```
+
+Feel free to explore further [examples](http://bropages.org/scp) of the `scp` command
+and possibilities of the [dataport nodes](../data_transfer/dataport_nodes.md).
+</pre></div>
+</div>
+<p>!!! caution “Terabytes of data”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If you are planning to move terabytes or even more from an outside machine into ZIH systems,
+please contact the ZIH [HPC support](mailto:hpc-support@tu-dresden.de) in advance.
+</pre></div>
+</div>
+</section>
+<section id="permission-rights">
+<h3>Permission Rights<a class="headerlink" href="#permission-rights" title="Permalink to this heading">#</a></h3>
+<p>Whenever working within a collaborative environment, take care of the file permissions.
+Esp. after creating and transferring data, file permission configuration might be necessary.</p>
+<p><strong>By default, workspaces are accessible only for the user who allocated the workspace.</strong>
+Files created by a user in the project directory have read-only access for other group members
+by default. Therefore, the correct file permissions must be configured (using <code class="docutils literal notranslate"><span class="pre">chmod</span></code>
+and <code class="docutils literal notranslate"><span class="pre">chgrp</span></code>) for all files in the project home and the workspaces that should be fully
+accessible (read, write, execute) to your collaborator group.
+Please refer to an <a class="reference external" href="https://hpc-wiki.info/hpc/Introduction_to_Linux_in_HPC/Users_and_permissions">overview on users and permissions</a>
+in Linux.</p>
+<p>??? example “Checking and changing file permissions”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The following example checks for file permissions (`ls -la`) of the file dataset.csv and adds
+permissions for write access for the group (`chmod g+w`).
+
+```console
+marie@login$ ls -la /data/horse/ws/marie-training-data/dataset.csv # list file permissions
+-rw-r--r-- 1 marie p_number_crunch 0 12. Jan 15:11 /data/horse/ws/marie-training-data/dataset.csv
+
+marie@login$ chmod g+w /data/horse/ws/marie-training-data/dataset.csv # add write permissions
+
+marie@login$ ls -la /data/horse/ws/marie-training-data/dataset.csv # list file permissions again
+-rw-rw-r-- 1 marie p_number_crunch 0 12. Jan 15:11 /data/horse/ws/marie-training-data/dataset.csv
+```
+</pre></div>
+</div>
+<p>??? hint “GUI-based data management”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>- Transferring data and managing file permissions for smaller amounts of data can be handled
+by SSH clients.
+- More so for Linux-based systems, `sshfs` (a command-line tool for safely mounting a remote
+folder from a server to a local machine) can be used to mount user home, project home or
+workspaces within the local folder structure.
+Data can be transferred directly with drag and drop in your local file explorer.
+Moreover, this approach makes it possible to edit files with your common editors and tools on
+the local machine.
+- Windows users can use [SFTP Drive](https://www.nsoftware.com/sftp/drive/) utility, to mount
+remote filesystems as Windows drives.
+</pre></div>
+</div>
+</section>
+</section>
+<section id="software-environment">
+<h2>Software Environment<a class="headerlink" href="#software-environment" title="Permalink to this heading">#</a></h2>
+<p>The <a class="reference internal" href="../software/overview.html"><span class="doc std std-doc">software</span></a> on the ZIH HPC systems is not installed system-wide,
+but is provided within so-called <a class="reference internal" href="../software/modules.html"><span class="doc std std-doc">modules</span></a>.
+In order to use specific software you need to “load” the respective module.
+This modifies the current environment (so only for the current user in the current session)
+such that the software becomes available.</p>
+<p>!!! note</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Different clusters (HPC systems) have different software or might have different versions of
+the same available software. See [software](../software/overview.md) for more details.
+</pre></div>
+</div>
+<p>Use the command <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">spider</span> <span class="pre">&lt;software&gt;</span></code> to check all available versions of a software that is
+available on the one specific system you are currently on:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>module<span class="w"> </span>spider<span class="w"> </span>Python
+<span class="go">--------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="go">  Python:</span>
+<span class="go">--------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="go">    Description:</span>
+<span class="go">      Python is a programming language that lets you work more quickly and integrate your systems more effectively.</span>
+
+<span class="go">     Versions:</span>
+<span class="go">        Python/2.7.14-foss-2018a</span>
+<span class="go">        [...]</span>
+<span class="go">        Python/3.8.6</span>
+<span class="go">        Python/3.9.5-bare</span>
+<span class="go">        Python/3.9.5</span>
+<span class="go">     Other possible modules matches:</span>
+<span class="go">        Biopython  Boost.Python  GitPython  IPython  PythonAnaconda  flatbuffers-python  netcdf4-python  protobuf-python  python</span>
+
+<span class="go">--------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="go">  To find other possible module matches execute:</span>
+
+<span class="gp">      $ </span>module<span class="w"> </span>-r<span class="w"> </span>spider<span class="w"> </span><span class="s1">&#39;.*Python.*&#39;</span>
+
+<span class="go">--------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="go">  For detailed information about a specific &quot;Python&quot; package (including how to load the modules) use the module&#39;s full name.</span>
+<span class="go">  Note that names that have a trailing (E) are extensions provided by other modules.</span>
+<span class="go">  For example:</span>
+
+<span class="gp">     $ </span>module<span class="w"> </span>spider<span class="w"> </span>Python/3.9.5
+<span class="go">--------------------------------------------------------------------------------------------------------------------------------</span>
+</pre></div>
+</div>
+<p>We now see the list of available Python versions.</p>
+<ul class="simple">
+<li><p>To get information on a specific module, use <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">spider</span> <span class="pre">&lt;software&gt;/&lt;version&gt;</span></code>:</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>module<span class="w"> </span>spider<span class="w"> </span>Python/3.9.5
+<span class="go">--------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="go">  Python: Python/3.9.5</span>
+<span class="go">--------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="go">    Description:</span>
+<span class="go">      Python is a programming language that lets you work more quickly and integrate your systems more effectively.</span>
+
+
+<span class="go">    You will need to load all module(s) on any one of the lines below before the &quot;Python/3.10.4&quot; module is available to load.</span>
+
+<span class="go">      GCCcore/11.3.0</span>
+
+<span class="go">    This module provides the following extensions:</span>
+
+<span class="go">      alabaster/0.7.12 (E), appdirs/1.4.4 (E), asn1crypto/1.4.0 (E), atomicwrites/1.4.0 (E), attrs/21.2.0 (E), Babel/2.9.1 (E), bcrypt/3.2.0 (E), bitstring/3.1.7 (E), blist/1.3.6 (E), CacheControl/0.12.6 (E), cachy/0.3.0 (E), certifi/2020.12.5 (E), cffi/1.14.5 (E), chardet/4.0.0 (E), cleo/0.8.1 (E), click/7.1.2 (E), clikit/0.6.2 (E), colorama/</span>
+<span class="go">      [...]</span>
+
+<span class="go">    Help:</span>
+<span class="go">      Description</span>
+<span class="go">      ===========</span>
+<span class="go">      Python is a programming language that lets you work more quickly and integrate your systems</span>
+<span class="go">       more effectively.</span>
+
+
+<span class="go">      More information</span>
+<span class="go">      ================</span>
+<span class="go">       - Homepage: https://python.org/</span>
+
+
+<span class="go">      Included extensions</span>
+<span class="go">      ===================</span>
+<span class="go">      alabaster-0.7.12, appdirs-1.4.4, asn1crypto-1.4.0, atomicwrites-1.4.0,</span>
+<span class="go">      attrs-21.2.0, Babel-2.9.1, bcrypt-3.2.0, bitstring-3.1.7, blist-1.3.6,</span>
+<span class="go">      [...]</span>
+</pre></div>
+</div>
+<p>In some cases it is required to load additional modules before loading the desired software.
+In the example above, it is <code class="docutils literal notranslate"><span class="pre">GCCcore/11.3.0</span></code>.</p>
+<ul class="simple">
+<li><p>Load prerequisites and the desired software:</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>module<span class="w"> </span>load<span class="w"> </span>GCCcore/11.3.0<span class="w">  </span><span class="c1"># load prerequisites</span>
+
+<span class="go">Module GCCcore/11.3.0 loaded.</span>
+
+<span class="gp">marie@login$ </span>module<span class="w"> </span>load<span class="w"> </span>Python/3.9.5<span class="w">   </span><span class="c1"># load desired version of software</span>
+<span class="go">Module Python/3.9.5 and 11 dependencies loaded.</span>
+</pre></div>
+</div>
+<p>For additional information refer to the detailed documentation on <a class="reference internal" href="../software/modules.html"><span class="doc std std-doc">modules</span></a>.</p>
+<p>!!! hint “Special hints on different software”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>See also the section &quot;Applications and Software&quot; for more information on e.g.
+[Python](../software/data_analytics_with_python.md),
+[R](../software/data_analytics_with_r.md),
+[Mathematica/MatLab](../software/mathematics.md), etc.
+</pre></div>
+</div>
+<p>!!! hint “Tip for Python packages”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The use of [Virtual Environments](../software/python_virtual_environments.md)
+(best in [workspaces](../data_lifecycle/workspaces.md)) is required if you want to install
+additional Python packages with `pip`.
+When using `pip install` without an activated virtual environment you will get this error:
+&gt; ERROR: Could not find an activated virtualenv (required).
+
+Please check the module system, even for specific Python packages,
+e.g. `numpy`, `tensorflow` or `pytorch`.
+Those modules may provide much better performance than the packages found on PyPi
+(installed via `pip`) which have to work on any system while our installation is optimized for
+each ZIH system to make the best use of the specific CPUs and GPUs found here.
+However the Python package ecosystem (like others) is very heterogeneous and dynamic,
+with daily updates.
+The central update cycle for software on ZIH HPC systems is approximately every six months.
+So the software installed as modules might be a bit older.
+</pre></div>
+</div>
+<p>!!! warning</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>When explicitely loading multiple modules you need to make sure that they are compatible.
+So try to stick to modules using the same toolchain.
+See the [Toolchains section](../software/modules.md#toolchains) for more information.
+</pre></div>
+</div>
+</section>
+<section id="running-a-program-job">
+<h2>Running a Program/Job<a class="headerlink" href="#running-a-program-job" title="Permalink to this heading">#</a></h2>
+<p>At HPC systems, computational work and resource requirements are encapsulated into so-called jobs.
+Since all computational resources are shared with other users, these resources need to be
+allocated. For managing these allocations a so-called job scheduler or a batch system is used -
+on ZIH systems this is <a class="reference external" href="https://slurm.schedmd.com/quickstart.html">Slurm</a>.
+It is possible to run a job <span class="xref myst">interactively</span>
+(real time execution) or to submit it as a <span class="xref myst">batch job</span>
+(scheduled execution).</p>
+<p>For beginners, we highly advise to run the job interactively. To do so, use the <code class="docutils literal notranslate"><span class="pre">srun</span></code> command
+on any of the ZIH HPC clusters (systems).
+For this <code class="docutils literal notranslate"><span class="pre">srun</span></code> command, it is possible to define options like the number of tasks (<code class="docutils literal notranslate"><span class="pre">--ntasks</span></code>),
+number of CPUs per task (<code class="docutils literal notranslate"><span class="pre">--cpus-per-task</span></code>),
+the amount of time you would like to keep this interactive session open (<code class="docutils literal notranslate"><span class="pre">--time</span></code>), memory per
+CPU (<code class="docutils literal notranslate"><span class="pre">--mem-per-cpu</span></code>) and many others.
+See <span class="xref myst">Slurm documentation</span> for more details.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>srun<span class="w"> </span>--ntasks<span class="o">=</span><span class="m">1</span><span class="w"> </span>--cpus-per-task<span class="o">=</span><span class="m">4</span><span class="w"> </span>--time<span class="o">=</span><span class="m">1</span>:00:00<span class="w"> </span>--mem-per-cpu<span class="o">=</span><span class="m">1700</span><span class="w"> </span>--pty<span class="w"> </span>bash<span class="w"> </span>-l<span class="w"> </span><span class="c1">#allocate 4 cores for the interactive job</span>
+<span class="gp">marie@compute$ </span>module<span class="w"> </span>load<span class="w"> </span>Python<span class="w"> </span><span class="c1">#load necessary packages</span>
+<span class="gp">marie@compute$ </span><span class="nb">cd</span><span class="w"> </span>/data/horse/ws/marie-number_crunch/<span class="w"> </span><span class="c1">#go to your allocated workspace</span>
+<span class="gp">marie@compute$ </span>python<span class="w"> </span>test.py<span class="w"> </span><span class="c1">#execute your file</span>
+<span class="go">Hello, World!</span>
+</pre></div>
+</div>
+<p>For more information, follow the <span class="xref myst">interactive jobs</span>
+or the <span class="xref myst">batch job</span> documentation.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/quickstart"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introductory-instructions">
+   Introductory Instructions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#obtaining-access">
+   Obtaining Access
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#accessing-zih-hpc-systems">
+   Accessing ZIH HPC Systems
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#jupyterhub">
+     JupyterHub
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ssh-connection-command-line">
+     SSH Connection (Command Line)
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#data-transfer-and-data-management">
+   Data Transfer and Data Management
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#allocate-a-workspace">
+     Allocate a Workspace
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#transferring-data-within-zih-hpc-systems">
+     Transferring Data
+     <em>
+      Within
+     </em>
+     ZIH HPC Systems
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#transferring-data-to-from-zih-hpc-systems">
+     Transferring Data
+     <em>
+      To/From
+     </em>
+     ZIH HPC Systems
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#permission-rights">
+     Permission Rights
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#software-environment">
+   Software Environment
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#running-a-program-job">
+   Running a Program/Job
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-23.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

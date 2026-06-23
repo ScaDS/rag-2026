@@ -1,0 +1,1552 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Batch System Slurm &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/jobs_and_resources/slurm';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Preparation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../00_preparation/readme.html">Preparation of the session</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/jobs_and_resources/slurm.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../../../../_sources/04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/jobs_and_resources/slurm.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Batch System Slurm</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#job-submission">
+   Job Submission
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#options">
+   Options
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#host-list">
+     Host List
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#number-of-switches">
+     Number of Switches
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#interactive-jobs">
+   Interactive Jobs
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#interactive-x11-gui-jobs">
+     Interactive X11/GUI Jobs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#batch-jobs">
+   Batch Jobs
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#job-files">
+     Job Files
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#accounts">
+   Accounts
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#default-account">
+     Default Account
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#listing-all-accounts">
+     Listing All Accounts
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#specify-account">
+     Specify Account
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#avoid-using-simultaneous-multithreading-smt">
+   Avoid Using Simultaneous Multithreading (SMT)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#heterogeneous-jobs">
+   Heterogeneous Jobs
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#limitations">
+     Limitations
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#manage-and-control-jobs">
+   Manage and Control Jobs
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#job-and-slurm-monitoring">
+     Job and Slurm Monitoring
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#editing-jobs">
+     Editing Jobs
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#canceling-jobs">
+     Canceling Jobs
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#evaluating-jobs">
+     Evaluating Jobs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#jobs-at-reservations">
+   Jobs at Reservations
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#node-local-storage-in-jobs">
+   Node-Local Storage in Jobs
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="batch-system-slurm">
+<h1>Batch System Slurm<a class="headerlink" href="#batch-system-slurm" title="Permalink to this heading">#</a></h1>
+<p>ZIH uses the batch system Slurm for resource management and job scheduling. Compute nodes are not
+accessed directly, but addressed through Slurm. You specify the needed resources
+(cores, memory, GPU, time, …) and Slurm will schedule your job for execution.</p>
+<p>When logging in to ZIH systems, you are placed on a login node. There, you can manage your
+<a class="reference internal" href="../data_lifecycle/overview.html"><span class="doc std std-doc">data life cycle</span></a>,
+setup experiments, and
+edit and prepare jobs. The login nodes are not suited for computational work! From the login nodes,
+you can interact with the batch system, e.g., submit and monitor your jobs.</p>
+<p>??? note “Batch System”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The batch system is the central organ of every HPC system users interact with its compute
+resources. The batch system finds an adequate compute system (partition) for your compute jobs.
+It organizes the queueing and messaging, if all resources are in use. If resources are available
+for your job, the batch system allocates and connects to these resources, transfers runtime
+environment, and starts the job.
+
+A workflow could look like this:
+
+```mermaid
+sequenceDiagram
+    user -&gt;&gt;+ login node: run programm
+    login node -&gt;&gt; login node: kill after 5 min
+    login node -&gt;&gt;- user: Killed!
+    user -&gt;&gt; login node: salloc [...]
+    login node -&gt;&gt; Slurm: Request resources
+    Slurm -&gt;&gt; user: resources
+    user -&gt;&gt;+ allocated resources: srun [options] [command]
+    allocated resources -&gt;&gt; allocated resources: run command (on allocated nodes)
+    allocated resources -&gt;&gt;- user: program finished
+    user -&gt;&gt;+ allocated resources: srun [options] [further_command]
+    allocated resources -&gt;&gt; allocated resources: run further command
+    allocated resources -&gt;&gt;- user: program finished
+    user -&gt;&gt;+ allocated resources: srun [options] [further_command]
+    allocated resources -&gt;&gt; allocated resources: run further command
+    Slurm -&gt;&gt; allocated resources: Job limit reached/exceeded
+    allocated resources -&gt;&gt;- user: Job limit reached
+```
+</pre></div>
+</div>
+<p>??? note “Batch Job”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>At HPC systems, computational work and resource requirements are encapsulated into so-called
+jobs. In order to allow the batch system an efficient job placement it needs these
+specifications:
+
+* requirements: number of nodes and cores, memory per core, additional resources (GPU)
+* maximum run-time
+* HPC project for accounting
+* who gets an email on which occasion
+
+Moreover, the [runtime environment](../software/overview.md) as well as the executable and
+certain command-line arguments have to be specified to run the computational work.
+</pre></div>
+</div>
+<p>This page provides a brief overview on</p>
+<ul class="simple">
+<li><p><span class="xref myst">Slurm options</span> to specify resource requirements,</p></li>
+<li><p>how to submit <span class="xref myst">interactive</span> and <span class="xref myst">batch jobs</span>,</p></li>
+<li><p>how to <span class="xref myst">write job files</span>,</p></li>
+<li><p>how to <span class="xref myst">manage and control your jobs</span>.</p></li>
+</ul>
+<p>If you are already familiar with Slurm, you might be more interested in our collection of
+<a class="reference internal" href="slurm_examples.html"><span class="doc std std-doc">job examples</span></a> and <a class="reference internal" href="slurm_examples_with_gpu.html"><span class="doc std std-doc">job examples for GPU usage</span></a>.
+There is also a ton of external resources regarding Slurm. We recommend these links for detailed
+information:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://slurm.schedmd.com/">slurm.schedmd.com</a> provides the official documentation comprising
+manual pages, tutorials, examples, etc.</p></li>
+<li><p><a class="reference external" href="https://www.schedmd.com/slurmdocs/rosetta.html">Comparison with other batch systems</a></p></li>
+</ul>
+<section id="job-submission">
+<h2>Job Submission<a class="headerlink" href="#job-submission" title="Permalink to this heading">#</a></h2>
+<p>There are three basic Slurm commands for job submission and execution:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">srun</span></code>: Run a parallel application (and, if necessary, allocate resources first).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sbatch</span></code>: Submit a batch script to Slurm for later execution.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">salloc</span></code>: Obtain a Slurm job allocation (i.e., resources like CPUs, nodes and GPUs) for
+interactive use. Release the allocation when finished.</p></li>
+</ol>
+<p>Executing a program with <code class="docutils literal notranslate"><span class="pre">srun</span></code> directly on the shell will be blocking and launch an
+<span class="xref myst">interactive job</span>. Apart from short test runs, it is recommended to submit your
+jobs to Slurm for later execution by using <span class="xref myst">batch jobs</span>. For that, you can conveniently
+put the parameters in a <span class="xref myst">job file</span>, which you can submit using <code class="docutils literal notranslate"><span class="pre">sbatch</span> <span class="pre">[options]</span> <span class="pre">&lt;job</span> <span class="pre">file&gt;</span></code>.</p>
+<p>After submission, your job gets a unique job ID, which is stored in the environment variable
+<code class="docutils literal notranslate"><span class="pre">SLURM_JOB_ID</span></code> at job runtime. The command <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> outputs the job ID to stderr. Furthermore, you
+can find it via <code class="docutils literal notranslate"><span class="pre">squeue</span> <span class="pre">--me</span></code>. The job ID allows you to
+<span class="xref myst">manage and control</span> your jobs.</p>
+<p>!!! warning “srun vs. mpirun”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>On ZIH systems, `srun` is used to run your parallel application. The use of `mpirun` is provenly
+broken on cluster `Alpha` for jobs requiring more than one node. Especially when
+using code from github projects, double-check its configuration by looking for a line like
+&#39;submit command  mpirun -n $ranks ./app&#39; and replace it with &#39;srun ./app&#39;.
+
+Otherwise, this may lead to wrong resource distribution and thus job failure, or tremendous
+slowdowns of your application.
+</pre></div>
+</div>
+</section>
+<section id="options">
+<h2>Options<a class="headerlink" href="#options" title="Permalink to this heading">#</a></h2>
+<p>The following table contains the most important options for <code class="docutils literal notranslate"><span class="pre">srun</span></code>, <code class="docutils literal notranslate"><span class="pre">sbatch</span></code>, <code class="docutils literal notranslate"><span class="pre">salloc</span></code> to specify
+resource requirements and control communication.</p>
+<p>??? tip “Options Table (see <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">sbatch</span></code> for all available options)”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>| Slurm Option               | Description |
+|:---------------------------|:------------|
+| `-n, --ntasks=&lt;N&gt;`         | Total number of (MPI) tasks (default: 1) |
+| `-N, --nodes=&lt;N&gt;`          | Number of compute nodes |
+| `--ntasks-per-node=&lt;N&gt;`    | Number of tasks per allocated node to start (default: 1) |
+| `-c, --cpus-per-task=&lt;N&gt;`  | Number of CPUs per task; needed for multithreaded (e.g. OpenMP) jobs; typically `N` should be equal to `OMP_NUM_THREADS` |
+| `--mem-per-cpu=&lt;size&gt;`     | Memory need per allocated CPU in MB |
+| `-t, --time=&lt;HH:MM:SS&gt;`    | Maximum runtime of the job |
+| `--mail-user=&lt;your email&gt;` | Get updates about the status of the jobs |
+| `--mail-type=ALL`          | For what type of events you want to get a mail; valid options: `ALL`, `BEGIN`, `END`, `FAIL`, `REQUEUE` |
+| `-J, --job-name=&lt;name&gt;`    | Name of the job shown in the queue and in mails (cut after 24 chars) |
+| `--no-requeue`             | Disable requeueing of the job in case of node failure (default: enabled) |
+| `--exclusive`              | Exclusive usage of compute nodes; you will be charged for all CPUs/cores on the node |
+| `-A, --account=&lt;project&gt;`  | Charge resources used by this job to the specified project |
+| `-o, --output=&lt;filename&gt;`  | File to save all normal output (stdout) (default: `slurm-%j.out`) |
+| `-e, --error=&lt;filename&gt;`   | File to save all error output (stderr)  (default: `slurm-%j.out`) |
+| `-a, --array=&lt;arg&gt;`        | Submit an array job ([examples](slurm_examples.md#array-jobs)) |
+| `-w &lt;node1&gt;,&lt;node2&gt;,...`   | Restrict job to run on specific nodes only |
+| `-x &lt;node1&gt;,&lt;node2&gt;,...`   | Exclude specific nodes from job |
+| `-L, --licenses=&lt;license1&gt;,&lt;license2&gt;` | Specification of licenses (or other resources available on all nodes of the cluster) which must be allocated to this job. (see [Filesystem License Flags](../data_lifecycle/working.md#filesystem-license-flags)) |
+| `--switches=&lt;count&gt;[@max-time]` | Optimum switches and max time to wait for optimum |
+| `--signal=&lt;sig_num&gt;[@sig_time]` | Send signal `sig_num` to job `sig_time` before time limit (see [Checkpoint/Restart page](checkpoint_restart.md#checkpointing-via-slurm-signal-handler)) |
+| `--test-only`              | Retrieve estimated start time of a job considering the job queue; does not actually submit the job nor run the application |
+</pre></div>
+</div>
+<p>!!! note “Output and Error Files”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>When redirecting stderr and stderr into a file using `--output=&lt;filename&gt;` and
+`--stderr=&lt;filename&gt;`, make sure the target path is writeable on the
+compute nodes, i.e., it may not point to a read-only mounted
+[filesystem](../data_lifecycle/overview.md) like `/projects.`
+</pre></div>
+</div>
+<p>!!! note “No free lunch”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Runtime and memory limits are enforced. Please refer to the page
+[Slurm resource limits](slurm_limits.md) for a detailed overview.
+</pre></div>
+</div>
+<section id="host-list">
+<h3>Host List<a class="headerlink" href="#host-list" title="Permalink to this heading">#</a></h3>
+<p>If you want to place your job onto specific nodes, use <code class="docutils literal notranslate"><span class="pre">-w,</span> <span class="pre">--nodelist=&lt;host1,host2,..&gt;</span></code> with a
+list of hosts that will work for you.</p>
+</section>
+<section id="number-of-switches">
+<h3>Number of Switches<a class="headerlink" href="#number-of-switches" title="Permalink to this heading">#</a></h3>
+<p>You can fine tune your job by specifying the number of switches desired for the job allocation and
+optionally the maximum time to wait for that number of switches. The corresponding option to
+<code class="docutils literal notranslate"><span class="pre">sbatch</span></code> is <code class="docutils literal notranslate"><span class="pre">--switches=&lt;count&gt;[&#64;max-time]</span></code>. The job remains pending until it either finds an
+allocation with desired switch count or the time limit expires. Acceptable time formats include
+“minutes”, “minutes:seconds”, “hours:minutes:seconds”, “days-hours”, “days-hours:minutes” and
+“days-hours:minutes:seconds”. For a detailed explanation, please refer to the
+<a class="reference external" href="https://slurm.schedmd.com/sbatch.html#OPT_switches">sbatch online documentation</a>.</p>
+</section>
+</section>
+<section id="interactive-jobs">
+<h2>Interactive Jobs<a class="headerlink" href="#interactive-jobs" title="Permalink to this heading">#</a></h2>
+<p>Interactive activities like editing, compiling, preparing experiments etc. are normally limited to
+the login nodes. For longer interactive sessions, you can allocate resources on the compute node
+with the command <code class="docutils literal notranslate"><span class="pre">salloc</span></code>. It takes the same options as <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> to specify the required resources.</p>
+<p><code class="docutils literal notranslate"><span class="pre">salloc</span></code> returns a new shell on the node where you submitted the job. You need to use the command
+<code class="docutils literal notranslate"><span class="pre">srun</span></code> in front of the following commands to have these commands executed on the allocated
+resources. If you request for  more than one task, please be aware that <code class="docutils literal notranslate"><span class="pre">srun</span></code> will run the command
+on each allocated task by default! To release the allocated resources, invoke the command <code class="docutils literal notranslate"><span class="pre">exit</span></code> or
+<code class="docutils literal notranslate"><span class="pre">scancel</span> <span class="pre">&lt;jobid&gt;</span></code>.</p>
+<p>!!! example “Example: Interactive allocation using <code class="docutils literal notranslate"><span class="pre">salloc</span></code>”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The following code listing depicts the allocation of two nodes with two tasks on each node with a
+time limit of one hour on the cluster `Barnard` for interactive usage.
+
+```console linenums=&quot;1&quot;
+marie@login.barnard$ salloc --nodes=2 --ntasks-per-node=2 --time=01:00:00
+salloc: Pending job allocation 1234567
+salloc: job 1234567 queued and waiting for resources
+salloc: job 1234567 has been allocated resources
+salloc: Granted job allocation 1234567
+salloc: Waiting for resource configuration
+salloc: Nodes n[1184,1223] are ready for job
+[...]
+marie@login.barnard$ hostname
+login1
+marie@login.barnard$ srun hostname
+n1184
+n1184
+n1223
+n1223
+marie@login.barnard$ exit # ending the resource allocation
+```
+
+After Slurm successfully allocated resources for the job, a new shell is created on the submit
+host (cf. lines 9-10).
+
+In order to use the allocated resources, you need to invoke your commands with `srun` (cf. lines
+11 ff).
+</pre></div>
+</div>
+<p>The command <code class="docutils literal notranslate"><span class="pre">srun</span></code> also creates an allocation, if it is running outside any <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> or <code class="docutils literal notranslate"><span class="pre">salloc</span></code>
+allocation.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>srun<span class="w"> </span>--pty<span class="w"> </span>--ntasks<span class="o">=</span><span class="m">1</span><span class="w"> </span>--cpus-per-task<span class="o">=</span><span class="m">4</span><span class="w"> </span>--time<span class="o">=</span><span class="m">1</span>:00:00<span class="w"> </span>--mem-per-cpu<span class="o">=</span><span class="m">1700</span><span class="w"> </span>bash<span class="w"> </span>-l
+<span class="go">srun: job 13598400 queued and waiting for resources</span>
+<span class="go">srun: job 13598400 has been allocated resources</span>
+<span class="gp">marie@compute$ # </span>Now,<span class="w"> </span>you<span class="w"> </span>can<span class="w"> </span>start<span class="w"> </span>interactive<span class="w"> </span>work<span class="w"> </span>with<span class="w"> </span>e.g.<span class="w"> </span><span class="m">4</span><span class="w"> </span>cores
+</pre></div>
+</div>
+<p>Since Slurm 20.11 <code class="docutils literal notranslate"><span class="pre">--exclusive</span></code> is the default for <code class="docutils literal notranslate"><span class="pre">srun</span></code> as a step, that means you have to
+use <code class="docutils literal notranslate"><span class="pre">--overlap</span></code>, if you want to run <code class="docutils literal notranslate"><span class="pre">srun</span></code> within a <code class="docutils literal notranslate"><span class="pre">srun</span></code> allocation.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>srun<span class="w"> </span>--pty<span class="w"> </span>bash<span class="w"> </span>-l
+<span class="go">srun: job 27410688 queued and waiting for resources</span>
+<span class="go">srun: job 27410688 has been allocated resources</span>
+<span class="gp">marie@compute$ </span>srun<span class="w"> </span>--overlap<span class="w"> </span>hostname
+<span class="go">taurusi6604.taurus.hrsk.tu-dresden.de</span>
+</pre></div>
+</div>
+<p>!!! note “Using <code class="docutils literal notranslate"><span class="pre">module</span></code> commands in interactive mode”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The [module commands](../software/modules.md) are made available by sourcing the files
+`/etc/profile` and `~/.bashrc`. This is done automatically by passing the parameter `-l` to your
+shell, as shown in the example above. If you missed adding `-l` at submitting the interactive
+session, no worry, you can source this files also later on manually (`source /etc/profile`).
+</pre></div>
+</div>
+<section id="interactive-x11-gui-jobs">
+<h3>Interactive X11/GUI Jobs<a class="headerlink" href="#interactive-x11-gui-jobs" title="Permalink to this heading">#</a></h3>
+<p>Slurm will forward your X11 credentials to the first (or even all) node for a job with the
+(undocumented) <code class="docutils literal notranslate"><span class="pre">--x11</span></code> option.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>srun<span class="w"> </span>--ntasks<span class="o">=</span><span class="m">1</span><span class="w"> </span>--pty<span class="w"> </span>--x11<span class="o">=</span>first<span class="w"> </span>xeyes
+</pre></div>
+</div>
+<p>!!! hint “X11 error”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If you are getting the error:
+
+```Bash
+srun: error: x11: unable to connect node taurusiXXXX
+```
+
+that probably means you still have an old host key for the target node in your
+`~.ssh/known_hosts` file (e.g. from pre-SCS5). This can be solved either by removing the entry
+from your `known_hosts` or by simply deleting the `known_hosts` file altogether if you don&#39;t have
+important other entries in it.
+</pre></div>
+</div>
+</section>
+</section>
+<section id="batch-jobs">
+<h2>Batch Jobs<a class="headerlink" href="#batch-jobs" title="Permalink to this heading">#</a></h2>
+<p>Working interactively using <code class="docutils literal notranslate"><span class="pre">srun</span></code> and <code class="docutils literal notranslate"><span class="pre">salloc</span></code> is a good starting point for testing and compiling.
+But, as soon as you leave the testing stage, we highly recommend to use batch jobs.
+Batch jobs are encapsulated within <span class="xref myst">job files</span> and submitted to the batch system using
+<code class="docutils literal notranslate"><span class="pre">sbatch</span></code> for later execution. A job file is basically a script holding the resource requirements,
+environment settings and the commands for executing the application. Using batch jobs and job files
+has multiple advantages*:</p>
+<ul class="simple">
+<li><p>You can reproduce your experiments and work, because all steps are saved in a file.</p></li>
+<li><p>You can easily share your settings and experimental setup with colleagues.</p></li>
+</ul>
+<p>*) If job files are version controlled or environment <code class="docutils literal notranslate"><span class="pre">env</span></code> is saved along with Slurm output.</p>
+<p>!!! hint “Syntax: Submitting a batch job”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```console
+marie@login$ sbatch [options] &lt;job_file&gt;
+```
+</pre></div>
+</div>
+<section id="job-files">
+<h3>Job Files<a class="headerlink" href="#job-files" title="Permalink to this heading">#</a></h3>
+<p>Job files have to be written with the following structure.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1"># ^Batch script starts with shebang line</span>
+
+<span class="c1">#SBATCH --ntasks=24                   # #SBATCH lines request resources and</span>
+<span class="c1">#SBATCH --time=01:00:00               # specify Slurm options</span>
+<span class="c1">#SBATCH --account=&lt;KTR&gt;               #</span>
+<span class="c1">#SBATCH --job-name=fancyExp           # All #SBATCH lines have to follow uninterrupted</span>
+<span class="c1">#SBATCH --output=simulation-%j.out    # after the shebang line</span>
+<span class="c1">#SBATCH --error=simulation-%j.err     # Comments start with # and do not count as interruptions</span>
+
+module<span class="w"> </span>purge<span class="w">                          </span><span class="c1"># Set up environment, e.g., clean/switch modules environment</span>
+module<span class="w"> </span>load<span class="w"> </span>&lt;module1<span class="w"> </span>module2&gt;<span class="w">         </span><span class="c1"># and load necessary modules</span>
+
+srun<span class="w"> </span>./application<span class="w"> </span><span class="o">[</span>options<span class="o">]</span><span class="w">          </span><span class="c1"># Execute parallel application with srun</span>
+</pre></div>
+</div>
+<p>The following two examples show the basic resource specifications for a pure OpenMP application and
+a pure MPI application, respectively. Within the section <a class="reference internal" href="slurm_examples.html"><span class="doc std std-doc">Job Examples</span></a>, we
+provide a comprehensive collection of job examples.</p>
+<p>??? example “Job file OpenMP”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```bash
+#!/bin/bash
+
+#SBATCH --nodes=1
+#SBATCH --tasks-per-node=1
+#SBATCH --cpus-per-task=64
+#SBATCH --time=01:00:00
+#SBATCH --account=&lt;account&gt;
+
+module purge
+module load &lt;modules&gt;
+
+export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
+srun ./path/to/openmp_application
+```
+
+* Submisson: `marie@login$ sbatch batch_script.sh`
+* Run with fewer CPUs: `marie@login$ sbatch --cpus-per-task=14 batch_script.sh`
+</pre></div>
+</div>
+<p>??? example “Job file MPI”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```bash
+#!/bin/bash
+
+#SBATCH --ntasks=64
+#SBATCH --time=01:00:00
+#SBATCH --account=&lt;account&gt;
+
+module purge
+module load &lt;modules&gt;
+
+srun ./path/to/mpi_application
+```
+
+* Submisson: `marie@login$ sbatch batch_script.sh`
+* Run with fewer MPI tasks: `marie@login$ sbatch --ntasks=14 batch_script.sh`
+</pre></div>
+</div>
+</section>
+</section>
+<section id="accounts">
+<h2>Accounts<a class="headerlink" href="#accounts" title="Permalink to this heading">#</a></h2>
+<p>You may be assigned to one or more projects, which may differ in terms of research
+goals and methods, team members, and duration. Furthermore, each project has its own budget for
+storage and compute time. Projects are reflected as so-called <strong>accounts</strong> in Slurm.
+These accounts allow for tracking and managing resource usage for a specific project, group, or
+funding allocation. Although, you have set a <span class="xref myst">default account</span>, you must
+<span class="xref myst">specify the correct account</span> when submitting jobs.</p>
+<section id="default-account">
+<h3>Default Account<a class="headerlink" href="#default-account" title="Permalink to this heading">#</a></h3>
+<p>You can ask Slurm for your default account using the <code class="docutils literal notranslate"><span class="pre">sacctmgr</span></code> command.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>sacctmgr<span class="w"> </span>--parsable2<span class="w"> </span>--noheader<span class="w"> </span>show<span class="w"> </span>user<span class="w"> </span>where<span class="w"> </span><span class="nv">name</span><span class="o">=</span><span class="nv">$USER</span><span class="w"> </span><span class="nv">format</span><span class="o">=</span>defaultaccount
+<span class="go">p_number_crunch</span>
+</pre></div>
+</div>
+<p>As a regular user, you can’t change your default account yourself in a permanent way - that
+requires admin privileges. However, you can override the default account on a per-job basis or
+by setting an environment variable in your shell (, e.g., in your <code class="docutils literal notranslate"><span class="pre">.bashrc</span></code>).</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SLURM_ACCOUNT</span></code> - interpreted by the <code class="docutils literal notranslate"><span class="pre">srun</span></code> command</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SALLOC_ACCOUNT</span></code> - interpreted by the <code class="docutils literal notranslate"><span class="pre">salloc</span></code> command</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SBATCH_ACCOUNT</span></code> - interpreted by the <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> command</p></li>
+</ul>
+<p>!!! warning “Precedence”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The environment variable `SBATCH_ACCOUNT` takes precedence over account settings specified in a
+job script via `#SBATCH --account=&lt;account&gt;`.
+</pre></div>
+</div>
+</section>
+<section id="listing-all-accounts">
+<h3>Listing All Accounts<a class="headerlink" href="#listing-all-accounts" title="Permalink to this heading">#</a></h3>
+<p>You can list all the accounts you are assigned to using the <code class="docutils literal notranslate"><span class="pre">sacctmgr</span></code> command.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>sacctmgr<span class="w"> </span>--noheader<span class="w"> </span>--parsable2<span class="w"> </span>show<span class="w"> </span>assoc<span class="w"> </span><span class="nv">user</span><span class="o">=</span><span class="nv">$USER</span><span class="w"> </span><span class="nv">format</span><span class="o">=</span>account
+<span class="go">p_number_crunch</span>
+<span class="go">p_long_computations</span>
+</pre></div>
+</div>
+</section>
+<section id="specify-account">
+<h3>Specify Account<a class="headerlink" href="#specify-account" title="Permalink to this heading">#</a></h3>
+<p>To charge compute time of (interactive and batch) jobs to a specific account, you need to specify
+the option <code class="docutils literal notranslate"><span class="pre">-A,</span> <span class="pre">--account=&lt;account&gt;</span></code> to the commands <code class="docutils literal notranslate"><span class="pre">sbatch</span></code>, <code class="docutils literal notranslate"><span class="pre">salloc</span></code>, and <code class="docutils literal notranslate"><span class="pre">srun</span></code>.
+Without this option, your <span class="xref myst">default account</span> will be charged for the required
+compute time.</p>
+<p>By explicitly specifying the account, you enable an accurate usage tracking, fair scheduling, and
+access to the right resources. In general, it matters for the following reasons:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>- Usage tracking: CPU/GPU time is charged to the account for reports, quotas, or billing.
+- Scheduling priority: Fair-share scheduling uses account history; the wrong account can lower
+  your priority or affect others.
+- Access control: Some partitions or nodes are restricted to certain accounts.
+- Compliance: Keeps reports accurate for project reviews and renewals.
+</pre></div>
+</div>
+</section>
+</section>
+<section id="avoid-using-simultaneous-multithreading-smt">
+<h2>Avoid Using Simultaneous Multithreading (SMT)<a class="headerlink" href="#avoid-using-simultaneous-multithreading-smt" title="Permalink to this heading">#</a></h2>
+<p>Most modern CPU architectures offer simultaneous multithreading (SMT), where
+physical cores of a CPU are split into virtual cores.
+This technique allows to run two instruction streams per physical core in
+parallel (at half the speed).
+Most high performance software applications do not benefit from SMT.</p>
+<p>!!! warning</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>On ZIH systems, SMT is hidden by default due to performance and efficiency
+reasons.
+Please contact our support personnel if you think that you absolutely
+need SMT.
+</pre></div>
+</div>
+<p>To use SMT in your job file despite the above warning, use the Slurm directives
+<code class="docutils literal notranslate"><span class="pre">--ntasks-per-core</span></code> for MPI or <code class="docutils literal notranslate"><span class="pre">--threads-per-core</span></code> for OpenMP parallel
+applications.</p>
+<p>The following <strong>non-recommended</strong> example forces an OpenMP application
+consisting of 2 OpenMP software threads to be executed on 2 virtual cores
+of a single physical CPU core (using SMT). Doing so, you will typically
+obtain slower runs than running the same application with 1 OpenMP thread
+on a single physical CPU core (without SMT).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH --ntasks=1</span>
+<span class="c1">#SBATCH --cpus-per-task=2</span>
+<span class="c1">#SBATCH --threads-per-core=2</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">2</span>
+srun<span class="w"> </span>./my_omp_application
+</pre></div>
+</div>
+</section>
+<section id="heterogeneous-jobs">
+<h2>Heterogeneous Jobs<a class="headerlink" href="#heterogeneous-jobs" title="Permalink to this heading">#</a></h2>
+<p>A heterogeneous job consists of several job components, all of which can have individual job
+options. In particular, different components can use resources from different Slurm partitions.
+One example for this setting is an MPI application consisting of a master process with a huge memory
+footprint and worker processes requiring GPU support.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">salloc</span></code>, <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> and <code class="docutils literal notranslate"><span class="pre">srun</span></code> commands can all be used to submit heterogeneous jobs. Resource
+specifications for each component of the heterogeneous job should be separated with “:” character.
+Running a job step on a specific component is supported by the option <code class="docutils literal notranslate"><span class="pre">--het-group</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>salloc<span class="w"> </span>--ntasks<span class="o">=</span><span class="m">1</span><span class="w"> </span>--cpus-per-task<span class="o">=</span><span class="m">4</span><span class="w"> </span>--partition<span class="w"> </span>&lt;partition&gt;<span class="w"> </span>--mem<span class="o">=</span>200G<span class="w"> </span>:<span class="w"> </span><span class="se">\</span>
+<span class="w">                    </span>--ntasks<span class="o">=</span><span class="m">8</span><span class="w"> </span>--cpus-per-task<span class="o">=</span><span class="m">1</span><span class="w"> </span>--gres<span class="o">=</span>gpu:8<span class="w"> </span>--mem<span class="o">=</span>80G<span class="w"> </span>--partition<span class="w"> </span>&lt;partition&gt;
+<span class="go">[...]</span>
+<span class="gp">marie@login$ </span>srun<span class="w"> </span>./my_application<span class="w"> </span>&lt;args<span class="w"> </span><span class="k">for</span><span class="w"> </span>master<span class="w"> </span>tasks&gt;<span class="w"> </span>:<span class="w"> </span>./my_application<span class="w"> </span>&lt;args<span class="w"> </span><span class="k">for</span><span class="w"> </span>worker<span class="w"> </span>tasks&gt;
+</pre></div>
+</div>
+<p>Heterogeneous jobs can also be defined in job files. There, it is required to separate multiple
+components by a line containing the directive <code class="docutils literal notranslate"><span class="pre">#SBATCH</span> <span class="pre">hetjob</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="c1">#SBATCH --ntasks=1</span>
+<span class="c1">#SBATCH --cpus-per-task=4</span>
+<span class="c1">#SBATCH --partition=&lt;partition&gt;</span>
+<span class="c1">#SBATCH --mem=200G</span>
+<span class="c1">#SBATCH hetjob # required to separate groups</span>
+<span class="c1">#SBATCH --ntasks=8</span>
+<span class="c1">#SBATCH --cpus-per-task=1</span>
+<span class="c1">#SBATCH --gres=gpu:8</span>
+<span class="c1">#SBATCH --mem=80G</span>
+<span class="c1">#SBATCH --partition=&lt;partition&gt;</span>
+
+srun<span class="w"> </span>./my_application<span class="w"> </span>&lt;args<span class="w"> </span><span class="k">for</span><span class="w"> </span>master<span class="w"> </span>tasks&gt;<span class="w"> </span>:<span class="w"> </span>./my_application<span class="w"> </span>&lt;args<span class="w"> </span><span class="k">for</span><span class="w"> </span>worker<span class="w"> </span>tasks&gt;
+
+<span class="c1"># or as an alternative</span>
+srun<span class="w"> </span>./my_application<span class="w"> </span>&lt;args<span class="w"> </span><span class="k">for</span><span class="w"> </span>master<span class="w"> </span>tasks&gt;<span class="w"> </span><span class="p">&amp;</span>
+srun<span class="w"> </span>--het-group<span class="o">=</span><span class="m">1</span><span class="w"> </span>./my_application<span class="w"> </span>&lt;args<span class="w"> </span><span class="k">for</span><span class="w"> </span>worker<span class="w"> </span>tasks&gt;<span class="w"> </span><span class="p">&amp;</span>
+<span class="nb">wait</span>
+</pre></div>
+</div>
+<section id="limitations">
+<h3>Limitations<a class="headerlink" href="#limitations" title="Permalink to this heading">#</a></h3>
+<p>Due to the way scheduling algorithm works it is required that each component has to be allocated on
+a different node. Furthermore, job arrays of heterogeneous jobs are not supported.</p>
+</section>
+</section>
+<section id="manage-and-control-jobs">
+<h2>Manage and Control Jobs<a class="headerlink" href="#manage-and-control-jobs" title="Permalink to this heading">#</a></h2>
+<section id="job-and-slurm-monitoring">
+<h3>Job and Slurm Monitoring<a class="headerlink" href="#job-and-slurm-monitoring" title="Permalink to this heading">#</a></h3>
+<p>On the command line, use <code class="docutils literal notranslate"><span class="pre">squeue</span></code> to watch the scheduling queue.</p>
+<p>!!! tip “Show your jobs”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Invoke `squeue --me` to list only your jobs.
+</pre></div>
+</div>
+<p>In its last column, the <code class="docutils literal notranslate"><span class="pre">squeue</span></code> command will also tell why a job is not running.
+Possible reasons and their detailed descriptions are listed in the following table.
+More information about job parameters can be obtained with <code class="docutils literal notranslate"><span class="pre">scontrol</span> <span class="pre">-d</span> <span class="pre">show</span> <span class="pre">job</span> <span class="pre">&lt;jobid&gt;</span></code>.</p>
+<p>??? tip “Reason Table”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>| Reason             | Long Description  |
+|:-------------------|:------------------|
+| `Dependency`         | This job is waiting for a dependent job to complete. |
+| `None`               | No reason is set for this job. |
+| `PartitionDown`      | The partition required by this job is in a down state. |
+| `PartitionNodeLimit` | The number of nodes required by this job is outside of its partitions current limits. Can also indicate that required nodes are down or drained. |
+| `PartitionTimeLimit` | The jobs time limit exceeds its partitions current time limit. |
+| `Priority`           | One or higher priority jobs exist for this partition. |
+| `Resources`          | The job is waiting for resources to become available. |
+| `NodeDown`           | A node required by the job is down. |
+| `BadConstraints`     | The jobs constraints can not be satisfied. |
+| `SystemFailure`      | Failure of the Slurm system, a filesystem, the network, etc. |
+| `JobLaunchFailure`   | The job could not be launched. This may be due to a filesystem problem, invalid program name, etc. |
+| `NonZeroExitCode`    | The job terminated with a non-zero exit code. |
+| `TimeLimit`          | The job exhausted its time limit. |
+| `InactiveLimit`      | The job reached the system inactive limit. |
+</pre></div>
+</div>
+<p>For detailed information on why your submitted job has not started yet, you can use the command</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>whypending<span class="w"> </span>&lt;jobid&gt;
+</pre></div>
+</div>
+</section>
+<section id="editing-jobs">
+<h3>Editing Jobs<a class="headerlink" href="#editing-jobs" title="Permalink to this heading">#</a></h3>
+<p>Jobs that have not yet started can be altered. By using <code class="docutils literal notranslate"><span class="pre">scontrol</span> <span class="pre">update</span> <span class="pre">timelimit=4:00:00</span> <span class="pre">jobid=&lt;jobid&gt;</span></code>, it is for example possible to modify the maximum runtime. <code class="docutils literal notranslate"><span class="pre">scontrol</span></code> understands
+many different options, please take a look at the
+<a class="reference external" href="https://slurm.schedmd.com/scontrol.html">scontrol documentation</a> for more details.</p>
+</section>
+<section id="canceling-jobs">
+<h3>Canceling Jobs<a class="headerlink" href="#canceling-jobs" title="Permalink to this heading">#</a></h3>
+<p>The command <code class="docutils literal notranslate"><span class="pre">scancel</span> <span class="pre">&lt;jobid&gt;</span></code> kills a single job and removes it from the queue. By using <code class="docutils literal notranslate"><span class="pre">scancel</span> <span class="pre">-u</span> <span class="pre">&lt;username&gt;</span></code>, you can send a canceling signal to all of your jobs at once.</p>
+</section>
+<section id="evaluating-jobs">
+<h3>Evaluating Jobs<a class="headerlink" href="#evaluating-jobs" title="Permalink to this heading">#</a></h3>
+<p>The Slurm command <code class="docutils literal notranslate"><span class="pre">sacct</span></code> provides job statistics like memory usage, CPU time, energy usage etc.
+as table-formatted output on the command line.</p>
+<p>The job monitor <a class="reference internal" href="../software/pika.html"><span class="doc std std-doc">PIKA</span></a> provides web-based graphical performance statistics
+at no extra cost.</p>
+<p>!!! hint “Learn from old jobs”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>We highly encourage you to inspect your previous jobs in order to better
+estimate the requirements, e.g., runtime, for future jobs.
+With PIKA, it is e.g. easy to check whether a job is hanging, idling,
+or making good use of the resources.
+</pre></div>
+</div>
+<p>??? tip “Using sacct (see also <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">sacct</span></code>)”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>`sacct` outputs the following fields by default.
+
+```console
+# show all own jobs contained in the accounting database
+marie@login$ sacct
+    JobID    JobName  Partition    Account  AllocCPUS      State ExitCode
+------------ ---------- ---------- ---------- ---------- ---------- --------
+[...]
+```
+
+We&#39;d like to point your attention to the following options to gain insight in your jobs.
+
+??? example &quot;Show specific job&quot;
+
+    ```console
+    marie@login$ sacct --jobs=&lt;JOBID&gt;
+    ```
+
+??? example &quot;Show all fields for a specific job&quot;
+
+    ```console
+    marie@login$ sacct --jobs=&lt;JOBID&gt; --format=All
+    ```
+
+??? example &quot;Show specific fields&quot;
+
+    ```console
+    marie@login$ sacct --jobs=&lt;JOBID&gt; --format=JobName,MaxRSS,MaxVMSize,CPUTime,ConsumedEnergy
+    ```
+
+The manual page (`man sacct`) and the [sacct online reference](https://slurm.schedmd.com/sacct.html)
+provide a comprehensive documentation regarding available fields and formats.
+
+!!! hint &quot;Time span&quot;
+
+    By default, `sacct` only shows data of the last day. If you want to look further into the past
+    without specifying an explicit job id, you need to provide a start date via the option
+    `--starttime` (or short: `-S`). A certain end date is also possible via `--endtime` (or `-E`).
+
+??? example &quot;Show all jobs since the beginning of year 2021&quot;
+
+    ```console
+    marie@login$ sacct --starttime 2021-01-01 [--endtime now]
+    ```
+</pre></div>
+</div>
+</section>
+</section>
+<section id="jobs-at-reservations">
+<h2>Jobs at Reservations<a class="headerlink" href="#jobs-at-reservations" title="Permalink to this heading">#</a></h2>
+<p>Within a reservation, you have privileged access to HPC resources.
+How to ask for a reservation is described in the section
+<span class="xref myst">reservations</span>.
+After we agreed with your requirements, we will send you an e-mail with your reservation name. Then,
+you could see more information about your reservation with the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>scontrol<span class="w"> </span>show<span class="w"> </span><span class="nv">res</span><span class="o">=</span>&lt;reservation<span class="w"> </span>name&gt;
+<span class="gp"># </span>e.g.<span class="w"> </span>scontrol<span class="w"> </span>show<span class="w"> </span><span class="nv">res</span><span class="o">=</span>hpcsupport_123
+</pre></div>
+</div>
+<p>If you want to use your reservation, you have to add the parameter
+<code class="docutils literal notranslate"><span class="pre">--reservation=&lt;reservation</span> <span class="pre">name&gt;</span></code> either in your job script or to your <code class="docutils literal notranslate"><span class="pre">srun</span></code> or <code class="docutils literal notranslate"><span class="pre">salloc</span></code> command.
+In particular, if your user account is associated with more than one compute project, make sure to
+select the correct one using the parameter <code class="docutils literal notranslate"><span class="pre">--account=&lt;hpc_project&gt;</span></code>.</p>
+</section>
+<section id="node-local-storage-in-jobs">
+<h2>Node-Local Storage in Jobs<a class="headerlink" href="#node-local-storage-in-jobs" title="Permalink to this heading">#</a></h2>
+<p>For some workloads and applications, it is valuable to use node-local storage in order to reduce or
+even completely omit usage of the <a class="reference internal" href="../data_lifecycle/working.html"><span class="doc std std-doc">parallel filesystems</span></a>.</p>
+<p>The availability and the capacity of local storage differ between the clusters, as depicted in the
+following table.</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Cluster</p></th>
+<th class="head"><p>Number of  Nodes</p></th>
+<th class="head"><p>Local Storage</p></th>
+<th class="head"><p>Mountpoint</p></th>
+<th class="head"><p>Request</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">Alpha</span> <span class="pre">Centauri</span></code></span></p></td>
+<td><p>All compute nodes</p></td>
+<td><p>3.5 TB on NVMe device</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/tmp</span></code></p></td>
+<td><p>Always present, no action needed</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">Barnard</span></code></span></p></td>
+<td><p>12 nodes</p></td>
+<td><p>1.8 TB on NVMe device</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/tmp</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">--constraint=local_disk</span></code> option to <code class="docutils literal notranslate"><span class="pre">sbatch</span></code>, <code class="docutils literal notranslate"><span class="pre">salloc</span></code>, and <code class="docutils literal notranslate"><span class="pre">srun</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">Capella</span></code></span></p></td>
+<td><p>All compute nodes</p></td>
+<td><p>800 GB</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/tmp</span></code></p></td>
+<td><p>Always present, no action needed</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">Romeo</span></code></span></p></td>
+<td><p>All compute nodes</p></td>
+<td><p>200 GB</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/tmp</span></code></p></td>
+<td><p>Always present, no action needed</p></td>
+</tr>
+</tbody>
+</table>
+<p>!!! hint “Cluster <code class="docutils literal notranslate"><span class="pre">Julia</span></code>”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Node-local storage is not available on [`Julia`](julia.md).
+</pre></div>
+</div>
+<p>!!! hint “Request nodes with local storage on <code class="docutils literal notranslate"><span class="pre">Barnard</span></code>”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Note that most nodes on `Barnard` don&#39;t have a local disk and space in `/tmp` is **very**
+limited. If you need a local disk request this with the
+[Slurm feature](slurm.md#node-local-storage-in-jobs) `--constraint=local_disk` to
+`sbatch`, `salloc`, and `srun`.
+</pre></div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/jobs_and_resources"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#job-submission">
+   Job Submission
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#options">
+   Options
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#host-list">
+     Host List
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#number-of-switches">
+     Number of Switches
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#interactive-jobs">
+   Interactive Jobs
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#interactive-x11-gui-jobs">
+     Interactive X11/GUI Jobs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#batch-jobs">
+   Batch Jobs
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#job-files">
+     Job Files
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#accounts">
+   Accounts
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#default-account">
+     Default Account
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#listing-all-accounts">
+     Listing All Accounts
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#specify-account">
+     Specify Account
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#avoid-using-simultaneous-multithreading-smt">
+   Avoid Using Simultaneous Multithreading (SMT)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#heterogeneous-jobs">
+   Heterogeneous Jobs
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#limitations">
+     Limitations
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#manage-and-control-jobs">
+   Manage and Control Jobs
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#job-and-slurm-monitoring">
+     Job and Slurm Monitoring
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#editing-jobs">
+     Editing Jobs
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#canceling-jobs">
+     Canceling Jobs
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#evaluating-jobs">
+     Evaluating Jobs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#jobs-at-reservations">
+   Jobs at Reservations
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#node-local-storage-in-jobs">
+   Node-Local Storage in Jobs
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-23.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

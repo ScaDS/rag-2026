@@ -1,0 +1,1078 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Hyperparameter Optimization (OmniOpt) &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/hyperparameter_optimization';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Preparation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../00_preparation/readme.html">Preparation of the session</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/hyperparameter_optimization.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../../../../_sources/04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/hyperparameter_optimization.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Hyperparameter Optimization (OmniOpt)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#quick-start-with-omniopt">
+   Quick start with OmniOpt
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#prepare-application-script-and-software-environment">
+     Prepare Application Script and Software Environment
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#configure-and-run-omniopt">
+     Configure and Run OmniOpt
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#check-and-evaluate-omniopt-results">
+     Check and Evaluate OmniOpt Results
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="hyperparameter-optimization-omniopt">
+<h1>Hyperparameter Optimization (OmniOpt)<a class="headerlink" href="#hyperparameter-optimization-omniopt" title="Permalink to this heading">#</a></h1>
+<p>Classical simulation methods as well as machine learning methods (e.g. neural networks) have a large
+number of hyperparameters that significantly determine the accuracy, efficiency, and transferability
+of the method. In classical simulations, the hyperparameters are usually determined by adaptation to
+measured values. Esp. in neural networks, the hyperparameters determine the network architecture:
+number and type of layers, number of neurons, activation functions, measures against overfitting
+etc. The most common methods to determine hyperparameters are intuitive testing, grid search or
+random search.</p>
+<p>The tool OmniOpt performs hyperparameter optimization within a broad range of applications as
+classical simulations or machine learning algorithms. OmniOpt is robust and it checks and installs
+all dependencies automatically and fixes many problems in the background. While OmniOpt optimizes,
+no further intervention is required. You can follow the ongoing output live in the console.
+Overhead of OmniOpt is minimal and virtually imperceptible.</p>
+<section id="quick-start-with-omniopt">
+<h2>Quick start with OmniOpt<a class="headerlink" href="#quick-start-with-omniopt" title="Permalink to this heading">#</a></h2>
+<p>The following instructions demonstrate the basic usage of OmniOpt on the ZIH system, based on the
+hyperparameter optimization for a neural network.</p>
+<p>The typical OmniOpt workflow comprises at least the following steps:</p>
+<ol class="arabic simple">
+<li><p><span class="xref myst">Prepare application script and software environment</span></p></li>
+<li><p><span class="xref myst">Configure and run OmniOpt</span></p></li>
+<li><p><span class="xref myst">Check and evaluate OmniOpt results</span></p></li>
+</ol>
+<section id="prepare-application-script-and-software-environment">
+<h3>Prepare Application Script and Software Environment<a class="headerlink" href="#prepare-application-script-and-software-environment" title="Permalink to this heading">#</a></h3>
+<p>The following example application script was created from
+<a class="reference external" href="https://pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html">https://pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html</a>
+as a starting point.
+Therein, a neural network is trained on the MNIST Fashion data set.</p>
+<p>There are the following script preparation steps for OmniOpt:</p>
+<ol class="arabic">
+<li><p>Changing hard-coded hyperparameters (chosen here: batch size, epochs, size of layer 1 and 2) into
+command line parameters.  Esp. for this example, the Python module <code class="docutils literal notranslate"><span class="pre">argparse</span></code> (see the docs at
+<a class="reference external" href="https://docs.python.org/3/library/argparse.html">https://docs.python.org/3/library/argparse.html</a>
+is used.</p>
+<p>??? note “Parsing arguments in Python”
+There are many ways for parsing arguments into Python scripts. The easiest approach is
+the <code class="docutils literal notranslate"><span class="pre">sys</span></code> module (see
+<a class="reference external" href="https://www.geeksforgeeks.org/how-to-use-sys-argv-in-python">www.geeksforgeeks.org/how-to-use-sys-argv-in-python</a>),
+which would be fully sufficient for usage with OmniOpt. Nevertheless, this basic approach
+has no consistency checks or error handling etc.</p>
+</li>
+<li><p>Mark the output of the optimization target (chosen here: average loss) by prefixing it with the
+RESULT string. OmniOpt takes the <strong>last appearing value</strong> prefixed with the RESULT string. In
+the example, different epochs are performed and the average from the last epoch is caught by
+OmniOpt. Additionally, the <code class="docutils literal notranslate"><span class="pre">RESULT</span></code> output has to be a <strong>single line</strong>. After all these changes,
+the final script is as follows (with the lines containing relevant changes highlighted).</p>
+<p>??? example “Final modified Python script: MNIST Fashion “</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span> ```python linenums=&quot;1&quot; hl_lines=&quot;18-33 52-53 66-68 72 74 76 85 125-126&quot;
+ #!/usr/bin/env python
+ # coding: utf-8
+
+ # # Example for using OmniOpt
+ #
+ # source code taken from: https://pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html
+ # parameters under consideration:#
+ # 1. batch size
+ # 2. epochs
+ # 3. size output layer 1
+ # 4. size output layer 2
+
+ import torch
+ from torch import nn
+ from torch.utils.data import DataLoader
+ from torchvision import datasets
+ from torchvision.transforms import ToTensor, Lambda, Compose
+ import argparse
+
+ # parsing hpyerparameters as arguments
+ parser = argparse.ArgumentParser(description=&quot;Demo application for OmniOpt for hyperparameter optimization, example: neural network on MNIST fashion data.&quot;)
+
+ parser.add_argument(&quot;--out-layer1&quot;, type=int, help=&quot;the number of outputs of layer 1&quot;, default = 512)
+ parser.add_argument(&quot;--out-layer2&quot;, type=int, help=&quot;the number of outputs of layer 2&quot;, default = 512)
+ parser.add_argument(&quot;--batchsize&quot;, type=int, help=&quot;batchsize for training&quot;, default = 64)
+ parser.add_argument(&quot;--epochs&quot;, type=int, help=&quot;number of epochs&quot;, default = 5)
+
+ args = parser.parse_args()
+
+ batch_size = args.batchsize
+ epochs = args.epochs
+ num_nodes_out1 = args.out_layer1
+ num_nodes_out2 = args.out_layer2
+
+ # Download training data from open data sets.
+ training_data = datasets.FashionMNIST(
+     root=&quot;data&quot;,
+     train=True,
+     download=True,
+     transform=ToTensor(),
+ )
+
+ # Download test data from open data sets.
+ test_data = datasets.FashionMNIST(
+     root=&quot;data&quot;,
+     train=False,
+     download=True,
+     transform=ToTensor(),
+ )
+
+ # Create data loaders.
+ train_dataloader = DataLoader(training_data, batch_size=batch_size)
+ test_dataloader = DataLoader(test_data, batch_size=batch_size)
+
+ for X, y in test_dataloader:
+     print(&quot;Shape of X [N, C, H, W]: &quot;, X.shape)
+     print(&quot;Shape of y: &quot;, y.shape, y.dtype)
+     break
+
+ # Get cpu or gpu device for training.
+ device = &quot;cuda&quot; if torch.cuda.is_available() else &quot;cpu&quot;
+ print(&quot;Using {} device&quot;.format(device))
+
+ # Define model
+ class NeuralNetwork(nn.Module):
+     def __init__(self, out1, out2):
+         self.o1 = out1
+         self.o2 = out2
+         super(NeuralNetwork, self).__init__()
+         self.flatten = nn.Flatten()
+         self.linear_relu_stack = nn.Sequential(
+             nn.Linear(28*28, out1),
+             nn.ReLU(),
+             nn.Linear(out1, out2),
+             nn.ReLU(),
+             nn.Linear(out2, 10),
+             nn.ReLU()
+         )
+
+     def forward(self, x):
+         x = self.flatten(x)
+         logits = self.linear_relu_stack(x)
+         return logits
+
+ model = NeuralNetwork(out1=num_nodes_out1, out2=num_nodes_out2).to(device)
+ print(model)
+
+ loss_fn = nn.CrossEntropyLoss()
+ optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)
+
+ def train(dataloader, model, loss_fn, optimizer):
+     size = len(dataloader.dataset)
+     for batch, (X, y) in enumerate(dataloader):
+         X, y = X.to(device), y.to(device)
+
+         # Compute prediction error
+         pred = model(X)
+         loss = loss_fn(pred, y)
+
+         # Backpropagation
+         optimizer.zero_grad()
+         loss.backward()
+         optimizer.step()
+
+         if batch % 200 == 0:
+             loss, current = loss.item(), batch * len(X)
+             print(f&quot;loss: {loss:&gt;7f}  [{current:&gt;5d}/{size:&gt;5d}]&quot;)
+
+ def test(dataloader, model, loss_fn):
+     size = len(dataloader.dataset)
+     num_batches = len(dataloader)
+     model.eval()
+     test_loss, correct = 0, 0
+     with torch.no_grad():
+         for X, y in dataloader:
+             X, y = X.to(device), y.to(device)
+             pred = model(X)
+             test_loss += loss_fn(pred, y).item()
+             correct += (pred.argmax(1) == y).type(torch.float).sum().item()
+     test_loss /= num_batches
+     correct /= size
+     print(f&quot;Test Error: \n Accuracy: {(100*correct):&gt;0.1f}%, Avg loss: {test_loss:&gt;8f} \n&quot;)
+
+
+     #print statement esp. for OmniOpt (single line!!)
+     print(f&quot;RESULT: {test_loss:&gt;8f} \n&quot;)
+
+ for t in range(epochs):
+     print(f&quot;Epoch {t+1}\n-------------------------------&quot;)
+     train(train_dataloader, model, loss_fn, optimizer)
+     test(test_dataloader, model, loss_fn)
+ print(&quot;Done!&quot;)
+ ```
+</pre></div>
+</div>
+</li>
+<li><p>Testing script functionality and determine software requirements for the chosen
+<a class="reference internal" href="../jobs_and_resources/hardware_overview.html"><span class="doc std std-doc">cluster</span></a>. In the following, the
+cluster <code class="docutils literal notranslate"><span class="pre">Alpha</span></code> is used. Please note the parameters <code class="docutils literal notranslate"><span class="pre">--out-layer1</span></code>, <code class="docutils literal notranslate"><span class="pre">--batchsize</span></code>, <code class="docutils literal notranslate"><span class="pre">--epochs</span></code> when
+calling the Python script. Additionally, note the <code class="docutils literal notranslate"><span class="pre">RESULT</span></code> string with the output for OmniOpt.</p>
+<p>??? hint “Hint for installing Python modules”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span> Note that for this example the module `torchvision` is not available on the cluster `alpha`
+ and it is installed by creating a [virtual environment](python_virtual_environments.md). It is
+ recommended to install such a virtual environment into a
+ [workspace](../data_lifecycle/workspaces.md).
+
+ ```console
+ marie@login$ module load release/23.04  GCC/11.3.0  OpenMPI/4.1.4 PyTorch/1.12.1
+ marie@login$ mkdir &lt;/path/to/workspace/python-environments&gt;    #create folder
+ marie@login$ virtualenv --system-site-packages &lt;/path/to/workspace/python-environments/torchvision_env&gt;
+ marie@login$ source &lt;/path/to/workspace/python-environments/torchvision_env&gt;/bin/activate #activate virtual environment
+ marie@login$ pip install torchvision #install torchvision module
+ ```
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Job<span class="w"> </span>submission<span class="w"> </span>on<span class="w"> </span>alpha<span class="w"> </span>nodes<span class="w"> </span>with<span class="w"> </span><span class="m">1</span><span class="w"> </span>GPU<span class="w"> </span>on<span class="w"> </span><span class="m">1</span><span class="w"> </span>node<span class="w"> </span>with<span class="w"> </span><span class="m">800</span><span class="w"> </span>MB<span class="w"> </span>per<span class="w"> </span>CPU
+<span class="gp">marie@login$ </span>srun<span class="w"> </span>--gres<span class="o">=</span>gpu:1<span class="w"> </span>--nodes<span class="o">=</span><span class="m">1</span><span class="w"> </span>--ntasks<span class="w"> </span><span class="m">1</span><span class="w"> </span>--cpus-per-task<span class="w"> </span><span class="m">7</span><span class="w"> </span>--pty<span class="w"> </span>--mem-per-cpu<span class="o">=</span><span class="m">800</span><span class="w"> </span>bash
+<span class="gp">marie@alpha$ </span>module<span class="w"> </span>load<span class="w"> </span>release/23.04<span class="w"> </span>GCC/11.3.0<span class="w">  </span>OpenMPI/4.1.4<span class="w"> </span>PyTorch/1.12.1
+<span class="gp"># </span>Activate<span class="w"> </span>virtual<span class="w"> </span>environment
+<span class="gp">marie@alpha$ </span><span class="nb">source</span><span class="w"> </span>&lt;/path/to/workspace/python-environments/torchvision_env&gt;/bin/activate
+
+<span class="gp">marie@alpha$ </span>python<span class="w"> </span>&lt;/path/to/your/script/mnistFashion.py&gt;<span class="w"> </span>--out-layer1<span class="o">=</span><span class="m">200</span><span class="w"> </span>--batchsize<span class="o">=</span><span class="m">10</span><span class="w"> </span>--epochs<span class="o">=</span><span class="m">3</span>
+<span class="go">[...]</span>
+<span class="go">Epoch 3</span>
+<span class="go">-------------------------------</span>
+<span class="go">loss: 1.422406  [    0/60000]</span>
+<span class="go">loss: 0.852647  [10000/60000]</span>
+<span class="go">loss: 1.139685  [20000/60000]</span>
+<span class="go">loss: 0.572221  [30000/60000]</span>
+<span class="go">loss: 1.516888  [40000/60000]</span>
+<span class="go">loss: 0.445737  [50000/60000]</span>
+<span class="go">Test Error:</span>
+<span class="go"> Accuracy: 69.5%, Avg loss: 0.878329</span>
+
+<span class="go">RESULT: 0.878329</span>
+
+<span class="go">Done!</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Using the modified script within OmniOpt requires configuring and loading of the software
+environment. The recommended way is to wrap the necessary calls in a shell script.</p>
+<p>??? example “Example for wrapping with shell script”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```bash
+#!/bin/bash -l
+# ^ Shebang-Line, so that it is known that this is a bash file
+# -l means &#39;load this as login shell&#39;, so that /etc/profile gets loaded and you can use &#39;module load&#39; or &#39;ml&#39; as usual
+
+# If you don&#39;t use this script via `./run.sh&#39; or just `srun run.sh&#39;, but like `srun bash run.sh&#39;, please add the &#39;-l&#39; there too.
+# Like this:
+# srun bash -l run.sh
+
+# Load modules your program needs, always specify versions!
+module load release/23.04 GCC/10.2.0 CUDA/11.1.1 OpenMPI/4.0.5 PyTorch/1.7.1
+source &lt;/path/to/workspace/python-environments/torchvision_env&gt;/bin/activate #activate virtual environment
+
+# Load your script. $@ is all the parameters that are given to this shell file.
+python &lt;/path/to/your/script/mnistFashion.py&gt; $@
+```
+</pre></div>
+</div>
+<p>When the wrapped shell script is running properly, the preparations are finished and the next step
+is configuring OmniOpt.</p>
+</section>
+<section id="configure-and-run-omniopt">
+<h3>Configure and Run OmniOpt<a class="headerlink" href="#configure-and-run-omniopt" title="Permalink to this heading">#</a></h3>
+<p>Configuring OmniOpt is done via the GUI at
+<a class="reference external" href="https://imageseg.scads.ai/omnioptgui/">https://imageseg.scads.ai/omnioptgui/</a>.
+This GUI guides through the configuration process and as result a configuration file is created
+automatically according to the GUI input. If you are more familiar with using OmniOpt later on,
+this configuration file can be modified directly without using the GUI.</p>
+<p>A screenshot of
+<a class="reference external" href="https://imageseg.scads.ai/omnioptgui/?maxevalserror=5&amp;mem_per_worker=1000&amp;number_of_parameters=3&amp;param_0_values=10%2C50%2C100&amp;param_1_values=8%2C16%2C32&amp;param_2_values=10%2C15%2C30&amp;param_0_name=out-layer1&amp;param_1_name=batchsize&amp;param_2_name=batchsize&amp;account=&amp;projectname=mnist_fashion_optimization_set_1&amp;partition=alpha&amp;searchtype=tpe.suggest&amp;param_0_type=hp.choice&amp;param_1_type=hp.choice&amp;param_2_type=hp.choice&amp;max_evals=1000&amp;objective_program=bash%20%3C%2Fpath%2Fto%2Fwrapper-script%2Frun-mnist-fashion.sh%3E%20--out-layer1%3D%28%24x_0%29%20--batchsize%3D%28%24x_1%29%20--epochs%3D%28%24x_2%29&amp;workdir=%3C%2Fscratch%2Fws%2Fomniopt-workdir%2F%3E">the GUI</a>,
+including a properly configuration for the MNIST fashion example is shown below.</p>
+<p>Please modify the paths for <code class="docutils literal notranslate"><span class="pre">objective</span> <span class="pre">program</span></code> and <code class="docutils literal notranslate"><span class="pre">workdir</span></code> according to your needs.</p>
+<p><img alt="GUI for configuring OmniOpt" src="../../../../../_images/hyperparameter_optimization-OmniOpt-GUI.png" />
+{: align=”center”}</p>
+<p>Using OmniOpt for a first trial example, it is often sufficient to concentrate on the following
+configuration parameters:</p>
+<ol class="arabic simple">
+<li><p><strong>Optimization run name:</strong> A name for an OmniOpt run given a belonging configuration.</p></li>
+<li><p><strong>Partition:</strong> Choose the cluster on the ZIH system that fits the programs’ needs.</p></li>
+<li><p><strong>Enable GPU:</strong> Decide whether a program could benefit from GPU usage or not.</p></li>
+<li><p><strong>Workdir:</strong> The directory where OmniOpt is saving its necessary files and all results. Derived
+from the optimization run name, each configuration creates a single directory.
+Make sure that this working directory is writable from the compute nodes. It is recommended to
+use a <a class="reference internal" href="../data_lifecycle/workspaces.html"><span class="doc std std-doc">workspace</span></a>.</p></li>
+<li><p><strong>Objective program:</strong> Provide all information for program execution. Typically, this will
+contain the command for executing a wrapper script.</p></li>
+<li><p><strong>Parameters:</strong> The hyperparameters to be optimized with the names OmniOpt should use. For the
+example here, the variable names are identical to the input parameters of the Python script.
+However, these names can be chosen differently, since the connection to OmniOpt is realized via
+the variables (<code class="docutils literal notranslate"><span class="pre">$x_0</span></code>), (<code class="docutils literal notranslate"><span class="pre">$x_1</span></code>), etc. from the GUI section “Objective program”. Please note that
+it is not necessary to name the parameters explicitly in your script but only within the OmniOpt
+configuration.</p></li>
+</ol>
+<p>After all parameters are entered into the GUI, the call for OmniOpt is generated automatically and
+displayed on the right. This command contains all necessary instructions (including requesting
+resources with Slurm). <strong>Thus, this command can be executed directly on a login node on the ZIH
+system.</strong></p>
+<p><img alt="GUI for configuring OmniOpt" src="../../../../../_images/hyperparameter_optimization-OmniOpt-final-command.png" />
+{: align=”center”}</p>
+<p>After executing this command OmniOpt is doing all the magic in the background and there are no
+further actions necessary.</p>
+<p>??? hint “Hints on the working directory”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>1. Starting OmniOpt without providing a working directory will store OmniOpt into the present directory.
+1. Within the given working directory, a new folder named &quot;omniopt&quot; as default, is created.
+1. Within one OmniOpt working directory, there can be multiple optimization projects.
+1. It is possible to have as many working directories as you want (with multiple optimization runs).
+1. It is recommended to use a [workspace](../data_lifecycle/workspaces.md) as working directory, but not the home directory.
+</pre></div>
+</div>
+</section>
+<section id="check-and-evaluate-omniopt-results">
+<h3>Check and Evaluate OmniOpt Results<a class="headerlink" href="#check-and-evaluate-omniopt-results" title="Permalink to this heading">#</a></h3>
+<p>For getting informed about the current status of OmniOpt or for looking into results, the evaluation
+tool of OmniOpt is used. Switch to the OmniOpt folder and run <code class="docutils literal notranslate"><span class="pre">evaluate-run.sh</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>bash<span class="w"> </span>&lt;/data/horse/ws/omniopt-workdir/&gt;evaluate-run.sh
+</pre></div>
+</div>
+<p>After initializing and checking for updates in the background, OmniOpt is asking to select the
+optimization run of interest.  After selecting the optimization run, there will be a menu with the
+items as shown below.  If OmniOpt has still running jobs there appear some menu items that refer to
+these running jobs (image shown below to the right).</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>evaluation options (all jobs finished)</p></th>
+<th class="head text-center"><p>evaluation options (still running jobs)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><img alt="GUI for configuring OmniOpt" src="../../../../../_images/OmniOpt-evaluate-menu.png" /></p></td>
+<td class="text-center"><p><img alt="GUI for configuring OmniOpt" src="../../../../../_images/OmniOpt-still-running-jobs.png" /></p></td>
+</tr>
+</tbody>
+</table>
+<p>For now, we assume that OmniOpt has finished already.
+In order to look into the results, there are the following basic approaches.</p>
+<ol class="arabic">
+<li><p><strong>Graphical approach:</strong>
+There are basically two graphical approaches: two dimensional scatter plots and parallel plots.</p>
+<p>Below there is shown a parallel plot from the MNIST fashion example.
+<img alt="GUI for configuring OmniOpt" src="../../../../../_images/OmniOpt-parallel-plot.png" />{: align=”center”}</p>
+<p>??? hint “Hints on parallel plots”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span> Parallel plots are suitable especially for dealing with multiple dimensions. The parallel
+ plot created by OmniOpt is an interactive `html` file that is stored in the OminOpt working
+ directory under `projects/&lt;name_of_optimization_run&gt;/parallel-plot`. The interactivity
+ of this plot is intended to make optimal combinations of the hyperparameters visible more
+ easily. Get more information about this interactivity by clicking the &quot;Help&quot; button at the
+ top of the graphic (see red arrow on the image above).
+</pre></div>
+</div>
+<p>After creating a 2D scatter plot or a parallel plot, OmniOpt will try to display the
+corresponding file (<code class="docutils literal notranslate"><span class="pre">html</span></code>, <code class="docutils literal notranslate"><span class="pre">png</span></code>) directly on the ZIH system. Therefore, X11 forwarding must be
+enabled, either by <span class="xref myst">SSH configuration
+</span> or by using e.g. <code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">-XC</span> <span class="pre">alpha</span></code>
+while logging in. Nevertheless, because of latency using X11 forwarding, it is recommended to
+download the created files and explore them on the local machine (esp. for the parallel plot).
+The created files are saved at
+<code class="docutils literal notranslate"><span class="pre">projects/&lt;name_of_optimization_run&gt;/{2d-scatterplots,parallel-plot}</span></code>.</p>
+</li>
+<li><p><strong>Getting the raw data:</strong>
+As a second approach, the raw data of the optimization process can be exported as a CSV file.
+The created output files are stored in the folder <code class="docutils literal notranslate"><span class="pre">projects/&lt;name_of_optimization_run&gt;/csv</span></code>.</p></li>
+</ol>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#quick-start-with-omniopt">
+   Quick start with OmniOpt
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#prepare-application-script-and-software-environment">
+     Prepare Application Script and Software Environment
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#configure-and-run-omniopt">
+     Configure and Run OmniOpt
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#check-and-evaluate-omniopt-results">
+     Check and Evaluate OmniOpt Results
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-23.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

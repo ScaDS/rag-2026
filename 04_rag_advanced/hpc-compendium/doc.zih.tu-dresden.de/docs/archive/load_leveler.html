@@ -1,0 +1,1485 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>LoadLeveler - IBM Tivoli Workload Scheduler (Outdated) &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/archive/load_leveler';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Preparation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../00_preparation/readme.html">Preparation of the session</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/archive/load_leveler.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../../../../_sources/04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/archive/load_leveler.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>LoadLeveler - IBM Tivoli Workload Scheduler (Outdated)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#job-submission">
+   Job Submission
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#job-file-examples">
+     Job File Examples
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#serial-batch-jobs">
+       Serial Batch Jobs
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#mpi-parallel-batch-jobs">
+       MPI Parallel Batch Jobs
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#hybrid-mpi-openmp-parallel-batch-jobs">
+       Hybrid MPI+OpenMP Parallel Batch Jobs
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#job-file-keywords">
+     Job File Keywords
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#submit-a-job-without-a-job-file">
+     Submit a Job without a Job File
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#interactive-jobs">
+     Interactive Jobs
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#loadleveler-runtime-environment-variables">
+     LoadLeveler Runtime Environment Variables
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#job-queues">
+   Job Queues
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#job-monitoring">
+   Job Monitoring
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#all-jobs-in-the-queue">
+     All Jobs in the Queue
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#all-of-one-s-own-jobs">
+       All of One’s Own Jobs
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#details-about-why-a-job-has-not-yet-started">
+     Details About Why A Job Has Not Yet Started
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#generate-a-long-listing-rather-than-the-standard-one">
+     Generate a long listing rather than the standard one
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#job-status-states">
+     Job Status States
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cancel-a-job">
+   Cancel a Job
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#a-particular-job">
+     A Particular Job
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#all-of-one-s-jobs">
+     All of One’s Jobs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#job-history-and-usage-summaries">
+   Job History and Usage Summaries
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#check-status-of-each-node">
+   Check status of each node
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="loadleveler-ibm-tivoli-workload-scheduler-outdated">
+<h1>LoadLeveler - IBM Tivoli Workload Scheduler (Outdated)<a class="headerlink" href="#loadleveler-ibm-tivoli-workload-scheduler-outdated" title="Permalink to this heading">#</a></h1>
+<p>!!! warning</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>This page is deprecated.
+</pre></div>
+</div>
+<section id="job-submission">
+<h2>Job Submission<a class="headerlink" href="#job-submission" title="Permalink to this heading">#</a></h2>
+<p>First of all, to submit a job to LoadLeveler a job file needs to be
+created. This job file can be passed to the command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">llsubmit</span> <span class="p">[</span><span class="n">llsubmit_options</span><span class="p">]</span> <span class="o">&lt;</span><span class="n">job_file</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<section id="job-file-examples">
+<h3>Job File Examples<a class="headerlink" href="#job-file-examples" title="Permalink to this heading">#</a></h3>
+<section id="serial-batch-jobs">
+<h4>Serial Batch Jobs<a class="headerlink" href="#serial-batch-jobs" title="Permalink to this heading">#</a></h4>
+<p>An example job file may look like this:</p>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#@ job_name = my_job</span>
+<span class="c1">#@ output = $(job_name).$(jobid).out</span>
+<span class="c1">#@ error  = $(job_name).$(jobid).err</span>
+<span class="c1">#@ class = short</span>
+<span class="c1">#@ group = triton-ww | triton-ipf | triton-ism | triton-et</span>
+<span class="c1">#@ wall_clock_limit = 00:30:00</span>
+<span class="c1">#@ resources = ConsumableMemory(1 gb)</span>
+<span class="c1">#@ environment = COPY_ALL</span>
+<span class="c1">#@ notification = complete</span>
+<span class="c1">#@ notify_user = your_email@adress</span>
+<span class="c1">#@ queue</span>
+
+./my_serial_program
+</pre></div>
+</div>
+<p>This example requests a serial job with a runtime of 30 minutes and a
+overall memory requirement of 1 GB. There are four groups available,
+don’t forget to choose the one and only matching group. When the job
+completes, a mail will be sent which includes details about resource
+usage.</p>
+</section>
+<section id="mpi-parallel-batch-jobs">
+<h4>MPI Parallel Batch Jobs<a class="headerlink" href="#mpi-parallel-batch-jobs" title="Permalink to this heading">#</a></h4>
+<p>An example job file may look like this:</p>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#@ job_name = my_job</span>
+<span class="c1">#@ output = $(job_name).$(jobid).out</span>
+<span class="c1">#@ error  = $(job_name).$(jobid).err</span>
+<span class="c1">#@ job_type = parallel</span>
+<span class="c1">#@ node = 2</span>
+<span class="c1">#@ tasks_per_node = 8</span>
+<span class="c1">#@ class = short</span>
+<span class="c1">#@ group = triton-ww | triton-ipf | triton-ism | triton-et</span>
+<span class="c1">#@ wall_clock_limit = 00:30:00</span>
+<span class="c1">#@ resources = ConsumableMemory(1 gb)</span>
+<span class="c1">#@ environment = COPY_ALL</span>
+<span class="c1">#@ notification = complete</span>
+<span class="c1">#@ notify_user = your_email@adress</span>
+<span class="c1">#@ queue</span>
+
+mpirun<span class="w"> </span>-x<span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>-x<span class="w"> </span>LD_LIBRARY_PATH<span class="w"> </span>-np<span class="w"> </span><span class="m">16</span><span class="w"> </span>./my_mpi_program
+</pre></div>
+</div>
+<p>This example requests a parallel job with 16 processes (2 nodes, 8 tasks
+per node), a runtime of 30 minutes, 1 GB memory requirement per task
+and therefore a overall memory requirement of 8 GB per node. Please
+keep in mind that each node on Triton only provides 45 GB. The choice
+of the correct group is also important and necessary. The <code class="docutils literal notranslate"><span class="pre">-x</span></code> option of
+<code class="docutils literal notranslate"><span class="pre">mpirun</span></code> exports the specified environment variables to all MPI
+processes.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">OMP_NUM_THREADS=1</span></code>: If you are using libraries like MKL, which are
+multithreaded, you always should set the number of threads
+explicitly so that the nodes are not overloaded. Otherwise you will
+experience heavy performance problems.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code>: If your program is linked with shared libraries
+(like MKL) which are not standard system libraries, you must export
+this variable to the MPI processes.</p></li>
+</ul>
+<p>When the job completes, a mail will be sent which includes details about
+resource usage.</p>
+<p>Before submitting MPI jobs, ensure that the appropriate MPI module is
+loaded, e.g issue:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># module load openmpi
+</pre></div>
+</div>
+</section>
+<section id="hybrid-mpi-openmp-parallel-batch-jobs">
+<h4>Hybrid MPI+OpenMP Parallel Batch Jobs<a class="headerlink" href="#hybrid-mpi-openmp-parallel-batch-jobs" title="Permalink to this heading">#</a></h4>
+<p>An example job file may look like this:</p>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#@ job_name = my_job</span>
+<span class="c1">#@ output = $(job_name).$(jobid).out</span>
+<span class="c1">#@ error  = $(job_name).$(jobid).err</span>
+<span class="c1">#@ job_type = parallel</span>
+<span class="c1">#@ node = 4</span>
+<span class="c1">#@ tasks_per_node = 8</span>
+<span class="c1">#@ class = short</span>
+<span class="c1">#@ group = triton-ww | triton-ipf | triton-ism | triton-et</span>
+<span class="c1">#@ wall_clock_limit = 00:30:00</span>
+<span class="c1">#@ resources = ConsumableMemory(1 gb)</span>
+<span class="c1">#@ environment = COPY_ALL</span>
+<span class="c1">#@ notification = complete</span>
+<span class="c1">#@ notify_user = your_email@adress</span>
+<span class="c1">#@ queue</span>
+
+mpirun<span class="w"> </span>-x<span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">8</span><span class="w"> </span>-x<span class="w"> </span>LD_LIBRARY_PATH<span class="w"> </span>-np<span class="w"> </span><span class="m">4</span><span class="w"> </span>--bynode<span class="w"> </span>./my_hybrid_program
+</pre></div>
+</div>
+<p>This example requests a parallel job with 32 processes (4 nodes, 8 tasks
+per node), a runtime of 30 minutes, 1 GB memory requirement per task
+and therefore a overall memory requirement of 8 GB per node. Please
+keep in mind that each node on Triton only provides 45 GB. The choice
+of the correct group is also important and necessary. The <code class="docutils literal notranslate"><span class="pre">mpirun</span></code> command
+starts 4 MPI processes (<code class="docutils literal notranslate"><span class="pre">--bynode</span></code> forces one process per node).
+<code class="docutils literal notranslate"><span class="pre">OMP_NUM_THREADS</span></code> is set to 8, so that 8 threads are started per MPI
+rank. When the job completes, a mail will be sent which includes details
+about resource usage.</p>
+</section>
+</section>
+<section id="job-file-keywords">
+<h3>Job File Keywords<a class="headerlink" href="#job-file-keywords" title="Permalink to this heading">#</a></h3>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Keyword</p></th>
+<th class="head text-left"><p>Valid values</p></th>
+<th class="head text-left"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">notification</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">always</span></code>, <code class="docutils literal notranslate"><span class="pre">error</span></code>, <code class="docutils literal notranslate"><span class="pre">start</span></code>, <code class="docutils literal notranslate"><span class="pre">never</span></code>, <code class="docutils literal notranslate"><span class="pre">complete</span></code></p></td>
+<td class="text-left"><p>When to write notification email.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">notify_user</span></code></p></td>
+<td class="text-left"><p>valid email address</p></td>
+<td class="text-left"><p>Notification email address.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">output</span></code></p></td>
+<td class="text-left"><p>file name</p></td>
+<td class="text-left"><p>File for stdout of the job.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">error</span></code></p></td>
+<td class="text-left"><p>file name</p></td>
+<td class="text-left"><p>File for stderr of the job.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">job_type</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">parallel</span></code>, <code class="docutils literal notranslate"><span class="pre">serial</span></code></p></td>
+<td class="text-left"><p>Job type, default is <code class="docutils literal notranslate"><span class="pre">serial</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">node</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">1</span></code> - <code class="docutils literal notranslate"><span class="pre">64</span></code></p></td>
+<td class="text-left"><p>Number of nodes requested (parallel jobs only).</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">tasks_per_node</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">1</span></code> - <code class="docutils literal notranslate"><span class="pre">8</span></code></p></td>
+<td class="text-left"><p>Number of processors per node requested (parallel jobs only).</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">class</span></code></p></td>
+<td class="text-left"><p>see <code class="docutils literal notranslate"><span class="pre">llclass</span></code></p></td>
+<td class="text-left"><p>Job queue.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">group</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">triton-ww</span></code>, <code class="docutils literal notranslate"><span class="pre">triton-ipf</span></code>, <code class="docutils literal notranslate"><span class="pre">triton-ism</span></code>, <code class="docutils literal notranslate"><span class="pre">triton-et</span></code></p></td>
+<td class="text-left"><p>choose matching group</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">wall_clock_limit</span></code></p></td>
+<td class="text-left"><p>HH:MM:SS</p></td>
+<td class="text-left"><p>Run time limit of the job.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">resources</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">name(count)</span></code> … <code class="docutils literal notranslate"><span class="pre">name(count)</span></code></p></td>
+<td class="text-left"><p>Specifies quantities of the consumable resources consumed by each task of a job step</p></td>
+</tr>
+</tbody>
+</table>
+<p>Further Information:
+[[<a class="reference external" href="http://publib.boulder.ibm.com/infocenter/clresctr/vxrx/index.jsp?topic=/com.ibm.cluster.loadl35.admin.doc/am2ug_jobkey.html">http://publib.boulder.ibm.com/infocenter/clresctr/vxrx/index.jsp?topic=/com.ibm.cluster.loadl35.admin.doc/am2ug_jobkey.html</a>][Full
+description of keywords]].</p>
+</section>
+<section id="submit-a-job-without-a-job-file">
+<h3>Submit a Job without a Job File<a class="headerlink" href="#submit-a-job-without-a-job-file" title="Permalink to this heading">#</a></h3>
+<p>Submission of a job without a job file can be done by the command:
+<code class="docutils literal notranslate"><span class="pre">llsub</span> <span class="pre">[llsub_options]</span> <span class="pre">&lt;command&gt;</span></code></p>
+<p>This command is not part of the IBM LoadLeveler software but was developed at ZIH.</p>
+<p>The job file will be created in background by means of the command line options. Afterwards, the job
+file will be passed to the command <code class="docutils literal notranslate"><span class="pre">llsubmit</span></code> which submit the job to LoadLeveler (see above).</p>
+<p>Important options are:</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Option</p></th>
+<th class="head text-left"><p>Default</p></th>
+<th class="head text-left"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">-J</span> <span class="pre">&lt;name&gt;</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">llsub</span></code></p></td>
+<td class="text-left"><p>Specifies the name of the job. You can name the job using any combination of letters, numbers, or both. The job name only appears in the long reports of the <code class="docutils literal notranslate"><span class="pre">llq</span></code>, <code class="docutils literal notranslate"><span class="pre">llstatus</span></code>, and <code class="docutils literal notranslate"><span class="pre">llsummary</span></code> commands.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">-n</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td class="text-left"><p>Specifies the total number of tasks of a parallel job you want to run on all available nodes.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">-T</span></code></p></td>
+<td class="text-left"><p>not specified</p></td>
+<td class="text-left"><p>Specifies the maximum number of OpenMP threads to use per process by setting the environment variable <code class="docutils literal notranslate"><span class="pre">OMP_NUM_THREADS</span></code> to number.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--o,</span> <span class="pre">-oo</span> <span class="pre">&lt;filename&gt;</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">&lt;jobname&gt;.&lt;hostname&gt;.&lt;jobid&gt;.out</span></code></p></td>
+<td class="text-left"><p>Specifies the name of the file to use as standard output (stdout) when your job step runs.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">-e,</span> <span class="pre">-oe</span> <span class="pre">&lt;filename&gt;</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">&lt;jobname&gt;.&lt;hostname&gt;.&lt;jobid&gt;.err</span></code></p></td>
+<td class="text-left"><p>Specifies the name of the file to use as standard error (stderr) when your job step runs.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">-I</span></code></p></td>
+<td class="text-left"><p>not specified</p></td>
+<td class="text-left"><p>Submits an interactive job and sends the job’s standard output (or standard error) to the terminal.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">-q</span> <span class="pre">&lt;name&gt;</span></code></p></td>
+<td class="text-left"><p>non-interactive: <code class="docutils literal notranslate"><span class="pre">short</span></code> interactive(n<code class="docutils literal notranslate"><span class="pre">1):</span> <span class="pre">=interactive</span></code> interactive(n&gt;1): <code class="docutils literal notranslate"><span class="pre">interactive_par</span></code></p></td>
+<td class="text-left"><p>Specifies the name of a job class defined locally in your cluster. You can use the <code class="docutils literal notranslate"><span class="pre">llclass</span></code> command to find out information on job classes.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">-x</span></code></p></td>
+<td class="text-left"><p>not specified</p></td>
+<td class="text-left"><p>Puts the node running your job into exclusive execution mode. In exclusive execution mode, your job runs by itself on a node. It is dispatched only to a node with no other jobs running, and LoadLeveler does not send any other jobs to the node until the job completes.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">-hosts</span> <span class="pre">&lt;number&gt;</span></code></p></td>
+<td class="text-left"><p>automatically</p></td>
+<td class="text-left"><p>Specifies the number of nodes requested by a job step. This option is equal to the bsub option <code class="docutils literal notranslate"><span class="pre">-R</span> <span class="pre">&quot;span\[hosts=number\]&quot;</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">-ptile</span> <span class="pre">&lt;number&gt;</span></code></p></td>
+<td class="text-left"><p>automatically</p></td>
+<td class="text-left"><p>Specifies the number of nodes requested by a job step. This option is equal to the bsub option <code class="docutils literal notranslate"><span class="pre">-R</span> <span class="pre">&quot;span\[ptile=number\]&quot;</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">-mem</span> <span class="pre">&lt;size&gt;</span></code></p></td>
+<td class="text-left"><p>not specified</p></td>
+<td class="text-left"><p>Specifies the requirement of memory which the job needs on a single node. The memory requirement is specified in MB. This option is equal to the bsub option <code class="docutils literal notranslate"><span class="pre">-R</span> <span class="pre">&quot;rusage\[mem=size\]&quot;</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The option <code class="docutils literal notranslate"><span class="pre">-H</span></code> prints the list of all available command line options.</p>
+<p>Here is an example for an MPI Job:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">llsub -T 1 -n 16 -e err.txt -o out.txt mpirun -x LD_LIBRARY_PATH -np 16 ./my_program</span>
+</pre></div>
+</div>
+</section>
+<section id="interactive-jobs">
+<h3>Interactive Jobs<a class="headerlink" href="#interactive-jobs" title="Permalink to this heading">#</a></h3>
+<p>Interactive Jobs can be submitted by the command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">llsub -I -q &lt;interactive&gt; &lt;command&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="loadleveler-runtime-environment-variables">
+<h3>LoadLeveler Runtime Environment Variables<a class="headerlink" href="#loadleveler-runtime-environment-variables" title="Permalink to this heading">#</a></h3>
+<p>LoadLeveler runtime variables give you some information within the job
+script, for example:</p>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#@ job_name = my_job</span>
+<span class="c1">#@ output = $(job_name).$(jobid).out</span>
+<span class="c1">#@ error  = $(job_name).$(jobid).err</span>
+<span class="c1">#@ job_type = parallel</span>
+<span class="c1">#@ node = 2</span>
+<span class="c1">#@ tasks_per_node = 8</span>
+<span class="c1">#@ class = short</span>
+<span class="c1">#@ wall_clock_limit = 00:30:00</span>
+<span class="c1">#@ resources = ConsumableMemory(1 gb)</span>
+<span class="c1">#@ environment = COPY_ALL</span>
+<span class="c1">#@ notification = complete</span>
+<span class="c1">#@ notify_user = your_email@adress</span>
+<span class="c1">#@ queue</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="nv">$LOADL_PROCESSOR_LIST</span>
+<span class="nb">echo</span><span class="w"> </span><span class="nv">$LOADL_STEP_ID</span>
+<span class="nb">echo</span><span class="w"> </span><span class="nv">$LOADL_JOB_NAME</span>
+mpirun<span class="w"> </span>-np<span class="w"> </span><span class="m">16</span><span class="w"> </span>./my_mpi_program
+</pre></div>
+</div>
+<p>Further Information:
+[[<a class="reference external" href="http://publib.boulder.ibm.com/infocenter/clresctr/vxrx/index.jsp?topic=/com.ibm.cluster.loadl35.admin.doc/am2ug_envvars.html">http://publib.boulder.ibm.com/infocenter/clresctr/vxrx/index.jsp?topic=/com.ibm.cluster.loadl35.admin.doc/am2ug_envvars.html</a>][Full
+description of variables]].</p>
+</section>
+</section>
+<section id="job-queues">
+<h2>Job Queues<a class="headerlink" href="#job-queues" title="Permalink to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">llclass</span></code> command provides information about each queue. Example
+output:</p>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>Name<span class="w">                 </span>MaxJobCPU<span class="w">     </span>MaxProcCPU<span class="w">  </span>Free<span class="w">   </span>Max<span class="w"> </span>Description
+<span class="w">                    </span>d+hh:mm:ss<span class="w">     </span>d+hh:mm:ss<span class="w"> </span>Slots<span class="w"> </span>Slots
+---------------<span class="w"> </span>--------------<span class="w"> </span>--------------<span class="w"> </span>-----<span class="w"> </span>-----<span class="w"> </span>---------------------
+interactive<span class="w">          </span>undefined<span class="w">      </span>undefined<span class="w">    </span><span class="m">32</span><span class="w">    </span><span class="m">32</span><span class="w"> </span>interactive,<span class="w"> </span>exclusive<span class="w"> </span>shared<span class="w"> </span>nodes,<span class="w"> </span>max.<span class="w"> </span>12h<span class="w"> </span>runtime
+triton_ism<span class="w">           </span>undefined<span class="w">      </span>undefined<span class="w">     </span><span class="m">8</span><span class="w">    </span><span class="m">80</span><span class="w"> </span>exclusive,<span class="w"> </span>serial<span class="w"> </span>+<span class="w"> </span>parallel<span class="w"> </span>queue,<span class="w"> </span>nodes<span class="w"> </span>shared,<span class="w"> </span>unlimited<span class="w"> </span>runtime
+openend<span class="w">              </span>undefined<span class="w">      </span>undefined<span class="w">   </span><span class="m">272</span><span class="w">   </span><span class="m">384</span><span class="w"> </span>serial<span class="w"> </span>+<span class="w"> </span>parallel<span class="w"> </span>queue,<span class="w"> </span>nodes<span class="w"> </span>shared,<span class="w"> </span>unlimited<span class="w"> </span>runtime
+long<span class="w">                 </span>undefined<span class="w">      </span>undefined<span class="w">   </span><span class="m">272</span><span class="w">   </span><span class="m">384</span><span class="w"> </span>serial<span class="w"> </span>+<span class="w"> </span>parallel<span class="w"> </span>queue,<span class="w"> </span>nodes<span class="w"> </span>shared,<span class="w"> </span>max.<span class="w"> </span><span class="m">7</span><span class="w"> </span>days<span class="w"> </span>runtime
+medium<span class="w">               </span>undefined<span class="w">      </span>undefined<span class="w">   </span><span class="m">272</span><span class="w">   </span><span class="m">384</span><span class="w"> </span>serial<span class="w"> </span>+<span class="w"> </span>parallel<span class="w"> </span>queue,<span class="w"> </span>nodes<span class="w"> </span>shared,<span class="w"> </span>max.<span class="w"> </span><span class="m">3</span><span class="w"> </span>days<span class="w"> </span>runtime
+short<span class="w">                </span>undefined<span class="w">      </span>undefined<span class="w">   </span><span class="m">272</span><span class="w">   </span><span class="m">384</span><span class="w"> </span>serial<span class="w"> </span>+<span class="w"> </span>parallel<span class="w"> </span>queue,<span class="w"> </span>nodes<span class="w"> </span>shared,<span class="w"> </span>max.<span class="w"> </span><span class="m">4</span><span class="w"> </span>hours<span class="w"> </span>runtime
+</pre></div>
+</div>
+</section>
+<section id="job-monitoring">
+<h2>Job Monitoring<a class="headerlink" href="#job-monitoring" title="Permalink to this heading">#</a></h2>
+<section id="all-jobs-in-the-queue">
+<h3>All Jobs in the Queue<a class="headerlink" href="#all-jobs-in-the-queue" title="Permalink to this heading">#</a></h3>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># llq</span>
+</pre></div>
+</div>
+<section id="all-of-one-s-own-jobs">
+<h4>All of One’s Own Jobs<a class="headerlink" href="#all-of-one-s-own-jobs" title="Permalink to this heading">#</a></h4>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># llq -u username</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="details-about-why-a-job-has-not-yet-started">
+<h3>Details About Why A Job Has Not Yet Started<a class="headerlink" href="#details-about-why-a-job-has-not-yet-started" title="Permalink to this heading">#</a></h3>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># llq -s job-id</span>
+</pre></div>
+</div>
+<p>The key information is located at the end of the output, and will look
+similar to the following:</p>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span><span class="o">====================</span><span class="w"> </span>EVALUATIONS<span class="w"> </span>FOR<span class="w"> </span>JOB<span class="w"> </span>STEP<span class="w"> </span>l1f1n01.4604.0<span class="w"> </span><span class="o">====================</span>
+The<span class="w"> </span>class<span class="w"> </span>of<span class="w"> </span>this<span class="w"> </span>job<span class="w"> </span>step<span class="w"> </span>is<span class="w"> </span><span class="s2">&quot;workq&quot;</span>.
+Total<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>available<span class="w"> </span>initiators<span class="w"> </span>of<span class="w"> </span>this<span class="w"> </span>class<span class="w"> </span>on<span class="w"> </span>all<span class="w"> </span>machines<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>cluster:<span class="w"> </span><span class="m">0</span>
+Minimum<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>initiators<span class="w"> </span>of<span class="w"> </span>this<span class="w"> </span>class<span class="w"> </span>required<span class="w"> </span>by<span class="w"> </span>job<span class="w"> </span>step:<span class="w"> </span><span class="m">4</span>
+The<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>available<span class="w"> </span>initiators<span class="w"> </span>of<span class="w"> </span>this<span class="w"> </span>class<span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>sufficient<span class="w"> </span><span class="k">for</span><span class="w"> </span>this<span class="w"> </span>job<span class="w"> </span>step.
+Not<span class="w"> </span>enough<span class="w"> </span>resources<span class="w"> </span>to<span class="w"> </span>start<span class="w"> </span>now.
+Not<span class="w"> </span>enough<span class="w"> </span>resources<span class="w"> </span><span class="k">for</span><span class="w"> </span>this<span class="w"> </span>step<span class="w"> </span>as<span class="w"> </span>backfill.
+</pre></div>
+</div>
+<p>Or it will tell you the <strong>estimated start</strong> time:</p>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span><span class="o">====================</span><span class="w"> </span>EVALUATIONS<span class="w"> </span>FOR<span class="w"> </span>JOB<span class="w"> </span>STEP<span class="w"> </span>l1f1n01.8207.0<span class="w"> </span><span class="o">====================</span>
+The<span class="w"> </span>class<span class="w"> </span>of<span class="w"> </span>this<span class="w"> </span>job<span class="w"> </span>step<span class="w"> </span>is<span class="w"> </span><span class="s2">&quot;checkpt&quot;</span>.
+Total<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>available<span class="w"> </span>initiators<span class="w"> </span>of<span class="w"> </span>this<span class="w"> </span>class<span class="w"> </span>on<span class="w"> </span>all<span class="w"> </span>machines<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>cluster:<span class="w"> </span><span class="m">8</span>
+Minimum<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>initiators<span class="w"> </span>of<span class="w"> </span>this<span class="w"> </span>class<span class="w"> </span>required<span class="w"> </span>by<span class="w"> </span>job<span class="w"> </span>step:<span class="w"> </span><span class="m">32</span>
+The<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>available<span class="w"> </span>initiators<span class="w"> </span>of<span class="w"> </span>this<span class="w"> </span>class<span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>sufficient<span class="w"> </span><span class="k">for</span><span class="w"> </span>this<span class="w"> </span>job<span class="w"> </span>step.
+Not<span class="w"> </span>enough<span class="w"> </span>resources<span class="w"> </span>to<span class="w"> </span>start<span class="w"> </span>now.
+This<span class="w"> </span>step<span class="w"> </span>is<span class="w"> </span>top-dog.
+Considered<span class="w"> </span>at:<span class="w"> </span>Fri<span class="w"> </span>Jul<span class="w"> </span><span class="m">13</span><span class="w"> </span><span class="m">12</span>:12:04<span class="w"> </span><span class="m">2007</span>
+Will<span class="w"> </span>start<span class="w"> </span>by:<span class="w"> </span>Tue<span class="w"> </span>Jul<span class="w"> </span><span class="m">17</span><span class="w"> </span><span class="m">18</span>:10:32<span class="w"> </span><span class="m">2007</span>
+</pre></div>
+</div>
+</section>
+<section id="generate-a-long-listing-rather-than-the-standard-one">
+<h3>Generate a long listing rather than the standard one<a class="headerlink" href="#generate-a-long-listing-rather-than-the-standard-one" title="Permalink to this heading">#</a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>llq<span class="w"> </span>-l<span class="w"> </span>job-id
+</pre></div>
+</div>
+<p>This command will give you detailed job information.</p>
+</section>
+<section id="job-status-states">
+<h3>Job Status States<a class="headerlink" href="#job-status-states" title="Permalink to this heading">#</a></h3>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>State</p></th>
+<th class="head"><p>Short</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Canceled</p></td>
+<td><p>CA</p></td>
+<td><p>The job has been canceled as by the <code class="docutils literal notranslate"><span class="pre">llcancel</span></code> command.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Completed</p></td>
+<td><p>C</p></td>
+<td><p>The job has completed.</p></td>
+</tr>
+<tr class="row-even"><td><p>Complete Pending</p></td>
+<td><p>CP</p></td>
+<td><p>The job is completed. Some tasks are finished.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Deferred</p></td>
+<td><p>D</p></td>
+<td><p>The job will not be assigned until a specified date. The start date may have been specified by the user in the Job Command file or it may have been set by LoadLeveler because a parallel job could not obtain enough machines to run the job.</p></td>
+</tr>
+<tr class="row-even"><td><p>Idle</p></td>
+<td><p>I</p></td>
+<td><p>The job is being considered to run on a machine though no machine has been selected yet.</p></td>
+</tr>
+<tr class="row-odd"><td><p>NotQueued</p></td>
+<td><p>NQ</p></td>
+<td><p>The job is not being considered to run. A job may enter this state due to an error in the command file or because LoadLeveler can not obtain information that it needs to act on the request.</p></td>
+</tr>
+<tr class="row-even"><td><p>Not Run</p></td>
+<td><p>NR</p></td>
+<td><p>The job will never run because a stated dependency in the Job Command file evaluated to be false.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pending</p></td>
+<td><p>P</p></td>
+<td><p>The job is in the process of starting on one or more machines. The request to start the job has been sent but has not yet been acknowledged.</p></td>
+</tr>
+<tr class="row-even"><td><p>Rejected</p></td>
+<td><p>X</p></td>
+<td><p>The job did not start because there was a mismatch or requirements for your job and the resources on the target machine or because the user does not have a valid ID on the target machine.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Reject Pending</p></td>
+<td><p>XP</p></td>
+<td><p>The job is in the process of being rejected.</p></td>
+</tr>
+<tr class="row-even"><td><p>Removed</p></td>
+<td><p>RM</p></td>
+<td><p>The job was canceled by either LoadLeveler or the owner of the job.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Remove Pending</p></td>
+<td><p>RP</p></td>
+<td><p>The job is in the process of being removed.</p></td>
+</tr>
+<tr class="row-even"><td><p>Running</p></td>
+<td><p>R</p></td>
+<td><p>The job is running.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Starting</p></td>
+<td><p>ST</p></td>
+<td><p>The job is starting.</p></td>
+</tr>
+<tr class="row-even"><td><p>Submission Error</p></td>
+<td><p>SX</p></td>
+<td><p>The job can not start due to a submission error. Please notify the Bluedawg administration team if you encounter this error.</p></td>
+</tr>
+<tr class="row-odd"><td><p>System Hold</p></td>
+<td><p>S</p></td>
+<td><p>The job has been put in hold by a system administrator.</p></td>
+</tr>
+<tr class="row-even"><td><p>System User Hold</p></td>
+<td><p>HS</p></td>
+<td><p>Both the user and a system administrator has put the job on hold.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Terminated</p></td>
+<td><p>TX</p></td>
+<td><p>The job was terminated, presumably by means beyond LoadLeveler’s control. Please notify the Bluedawg administration team if you encounter this error.</p></td>
+</tr>
+<tr class="row-even"><td><p>User Hold</p></td>
+<td><p>H</p></td>
+<td><p>The job has been put on hold by the owner.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Vacated</p></td>
+<td><p>V</p></td>
+<td><p>The started job did not complete. The job will be scheduled again provided that the job may be rescheduled.</p></td>
+</tr>
+<tr class="row-even"><td><p>Vacate Pending</p></td>
+<td><p>VP</p></td>
+<td><p>The job is in the process of vacating.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="cancel-a-job">
+<h2>Cancel a Job<a class="headerlink" href="#cancel-a-job" title="Permalink to this heading">#</a></h2>
+<section id="a-particular-job">
+<h3>A Particular Job<a class="headerlink" href="#a-particular-job" title="Permalink to this heading">#</a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>llcancel<span class="w"> </span>job-id
+</pre></div>
+</div>
+</section>
+<section id="all-of-one-s-jobs">
+<h3>All of One’s Jobs<a class="headerlink" href="#all-of-one-s-jobs" title="Permalink to this heading">#</a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>llcancel<span class="w"> </span>-u<span class="w"> </span>username
+</pre></div>
+</div>
+</section>
+</section>
+<section id="job-history-and-usage-summaries">
+<h2>Job History and Usage Summaries<a class="headerlink" href="#job-history-and-usage-summaries" title="Permalink to this heading">#</a></h2>
+<p>On each cluster, there exists a file that contains the history of all
+jobs run under LoadLeveler. This file is
+<code class="docutils literal notranslate"><span class="pre">/var/loadl/archive/history.archive</span></code>, and may be queried using the
+<code class="docutils literal notranslate"><span class="pre">llsummary</span></code> command.</p>
+<p>An example of usage would be as follows:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>llsummary<span class="w"> </span>-u<span class="w"> </span>estrabd<span class="w"> </span>/var/loadl/archive/history.archive
+</pre></div>
+</div>
+<p>And the output would look something like:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">       Name   Jobs   Steps        Job Cpu    Starter Cpu     Leverage</span>
+<span class="go">    estrabd    118     128       07:55:57       00:00:45        634.6</span>
+<span class="go">      TOTAL    118     128       07:55:57       00:00:45        634.6</span>
+<span class="go">      Class   Jobs   Steps        Job Cpu    Starter Cpu     Leverage</span>
+<span class="go">    checkpt     13      23       03:09:32       00:00:18        631.8</span>
+<span class="go">interactive    105     105       04:46:24       00:00:26        660.9</span>
+<span class="go">      TOTAL    118     128       07:55:57       00:00:45        634.6</span>
+<span class="go">      Group   Jobs   Steps        Job Cpu    Starter Cpu     Leverage</span>
+<span class="go">   No_Group    118     128       07:55:57       00:00:45        634.6</span>
+<span class="go">      TOTAL    118     128       07:55:57       00:00:45        634.6</span>
+<span class="go">    Account   Jobs   Steps        Job Cpu    Starter Cpu     Leverage</span>
+<span class="go">       NONE    118     128       07:55:57       00:00:45        634.6</span>
+<span class="go">      TOTAL    118     128       07:55:57       00:00:45        634.6</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">llsummary</span></code> tool has a lot of options, which are discussed in its
+man pages.</p>
+</section>
+<section id="check-status-of-each-node">
+<h2>Check status of each node<a class="headerlink" href="#check-status-of-each-node" title="Permalink to this heading">#</a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>llstatus
+</pre></div>
+</div>
+<p>And the output would look something like:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">root@triton[0]:~# </span>llstatus
+<span class="go">Name                      Schedd InQ  Act Startd Run LdAvg Idle Arch      OpSys</span>
+<span class="go">n01                       Avail     0   0 Idle     0 0.00  2403 AMD64     Linux2</span>
+<span class="go">n02                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n03                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n04                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n05                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n06                       Avail     0   0 Idle     0 0.71  9999 AMD64     Linux2</span>
+<span class="go">n07                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n08                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n09                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n10                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n11                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n12                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n13                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n14                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n15                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n16                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n17                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n18                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n19                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n20                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n21                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n22                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n23                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n24                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n25                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n26                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n27                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n28                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n29                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n30                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n31                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n32                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n33                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n34                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n35                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n36                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n37                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n38                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n39                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n40                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n41                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n42                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n43                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n44                       Avail     0   0 Idle     0 0.01  9999 AMD64     Linux2</span>
+<span class="go">n45                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n46                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n47                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n48                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n49                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n50                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n51                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n52                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n53                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n54                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n55                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n56                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n57                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n58                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n59                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n60                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n61                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n62                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n63                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">n64                       Avail     0   0 Idle     0 0.00  9999 AMD64     Linux2</span>
+<span class="go">triton                    Avail     0   0 Idle     0 0.00   585 AMD64     Linux2</span>
+
+<span class="go">AMD64/Linux2               65 machines      0  jobs      0  running tasks</span>
+<span class="go">Total Machines             65 machines      0  jobs      0  running tasks</span>
+
+<span class="go">The Central Manager is defined on triton</span>
+
+<span class="go">The BACKFILL scheduler is in use</span>
+
+<span class="go">All machines on the machine_list are present.</span>
+</pre></div>
+</div>
+<p>Detailed status information for a specific node:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>llstatus<span class="w"> </span>-l<span class="w"> </span>n54
+</pre></div>
+</div>
+<p>Further information:
+<a class="reference external" href="http://publib.boulder.ibm.com/infocenter/clresctr/vxrx/index.jsp?topic=/com.ibm.cluster.loadl.doc/llbooks.html">IBM Documentation (see version 3.5)</a></p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/archive"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#job-submission">
+   Job Submission
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#job-file-examples">
+     Job File Examples
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#serial-batch-jobs">
+       Serial Batch Jobs
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#mpi-parallel-batch-jobs">
+       MPI Parallel Batch Jobs
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#hybrid-mpi-openmp-parallel-batch-jobs">
+       Hybrid MPI+OpenMP Parallel Batch Jobs
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#job-file-keywords">
+     Job File Keywords
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#submit-a-job-without-a-job-file">
+     Submit a Job without a Job File
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#interactive-jobs">
+     Interactive Jobs
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#loadleveler-runtime-environment-variables">
+     LoadLeveler Runtime Environment Variables
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#job-queues">
+   Job Queues
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#job-monitoring">
+   Job Monitoring
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#all-jobs-in-the-queue">
+     All Jobs in the Queue
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#all-of-one-s-own-jobs">
+       All of One’s Own Jobs
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#details-about-why-a-job-has-not-yet-started">
+     Details About Why A Job Has Not Yet Started
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#generate-a-long-listing-rather-than-the-standard-one">
+     Generate a long listing rather than the standard one
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#job-status-states">
+     Job Status States
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cancel-a-job">
+   Cancel a Job
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#a-particular-job">
+     A Particular Job
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#all-of-one-s-jobs">
+     All of One’s Jobs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#job-history-and-usage-summaries">
+   Job History and Usage Summaries
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#check-status-of-each-node">
+   Check status of each node
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-23.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

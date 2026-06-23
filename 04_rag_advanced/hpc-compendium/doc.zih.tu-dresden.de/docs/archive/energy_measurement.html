@@ -1,0 +1,998 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Measure Energy Consumption (Outdated) &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/archive/energy_measurement';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Preparation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../00_preparation/readme.html">Preparation of the session</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/archive/energy_measurement.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../../../../_sources/04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/archive/energy_measurement.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Measure Energy Consumption (Outdated)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#summary-of-measurement-interfaces">
+   Summary of Measurement Interfaces
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#accuracy-temporal-and-spatial-resolution">
+     Accuracy, Temporal and Spatial Resolution
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#command-line-interface">
+   Command Line Interface
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#integration-in-application-performance-traces">
+   Integration in Application Performance Traces
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#access-using-slurm-tools">
+   Access Using Slurm Tools
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#post-mortem-per-job-accounting">
+     Post-Mortem Per-Job Accounting
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#slurm-energy-profiling">
+     Slurm Energy Profiling
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#using-the-hdeem-c-api">
+   Using the HDEEM C API
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#further-information-and-citing">
+   Further Information and Citing
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="measure-energy-consumption-outdated">
+<h1>Measure Energy Consumption (Outdated)<a class="headerlink" href="#measure-energy-consumption-outdated" title="Permalink to this heading">#</a></h1>
+<p>The Intel Haswell nodes of ZIH system are equipped with power instrumentation that allow the
+recording and accounting of power dissipation and energy consumption data. The data is made
+available through several different interfaces, which are described below.</p>
+<section id="summary-of-measurement-interfaces">
+<h2>Summary of Measurement Interfaces<a class="headerlink" href="#summary-of-measurement-interfaces" title="Permalink to this heading">#</a></h2>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Interface</p></th>
+<th class="head text-left"><p>Sensors</p></th>
+<th class="head text-left"><p>Rate</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Dataheap (C, Python, VampirTrace, Score-P)</p></td>
+<td class="text-left"><p>Blade, (CPU)</p></td>
+<td class="text-left"><p>1 sample/s</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>HDEEM* (C, Score-P)</p></td>
+<td class="text-left"><p>Blade, CPU, DDR</p></td>
+<td class="text-left"><p>1000 samples/s (Blade), 100 samples/s (VRs)</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>HDEEM Command Line Interface</p></td>
+<td class="text-left"><p>Blade, CPU, DDR</p></td>
+<td class="text-left"><p>1000 samples/s (Blade), 100 samples/s (VR)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Slurm Accounting (<code class="docutils literal notranslate"><span class="pre">sacct</span></code>)</p></td>
+<td class="text-left"><p>Blade</p></td>
+<td class="text-left"><p>Per Job Energy</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Slurm Profiling (HDF5)</p></td>
+<td class="text-left"><p>Blade</p></td>
+<td class="text-left"><p>Up to 1 sample/s</p></td>
+</tr>
+</tbody>
+</table>
+<p>!!! note</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Please specify `--partition=haswell --exclusive` along with your job request if you wish to use
+HDEEM.
+</pre></div>
+</div>
+<section id="accuracy-temporal-and-spatial-resolution">
+<h3>Accuracy, Temporal and Spatial Resolution<a class="headerlink" href="#accuracy-temporal-and-spatial-resolution" title="Permalink to this heading">#</a></h3>
+<p>In addition to the above mentioned interfaces, you can access the measurements through a
+<span class="xref myst">C API</span> to get the full temporal and spatial resolution:</p>
+<ul class="simple">
+<li><p>** Blade:** 1000 samples/s for the whole node, includes both sockets, DRAM,
+SSD, and other on-board consumers. Since the system is directly
+water cooled, no cooling components are included in the blade
+consumption.</p></li>
+<li><p><strong>Voltage regulators (VR):</strong> 100 samples/s for each of the six VR
+measurement points, one for each socket and four for eight DRAM
+lanes (two lanes bundled).</p></li>
+</ul>
+<p>The GPU blades also have 1 sample/s power instrumentation but have a lower accuracy.</p>
+<p>HDEEM measurements have an accuracy of 2 % for Blade (node) measurements, and 5 % for voltage
+regulator (CPU, DDR) measurements.</p>
+</section>
+</section>
+<section id="command-line-interface">
+<h2>Command Line Interface<a class="headerlink" href="#command-line-interface" title="Permalink to this heading">#</a></h2>
+<p>The HDEEM infrastructure can be controlled through command line tools. They are commonly used on
+the node under test to start, stop, and query the measurement device.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">startHdeem</span></code>: Start a measurement. After the command succeeds, the
+measurement data with the 1000 / 100 samples/s described above will be
+recorded on the Board Management Controller (BMC), which is capable
+of storing up to 8h of measurement data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stopHdeem</span></code>: Stop a measurement. No further data is recorded and
+the previously recorded data remains available on the BMC.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">printHdeem</span></code>: Read the data from the BMC. By default, the data is
+written into a CSV file, whose name can be controlled using the
+<code class="docutils literal notranslate"><span class="pre">-o</span></code> argument.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">checkHdeem</span></code>: Print the status of the measurement device.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">clearHdeem</span></code>: Reset and clear the measurement device. No further
+data can be read from the device after this command is executed
+before a new measurement is started.</p></li>
+</ul>
+<p>!!! note</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Please always execute `clearHdeem` before `startHdeem`.
+</pre></div>
+</div>
+</section>
+<section id="integration-in-application-performance-traces">
+<h2>Integration in Application Performance Traces<a class="headerlink" href="#integration-in-application-performance-traces" title="Permalink to this heading">#</a></h2>
+<p>The per-node power consumption data can be included as metrics in application traces by using the
+provided metric plugins for Score-P (and VampirTrace). The plugins are provided as modules and set
+all necessary environment variables that are required to record data for all nodes that are part of
+the current job.</p>
+<p>For 1 sample/s Blade values (Dataheap):</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../software/scorep.html"><span class="doc std std-doc">Score-P</span></a>: use the module <code class="docutils literal notranslate"><span class="pre">scorep-dataheap</span></code></p></li>
+<li><p><a class="reference internal" href="vampirtrace.html"><span class="doc std std-doc">VampirTrace</span></a>: use the module <code class="docutils literal notranslate"><span class="pre">vampirtrace-plugins/power-1.1</span></code>
+(<strong>Remark:</strong> VampirTrace is outdated!)</p></li>
+</ul>
+<p>For 1000 samples/s (Blade) and 100 samples/s (CPU{0,1}, DDR{AB,CD,EF,GH}):</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../software/scorep.html"><span class="doc std std-doc">Score-P</span></a>: use the module <code class="docutils literal notranslate"><span class="pre">scorep-hdeem</span></code>. This
+module requires a recent version of <code class="docutils literal notranslate"><span class="pre">scorep/sync-...</span></code>. Please use
+the latest that fits your compiler and MPI version.</p></li>
+</ul>
+<p>By default, the modules are set up to record the power data for the nodes they are used on. For
+further information on how to change this behavior, please use module show on the respective module.</p>
+<p>!!! example “Example usage with <code class="docutils literal notranslate"><span class="pre">gcc</span></code>”</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@haswell$ </span>module<span class="w"> </span>load<span class="w"> </span>scorep/trunk-2016-03-17-gcc-xmpi-cuda7.5
+<span class="gp">marie@haswell$ </span>module<span class="w"> </span>load<span class="w"> </span>scorep-dataheap
+<span class="gp">marie@haswell$ </span>scorep<span class="w"> </span>gcc<span class="w"> </span>application.c<span class="w"> </span>-o<span class="w"> </span>application
+<span class="gp">marie@haswell$ </span>srun<span class="w"> </span>./application
+</pre></div>
+</div>
+<p>Once the application is finished, a trace will be available that allows you to correlate application
+functions with the component power consumption of the parallel application.</p>
+<p>!!! note</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>For energy measurements, only tracing is supported in Score-P/VampirTrace.
+The modules therefore disables profiling and enables tracing,
+please use [Vampir](../software/vampir.md) to view the trace.
+</pre></div>
+</div>
+<p><img alt="Energy measurements in Vampir" src="../../../../../_images/energy_measurements-vampir.png" />
+{: align=”center”}</p>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">scorep-dataheap</span></code> records all sensors that are available. Currently this is the total
+node consumption and the CPUs. <code class="docutils literal notranslate"><span class="pre">scorep-hdeem</span></code> also records all available sensors
+(node, 2x CPU, 4x DDR) by default. You can change the selected sensors by setting the environment
+variables:</p>
+<p>!!! note</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The power measurement modules `scorep-dataheap` and `scorep-hdeem` are
+dynamic and only need to be loaded during execution.
+However, `scorep-hdeem` does require the application to be linked with
+a certain version of Score-P.
+</pre></div>
+</div>
+<p>??? hint “For HDEEM”
+<code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">SCOREP_METRIC_HDEEM_PLUGIN=Blade,CPU*</span></code></p>
+<p>??? hint “For Dataheap”
+<code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">SCOREP_METRIC_DATAHEAP_PLUGIN=localhost/watts</span></code></p>
+<p>For more information on how to use Score-P, please refer to the
+<a class="reference internal" href="../software/scorep.html"><span class="doc std std-doc">respective documentation</span></a>.</p>
+</section>
+<section id="access-using-slurm-tools">
+<h2>Access Using Slurm Tools<a class="headerlink" href="#access-using-slurm-tools" title="Permalink to this heading">#</a></h2>
+<p><a class="reference internal" href="../jobs_and_resources/slurm.html"><span class="doc std std-doc">Slurm</span></a> maintains its own database of job information, including
+energy data. There are two main ways of accessing this data, which are described below.</p>
+<section id="post-mortem-per-job-accounting">
+<h3>Post-Mortem Per-Job Accounting<a class="headerlink" href="#post-mortem-per-job-accounting" title="Permalink to this heading">#</a></h3>
+<p>This is the easiest way of accessing information about the energy consumed by a job and its job
+steps. The Slurm tool <code class="docutils literal notranslate"><span class="pre">sacct</span></code> allows users to query post-mortem energy data for any past job or job
+step by adding the field <code class="docutils literal notranslate"><span class="pre">ConsumedEnergy</span></code> to the <code class="docutils literal notranslate"><span class="pre">--format</span></code> parameter:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login $ </span>sacct<span class="w"> </span>--format<span class="o">=</span><span class="s2">&quot;jobid,jobname,ntasks,submit,start,end,ConsumedEnergy,nodelist,state&quot;</span><span class="w"> </span>-j<span class="w"> </span><span class="m">3967027</span>
+<span class="go">       JobID    JobName   NTasks              Submit               Start                 End ConsumedEnergy        NodeList      State</span>
+<span class="go">------------ ---------- -------- ------------------- ------------------- ------------------- -------------- --------------- ----------</span>
+<span class="go">3967027            bash          2014-01-07T12:25:42 2014-01-07T12:25:52 2014-01-07T12:41:20                    taurusi1159  COMPLETED</span>
+<span class="go">3967027.0         sleep        1 2014-01-07T12:26:07 2014-01-07T12:26:07 2014-01-07T12:26:18              0     taurusi1159  COMPLETED</span>
+<span class="go">3967027.1         sleep        1 2014-01-07T12:29:06 2014-01-07T12:29:06 2014-01-07T12:29:16          1.67K     taurusi1159  COMPLETED</span>
+<span class="go">3967027.2         sleep        1 2014-01-07T12:33:25 2014-01-07T12:33:25 2014-01-07T12:33:36          1.84K     taurusi1159  COMPLETED</span>
+<span class="go">3967027.3         sleep        1 2014-01-07T12:34:06 2014-01-07T12:34:06 2014-01-07T12:34:11          1.09K     taurusi1159  COMPLETED</span>
+<span class="go">3967027.4         sleep        1 2014-01-07T12:38:03 2014-01-07T12:38:03 2014-01-07T12:39:44         18.93K     taurusi1159  COMPLETED</span>
+</pre></div>
+</div>
+<p>This example job consisted of 5 job steps, each executing a sleep of a different length. Note that the
+<code class="docutils literal notranslate"><span class="pre">ConsumedEnergy</span></code> metric is only applicable to exclusive jobs.</p>
+</section>
+<section id="slurm-energy-profiling">
+<h3>Slurm Energy Profiling<a class="headerlink" href="#slurm-energy-profiling" title="Permalink to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">srun</span></code> tool offers several options for profiling job steps by adding the <code class="docutils literal notranslate"><span class="pre">--profile</span></code> parameter.
+Possible profiling options are <code class="docutils literal notranslate"><span class="pre">All</span></code>, <code class="docutils literal notranslate"><span class="pre">Energy</span></code>, <code class="docutils literal notranslate"><span class="pre">Task</span></code>, <code class="docutils literal notranslate"><span class="pre">Lustre</span></code>, and <code class="docutils literal notranslate"><span class="pre">Network</span></code>. In all cases, the
+profiling information is stored in an HDF5 file that can be inspected using available HDF5 tools,
+e.g., <code class="docutils literal notranslate"><span class="pre">h5dump</span></code>. The files are stored under <code class="docutils literal notranslate"><span class="pre">/scratch/profiling/</span></code> for each job, job step, and node. A
+description of the data fields in the file can be found
+<a class="reference external" href="http://slurm.schedmd.com/hdf5_profile_user_guide.html#HDF5">in the official documentation</a>.
+In general, the data files
+contain samples of the current <strong>power</strong> consumption on a per-second basis:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login $ </span>srun<span class="w"> </span>--partition<span class="w"> </span>haswell64<span class="w"> </span>--acctg-freq<span class="o">=</span><span class="m">2</span>,energy<span class="o">=</span><span class="m">1</span><span class="w"> </span>--profile<span class="o">=</span>energy<span class="w"> </span>sleep<span class="w"> </span><span class="m">10</span>
+<span class="go">srun: job 3967674 queued and waiting for resources</span>
+<span class="go">srun: job 3967674 has been allocated resources</span>
+<span class="gp">marie@login $ </span>h5dump<span class="w"> </span>/scratch/profiling/marie/3967674_0_taurusi1073.h5
+<span class="go">[...]</span>
+<span class="go">  DATASET &quot;Energy_0000000002 Data&quot; {</span>
+<span class="go">    DATATYPE  H5T_COMPOUND {</span>
+<span class="go">      H5T_STRING {</span>
+<span class="go">        STRSIZE 24;</span>
+<span class="go">        STRPAD H5T_STR_NULLTERM;</span>
+<span class="go">        CSET H5T_CSET_ASCII;</span>
+<span class="go">        CTYPE H5T_C_S1;</span>
+<span class="go">      } &quot;Date_Time&quot;;</span>
+<span class="go">      H5T_STD_U64LE &quot;Time&quot;;</span>
+<span class="go">      H5T_STD_U64LE &quot;Power&quot;;</span>
+<span class="go">      H5T_STD_U64LE &quot;CPU_Frequency&quot;;</span>
+<span class="go">    }</span>
+<span class="go">    DATASPACE  SIMPLE { ( 1 ) / ( 1 ) }</span>
+<span class="go">    DATA {</span>
+<span class="go">    (0): {</span>
+<span class="go">        &quot;&quot;,</span>
+<span class="go">        1389097545,  # timestamp</span>
+<span class="go">        174,         # power value</span>
+<span class="go">        1</span>
+<span class="go">      }</span>
+<span class="go">    }</span>
+<span class="go">  }</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="using-the-hdeem-c-api">
+<h2>Using the HDEEM C API<a class="headerlink" href="#using-the-hdeem-c-api" title="Permalink to this heading">#</a></h2>
+<p>Please specify <code class="docutils literal notranslate"><span class="pre">--partition=haswell</span> <span class="pre">--exclusive</span></code> along with your job request if you wish to use HDEEM.</p>
+<p>Please download the official documentation at
+<a class="reference external" href="http://www.bull.com/download-hdeem-library-reference-guide">http://www.bull.com/download-hdeem-library-reference-guide</a>.</p>
+<p>The HDEEM header and sample code are locally installed on the nodes.</p>
+<p>??? hint “HDEEM header location”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>`/usr/include/hdeem.h`
+</pre></div>
+</div>
+<p>??? hint “HDEEM sample location”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>`/usr/share/hdeem/sample/`
+</pre></div>
+</div>
+</section>
+<section id="further-information-and-citing">
+<h2>Further Information and Citing<a class="headerlink" href="#further-information-and-citing" title="Permalink to this heading">#</a></h2>
+<p>More information can be found in the paper
+<a class="reference external" href="http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=7016382">HDEEM: high definition energy efficiency monitoring</a>
+by Daniel Hackenberg et al. Please cite this paper if you are using HDEEM for your scientific work.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/archive"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#summary-of-measurement-interfaces">
+   Summary of Measurement Interfaces
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#accuracy-temporal-and-spatial-resolution">
+     Accuracy, Temporal and Spatial Resolution
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#command-line-interface">
+   Command Line Interface
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#integration-in-application-performance-traces">
+   Integration in Application Performance Traces
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#access-using-slurm-tools">
+   Access Using Slurm Tools
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#post-mortem-per-job-accounting">
+     Post-Mortem Per-Job Accounting
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#slurm-energy-profiling">
+     Slurm Energy Profiling
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#using-the-hdeem-c-api">
+   Using the HDEEM C API
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#further-information-and-citing">
+   Further Information and Citing
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-23.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

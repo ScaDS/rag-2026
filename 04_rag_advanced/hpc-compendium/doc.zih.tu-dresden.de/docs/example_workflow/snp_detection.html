@@ -1,0 +1,1451 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Simple SNP detection workflow &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/example_workflow/snp_detection';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Preparation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../00_preparation/readme.html">Preparation of the session</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/example_workflow/snp_detection.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../../../../_sources/04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/example_workflow/snp_detection.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Simple SNP detection workflow</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#content">
+   Content
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dataset">
+     1. Dataset
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#download-the-data">
+       Download the data
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#hpc-infrastructure">
+     2. HPC infrastructure
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#directories-within-the-filesystem-differ-in-capacity-duration-and-functionality">
+       Directories within the filesystem differ in capacity, duration and functionality
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#workflow-steps">
+     3. Workflow steps
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#login-to-cluster-with-windows">
+     4. Login to cluster with windows
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#create-a-workspace">
+     5. Create a workspace
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#create-environment-and-install-required-modules">
+     6. Create environment and install required modules
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#copy-data-to-the-hpc-filesystem">
+     7. Copy data to the HPC filesystem
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#conduct-analysis">
+     8. Conduct analysis
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#combine-all-steps-into-a-batch-job-file-to-be-submitted-on-the-hpc-cluster">
+       Combine all steps into a batch job file to be submitted on the HPC cluster
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#copy-results-to-local-computer">
+     9. Copy results to local computer
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="simple-snp-detection-workflow">
+<h1>Simple SNP detection workflow<a class="headerlink" href="#simple-snp-detection-workflow" title="Permalink to this heading">#</a></h1>
+<p>This example, for HPC beginners, describes each step of an SNP detection analysis based on DNA
+sequencing data on an HPC system. We do not guarantee correctness.</p>
+<section id="content">
+<h2>Content<a class="headerlink" href="#content" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><span class="xref myst">Dataset</span></p></li>
+<li><p><span class="xref myst">HPC Infrastructure</span></p></li>
+<li><p><span class="xref myst">Workflow steps</span></p></li>
+<li><p><span class="xref myst">Login to cluster</span></p></li>
+<li><p><span class="xref myst">Create a workspace</span></p></li>
+<li><p><span class="xref myst">Create environment and install required modules</span></p></li>
+<li><p><span class="xref myst">Copy data to the HPC filesystem</span></p></li>
+<li><p><span class="xref myst">Conduct analysis</span></p></li>
+<li><p><span class="xref myst">Copy results to local computer</span></p></li>
+</ol>
+<section id="dataset">
+<h3>1. Dataset<a class="headerlink" href="#dataset" title="Permalink to this heading">#</a></h3>
+<p>Detailed information regarding the dataset and experimental design:
+Key <em>et al.</em> (2023) <a class="reference external" href="https://www.cell.com/cell-host-microbe/fulltext/S1931-3128(23)00113-0.">On-person adaptive evolution of <em>Staphylococcus aureus</em> during treatment
+for Atopic Dermatitis (Cell &amp; Microbe)</a>.</p>
+<p>As raw data, to be analyzed, five <em>Staphylococcus aureus</em> samples of this publication and
+the <em>S. aureus</em> reference genome <a class="reference external" href="https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000013425.1/"><code class="docutils literal notranslate"><span class="pre">ASM1342v1</span></code></a>
+were downloaded.
+Accession numbers of the five samples: <code class="docutils literal notranslate"><span class="pre">SRR13995561</span></code>, <code class="docutils literal notranslate"><span class="pre">SRR13995562</span></code>, <code class="docutils literal notranslate"><span class="pre">SRR13995563</span></code>, <code class="docutils literal notranslate"><span class="pre">SRR13995564</span></code>, <code class="docutils literal notranslate"><span class="pre">SRR13995565</span></code>.</p>
+<p>For your convenience the data with the five accessions and the reference genome
+<code class="docutils literal notranslate"><span class="pre">ASM1342v1</span></code> are available to download
+at a <a class="reference external" href="https://datashare.tu-dresden.de/s/sdnEMc9BXzCKrdE">ZIH Datashare repository</a>.
+In case you would like to practice downloading data from NCBI, follow the instructions
+<a class="reference external" href="https://github.com/ncbi/sra-tools/wiki/02.-Installing-SRA-Toolkit">of the SRA Toolkit installation</a>
+<a class="reference external" href="https://github.com/ncbi/sra-tools/wiki/03.-Quick-Toolkit-Configuration">how to configure</a>
+and how to download the <code class="docutils literal notranslate"><span class="pre">fastq</span></code> files using the SRA Toolkit.
+It is also possible to download the data directly to the cluster filesystem.
+In this case you can skip the data transfer part.</p>
+<section id="download-the-data">
+<h4>Download the data<a class="headerlink" href="#download-the-data" title="Permalink to this heading">#</a></h4>
+<p>Using the SRA Toolkit, you can download the accessions, the raw data,
+which you would like to analyze.
+There are SRA Toolkit versions available for Linux and Windows systems.
+The following example downloads the accession number <code class="docutils literal notranslate"><span class="pre">SRR13995561</span></code> using
+a Windows or Linux OS, respectively.</p>
+<p>=== “Windows”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```powershell
+# downloading accession number SRR13995561 to the &#39;sratoolkit \bin&#39; folder:
+marie@local$ fastq-dump SRR13995561
+
+# downloading directly the fastq files and saving it in folder named &quot;fastqfiles&quot;:
+PS C:\marie@local\path\to\sratoolkit.current-win64\sratoolkit.3.0.7-win64\bin$ .\fasterq-dump SRR13995561
+--outdir fastqfiles --outfile SRR13995561.fastq
+```
+</pre></div>
+</div>
+<p>=== “Linux”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```bash
+# downloading accession number SRR13995561 to the &#39;sratoolkit /bin&#39; folder:
+marie@local$ fastq-dump SRR13995561
+
+# specify the directory with
+marie@local$ ~/path/to/sratoolkit/bin/fasterq-dump SRR13995561 --outdir /path/to/folder/fastqfiles --outfile SRR13995561.fastq
+```
+</pre></div>
+</div>
+</section>
+</section>
+<section id="hpc-infrastructure">
+<h3>2. HPC infrastructure<a class="headerlink" href="#hpc-infrastructure" title="Permalink to this heading">#</a></h3>
+<p>The filesystem can communicate with each cluster, login and compute node.
+Access to the compute node is possible via the login nodes.
+Slurm is a workload manager who facilitates the allocation of the
+requested resources for each job.
+The HPC system at TUD consists of five clusters with the basic structure as shown below.
+With the exception that they share one filesystem.</p>
+<p><img alt="Diagram with boxes and arrows. Boxes represent one job scheduler (top), login nodes (left), compute nodes (right), one filesystem (bottom). Boxes are connected with arrows top to bottom. Users are depicted with an icon connected to login nodes with an arrow." src="../../../../../_images/overview_cluster_basic400.png" /></p>
+<section id="directories-within-the-filesystem-differ-in-capacity-duration-and-functionality">
+<h4>Directories within the filesystem differ in capacity, duration and functionality<a class="headerlink" href="#directories-within-the-filesystem-differ-in-capacity-duration-and-functionality" title="Permalink to this heading">#</a></h4>
+<p>There are two types of filesystems: permanent and working. Permanent filesystems do not expire, and
+regular backups are generated. Working filesystems are accessible via workspaces, and have an expiry
+date. They are designed for data computation, data processing, hence a working filesystem.</p>
+<p><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">/home</span></code></span></p>
+<ul class="simple">
+<li><p>permanent</p></li>
+<li><p>limited in size</p></li>
+<li><p>backups are taken from here, frequent changes are a bad idea</p></li>
+<li><p>not a working directory</p></li>
+</ul>
+<p><a class="reference internal" href="../data_lifecycle/working.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">/data</span></code></span></a></p>
+<ul class="simple">
+<li><p>working filesystem</p></li>
+<li><p>no backups</p></li>
+<li><p>depending on your project use
+<a class="reference internal" href="../jobs_and_resources/hardware_overview.html"><span class="doc std std-doc">the different systems, e.g. <code class="docutils literal notranslate"><span class="pre">/horse</span></code>,<code class="docutils literal notranslate"><span class="pre">/walrus</span></code></span></a></p></li>
+</ul>
+<p><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">/projects</span></code></span></p>
+<ul class="simple">
+<li><p>for the duration of the applied project</p></li>
+<li><p>backups are generated</p></li>
+<li><p>capacity according to the application</p></li>
+<li><p>folders within can be shared with other members of the project</p></li>
+<li><p>mounted read-only, not for temporary data on the compute nodes - not a working directory</p></li>
+</ul>
+<p><a class="reference internal" href="../software/overview.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">/software</span></code></span></a></p>
+<ul class="simple">
+<li><p>pre-installed software can be found here</p></li>
+<li><p>1-2 per year, admins install new software in different release folders.
+Software and their versions will differ among the releases.
+The compendium describes <a class="reference internal" href="../software/modules.html"><span class="doc std std-doc">how to find the available software</span></a>.</p></li>
+</ul>
+</section>
+</section>
+<section id="workflow-steps">
+<h3>3. Workflow steps<a class="headerlink" href="#workflow-steps" title="Permalink to this heading">#</a></h3>
+<p>Considering the infrastructure of the HPC system and assuming the <code class="docutils literal notranslate"><span class="pre">fastq</span></code> files including reference
+genome are saved on the local computer, the following steps are necessary:</p>
+<ul class="simple">
+<li><p><span class="xref myst">Access the HPC system via login node</span></p></li>
+<li><p><span class="xref myst">Create a workspace</span></p></li>
+<li><p><span class="xref myst">Create a virtual environment and install required software</span></p></li>
+<li><p><span class="xref myst">Copy data to the created workspace</span></p></li>
+<li><p><span class="xref myst">Conduct analysis</span></p></li>
+<li><p><span class="xref myst">Copy results to local computer</span></p></li>
+</ul>
+</section>
+<section id="login-to-cluster-with-windows">
+<h3>4. Login to cluster with windows<a class="headerlink" href="#login-to-cluster-with-windows" title="Permalink to this heading">#</a></h3>
+<p>Follow the different steps to login to the HPC system using Windows PowerShell.</p>
+<p>Open Windows PowerShell:</p>
+<p><img alt="Snapshot of Windows start menu with PowerShell entry" src="../../../../../_images/powershell_open300.png" /></p>
+<p>Using the program PowerShell to establish the ssh connection.
+The example shows how to connect to the login node 2 of the <code class="docutils literal notranslate"><span class="pre">barnard</span></code> cluster.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>marie@local$ ssh marie@login2.barnard.hpc.tu-dresden.de
+</pre></div>
+</div>
+<p>When logging in for the first time, the following question will occur:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>The authenticity of host &#39;login2.barnard.hpc.tu-dresden.de (172.24.95.29)&#39;
+ cant&#39;t be established. ECDSA key fingerprint is SHA256:Xan2MYazewT0V5agNazaQfWzLKBD3P48zRwR6reoXhI.
+ Are you sure you want to continue connecting (yes/no/[fingerprint])?
+</pre></div>
+</div>
+<p>Compare <a class="reference internal" href="../access/key_fingerprints.html"><span class="doc std std-doc">the keys</span></a> and, only if correct, continue.
+Enter your password.</p>
+<p>!!! Important “”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Note that the password will not be visible while typing
+</pre></div>
+</div>
+<p>With the successful login, you will receive some basic information:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Last</span> <span class="n">login</span><span class="p">:</span> <span class="n">Mon</span> <span class="n">Aug11</span> <span class="mi">11</span><span class="p">:</span><span class="mi">11</span><span class="p">:</span><span class="mi">11</span> <span class="mi">2025</span> <span class="kn">from</span><span class="w"> </span><span class="mf">141.00.000.00</span>
+<span class="o">-----------------------------------------------------------------------</span>
+<span class="c1"># nodes: 720    (714 available / 6 unavailable)</span>
+<span class="o">-----------------------------------------------------------------------</span>
+<span class="n">jobs</span> <span class="n">running</span><span class="p">:</span>           <span class="mi">1010</span> <span class="o">|</span> <span class="n">cores</span> <span class="ow">in</span> <span class="n">use</span><span class="p">:</span>  <span class="mi">90398</span>
+<span class="n">jobs</span> <span class="n">pending</span><span class="p">:</span>             <span class="mi">52</span> <span class="o">|</span> <span class="n">cores</span> <span class="n">unavailable</span><span class="p">:</span> <span class="mi">936</span>
+<span class="n">jobs</span> <span class="n">suspend</span><span class="p">:</span>              <span class="mi">0</span> <span class="o">|</span>
+<span class="n">jobs</span> <span class="n">damaged</span><span class="p">:</span>             <span class="mi">35</span> <span class="o">|</span>
+<span class="o">-----------------------------------------------------------------------</span>
+                                  <span class="n">CORES</span>
+               <span class="n">free</span> <span class="o">|</span> <span class="n">resv</span> <span class="o">|</span> <span class="n">down</span> <span class="o">|</span> <span class="n">total</span>
+              <span class="o">------+-------+-------+-------</span>
+              <span class="mi">28641</span> <span class="o">|</span>  <span class="mi">208</span> <span class="o">|</span> <span class="mi">936</span> <span class="o">|</span> <span class="mi">74880</span>
+              <span class="o">------+-------+-------+-------</span>
+<span class="o">-----------------------------------------------------------------------</span>
+</pre></div>
+</div>
+<p>??? info “Linux login”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>In case you are using a Linux operation system. Open your terminal
+ and conduct the same steps as within the PowerShell to connect.
+</pre></div>
+</div>
+</section>
+<section id="create-a-workspace">
+<h3>5. Create a workspace<a class="headerlink" href="#create-a-workspace" title="Permalink to this heading">#</a></h3>
+<p><a class="reference internal" href="../data_lifecycle/workspaces.html"><span class="doc std std-doc">Creating a workspace</span></a> with a specific expiration date.
+The workspace is the optimal location for your data while conducting the analysis.
+But it is not for storing data.
+It is possible to have more than one workspace in the selected filesystem.</p>
+<p>Create a workspace named <code class="docutils literal notranslate"><span class="pre">example_SNPs</span></code> and a validity of 60 days.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[marie@login.barnard ~] $ ws_allocate -r 7 -m marie@tu-dresden.de example_SNPs -d 60
+Info:creating workspace.
+/data/horse/ws/marie-example_SNPs
+Remaining extensions: 10
+Remaining time in days:60
+</pre></div>
+</div>
+<p>Parameters:</p>
+<ul class="simple">
+<li><p>as we did not specify the filesystem, the workspace will be generated in the default system
+<code class="docutils literal notranslate"><span class="pre">/data/horse</span></code>.</p></li>
+<li><p>-r: determine the time, in days, that the reminder about the expiry date is sent.
+In this example 7 days.</p></li>
+<li><p>-m: email address the reminder will be send to</p></li>
+<li><p>workspace name (in this case <code class="docutils literal notranslate"><span class="pre">example_SNPs</span></code>)</p></li>
+<li><p>-d: duration of the workspace in days, here 60 days</p></li>
+</ul>
+<p>It is possible to have more than one workspace within a given filesystem.</p>
+<p>Change the directory to the generated workspace:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[marie@login.barnard ~] $ cd /data/horse/ws/marie-example_SNPs
+[marie@login.barnard marie-example_SNPs]$
+
+# instead of &#39;~&#39; (=home directory), the current directory is now marie-example_SNPs. You may check the complete path with
+[marie@login.barnard marie-example_SNPs]$ pwd
+/data/horse/ws/marie-example_SNPs
+</pre></div>
+</div>
+</section>
+<section id="create-environment-and-install-required-modules">
+<h3>6. Create environment and install required modules<a class="headerlink" href="#create-environment-and-install-required-modules" title="Permalink to this heading">#</a></h3>
+<p>We create a <a class="reference internal" href="../software/python_virtual_environments.html"><span class="doc std std-doc">virtual environment</span></a>,
+where the required modules can be installed to
+avoid problems due to incompatibilities
+of different software versions and/or overloading the user space with software which
+is unnecessary for a particular analysis, but would slow down working in the user space.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">(name)</span></code> in front of the directory is the current environment you are in.
+It is possible to create virtual environments in either the <code class="docutils literal notranslate"><span class="pre">/home</span></code> directory or in
+the created workspace.
+For the latter case, the virtual environment will be deleted with the workspace at
+the defined expiration date.
+The <code class="docutils literal notranslate"><span class="pre">/home</span></code> directory is limited in size and virtual environments can become large.
+Therefore, we recommend to create environments in your workspace.
+Independent from the directory, we recommend to save all
+steps in a <code class="docutils literal notranslate"><span class="pre">.yml</span></code> file and save it in the <code class="docutils literal notranslate"><span class="pre">/home</span></code> directory.
+So at a later point you are able to
+<span class="xref myst">recreate the environment</span>.</p>
+<p>In general, we recommend to use ‘pip’ as a package manager, but some modules require
+different managers like ‘conda’ or ‘mamba’.
+Here, we will use ‘mamba’ and, therefore, we will first install Mamba in the /home directory using
+<code class="docutils literal notranslate"><span class="pre">Miniforge3</span></code>.  Mamba is a package manager similar to conda but
+<a class="reference external" href="https://statistics.berkeley.edu/computing/conda">faster and better in solving dependencies</a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[marie@login.barnard ~] $ curl -L -O &quot;https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh&quot;
+[marie@login.barnard ~] $ bash Miniforge3-$(uname)-$(uname -m).sh
+</pre></div>
+</div>
+<p>After the successful installation, you will receive the following confirmation.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Miniforge3</span> <span class="n">will</span> <span class="n">now</span> <span class="n">be</span> <span class="n">installed</span> <span class="n">into</span> <span class="n">this</span> <span class="n">location</span><span class="p">:</span>
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">marie</span><span class="o">/</span><span class="n">miniforge3</span>
+  <span class="o">-</span> <span class="n">Press</span> <span class="n">ENTER</span> <span class="n">to</span> <span class="n">confirm</span> <span class="n">the</span> <span class="n">location</span>
+  <span class="o">-</span> <span class="n">Press</span> <span class="n">CTRL</span><span class="o">-</span><span class="n">C</span> <span class="n">to</span> <span class="n">abort</span> <span class="n">the</span> <span class="n">intallation</span>
+  <span class="o">-</span> <span class="n">Or</span> <span class="n">specify</span> <span class="n">a</span> <span class="n">different</span> <span class="n">location</span> <span class="n">below</span>
+<span class="p">[</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">marie</span><span class="o">/</span><span class="n">miniforge3</span><span class="p">]</span> <span class="o">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p>We will now create, using Mamba, the environment <code class="docutils literal notranslate"><span class="pre">SNP_detection</span></code>
+in the folder <code class="docutils literal notranslate"><span class="pre">/env</span></code> in your workspace <code class="docutils literal notranslate"><span class="pre">example_SNPs</span></code>.
+Immediately with the creation the software <code class="docutils literal notranslate"><span class="pre">bowtie2</span></code> including all
+dependencies like python are installed within the environment.
+You will find the created environments in the following directory <code class="docutils literal notranslate"><span class="pre">/home/marie/miniforge3/envs/</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[marie@login ~]$ mamba create --prefix /data/horse/ws/marie-example_SNPs/env/SNP_detection -c conda-forge -c bioconda bowtie2
+</pre></div>
+</div>
+<p>To use the environment, it is necessary to activate it.
+After the activation, in front of the directory, you can now see <code class="docutils literal notranslate"><span class="pre">SNP_detection</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[marie@login ~]$ mamba activate /data/horse/ws/marie-example_SNPs/env/SNP_detection
+(SNP_detection)[marie@login ~]$
+
+# to deactivate the environment:
+(SNP_detection)[marie@login ~]$ mamba deactivate
+</pre></div>
+</div>
+<p>We will additionally install the modules <code class="docutils literal notranslate"><span class="pre">samtools</span></code> and <code class="docutils literal notranslate"><span class="pre">bcftools</span></code> in the virtual environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[marie@login marie-example_SNPs]$ mamba activate /data/horse/ws/marie-example_SNPs/env/SNP_detection
+**(SNP_detection)**[marie@login marie-example_SNPs]$
+(SNP_detection)[marie@login marie-example_SNPs]$ mamba install -c bioconda samtools
+(SNP_detection)[marie@login marie-example_SNPs]$ mamba install -c bioconda bcftools
+
+# display installed packages:
+(SNP_detection)[marie@login marie-example_SNPs]$ mamba list
+</pre></div>
+</div>
+</section>
+<section id="copy-data-to-the-hpc-filesystem">
+<h3>7. Copy data to the HPC filesystem<a class="headerlink" href="#copy-data-to-the-hpc-filesystem" title="Permalink to this heading">#</a></h3>
+<p>Instead of <code class="docutils literal notranslate"><span class="pre">ssh</span></code> and the login nodes,
+<a class="reference internal" href="../data_transfer/dataport_nodes.html"><span class="doc std std-doc">sftp or Dataport nodes are used to copy the data</span></a>.</p>
+<p>!!! Important “”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Note that the password will not be visible while typing.
+</pre></div>
+</div>
+<p>The folder ‘staphylococcus_data’ contains the <code class="docutils literal notranslate"><span class="pre">fastq</span></code> files of the five accessions
+and of the reference genome.
+First we will zip the folder as it will increase the copying speed and
+will provide you with an estimation of the transfer time.</p>
+<p>=== “Windows”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```Powershell
+# while not yet logged-in to the sftp server, change the directory where the folder
+# staphylococcus_data is located and tar bundle the folder
+marie@local$ cd .\Documents\path\to\folder\where\staphylococcus_data\is
+marie@local$ tar czvf staphylococcus_data.tar.gz staphylococcus_data
+
+# login to the dataport node
+marie@local$ sftp marie@dataport1.hpc.tu-dresden.de
+Password:
+sftp&gt;$
+
+# using $pwd, the remote (cluster) directory will be displayed, using $lpwd
+# the local directory you are currently in, will be displayed.
+# Alternatively you may directly provide the complete path for both directories
+# to copy the tar bundled folder &#39;staphylococcus_data.tar.gz&#39; to our workspace example_SNPs.
+# As we are working on a windows computer the first (local) directory requires backslashes and,
+# in contrast, the cluster, a linux system, requires forward slashes to determine the directory.
+
+sftp$ put -r .\Documents\path\to\folder\staphylococcus_data.tar.gz /data/horse/ws/marie-example_SNPs
+
+# to log off the dataport node:
+sftp$ exit
+
+# example how to copy a fictional example.txt file to the workspace example_SNPs,
+# as it differs to copying a complete folder.
+
+marie@local$ sftp marie@dataport1.hpc.tu-dresden.de
+Password:
+
+sftp&gt;$ put path\on\your\computer\to\file\example.txt /data/horse/ws/marie-example_SNPs
+```
+</pre></div>
+</div>
+<p>=== “Linux”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```Console
+# change to the staphylococcus_data folder
+marie@local$ cd Documents/path/to/staphylococcus_data/
+
+# tar bundle folder
+marie@local$ tar czvf staphylococcus_data.tar.gz staphylococcus_data
+marie@local$ sftp marie@dataport1.hpc.tu-dresden.de
+Password:
+sftp&gt;$
+```
+</pre></div>
+</div>
+<p>Now we access the workspace <code class="docutils literal notranslate"><span class="pre">example_SNPs</span></code> via one of the <code class="docutils literal notranslate"><span class="pre">barnard</span></code> login nodes
+again and can unpack the data folder.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>marie@local$ ssh marie@login2.barnard.hpc.tu-dresden.de
+marie@login$ cd /data/horse/ws/marie-example_SNPs
+marie@login$ tar -xzvf staphylococcus_data.tar.gz
+</pre></div>
+</div>
+</section>
+<section id="conduct-analysis">
+<h3>8. Conduct analysis<a class="headerlink" href="#conduct-analysis" title="Permalink to this heading">#</a></h3>
+<p>We are logged into <code class="docutils literal notranslate"><span class="pre">barnard</span></code>, in our workspace <code class="docutils literal notranslate"><span class="pre">example_SNPs</span></code> and have activated our
+environment <code class="docutils literal notranslate"><span class="pre">SNP_detection</span></code>.
+First step is to create the <code class="docutils literal notranslate"><span class="pre">bowtie2</span></code> indices for the reference genome.
+After that we create a new folder named <code class="docutils literal notranslate"><span class="pre">bowtie_results</span></code> for the results.
+The intermediate results will be saved there.
+This analysis is running now on the login nodes as only one sample with a small reference
+genome is analyzed.</p>
+<p><strong>For more intensive analysis use the compute nodes.</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(SNP_detection) [marie@login.barnard staphylococcus_data] $ bowtie2-build /data/horse/ws/marie-example_SNPs/staphylococcus_data/reference_staphylococcus_aureus.fna staphylo_index
+
+$ mkdir bowtie_results
+
+$ bowtie2 -t -p 4 -x bowtie_results/staphylo_index -1 SRR13995561_pass_1.fastq.gz -2 SRR13995561_pass_2.fastq.gz -S bowtie_results/SRR13995561.sam
+</pre></div>
+</div>
+<p>Now we will use the modules <code class="docutils literal notranslate"><span class="pre">samtools</span></code> and <code class="docutils literal notranslate"><span class="pre">bcftools</span></code> we installed in the <code class="docutils literal notranslate"><span class="pre">SNP_detection</span></code> environment.
+First it is required to generate indices for the reference genome, these are
+different to the index which were previously build with the <code class="docutils literal notranslate"><span class="pre">bowtie2</span></code> software</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># generate index for reference genome
+$ samtools faidx rg_staphylococcus_aureus.fna
+</pre></div>
+</div>
+<p>In the next steps the <code class="docutils literal notranslate"><span class="pre">.sam</span></code> file will be converted to a <code class="docutils literal notranslate"><span class="pre">.bam</span></code> file, then sorted and indexed.
+The resulting sorted <code class="docutils literal notranslate"><span class="pre">.bam</span></code> file will be used for the SNV calling step.
+Afterwards, the intermediate result files can be deleted.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># the example is shown for the accession number SRR13995561
+$ samtools view -b -S -o bowtie_results/SRR13995561.bam bowtie_results/SRR13995561.sam
+$ samtools sort bowtie_results/SRR13995561.bam -o SRR13995561.sorted.bam
+$ samtools index SRR13995561.sorted.bam
+</pre></div>
+</div>
+<p><a class="reference external" href="http://www.htslib.org/doc/samtools-view.html">Parameter:</a></p>
+<ul class="simple">
+<li><p>-b: output in <code class="docutils literal notranslate"><span class="pre">bam</span></code> format</p></li>
+<li><p>-S: in some <code class="docutils literal notranslate"><span class="pre">samtools</span></code> versions necessary to detect the correct format of the input file in <code class="docutils literal notranslate"><span class="pre">sam</span></code>
+format</p></li>
+<li><p>-o: output file</p></li>
+</ul>
+<p>The file <code class="docutils literal notranslate"><span class="pre">SRR13995561.sorted.bam</span></code> is used for the further analysis and is in the same directory
+as the reference genome file.
+The next step is the variant call for the sample using <code class="docutils literal notranslate"><span class="pre">bcftools</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ bcftools mpileup -Ou -f rg_staphylococcus_aureus.fna SRR13995561.sorted.bam -o variants_SRR13995561.bcf
+
+# create a readable vcf file
+$ bcftools call -v -c variants_SRR13995561.bcf &gt; variants_SRR13995561.vcf
+</pre></div>
+</div>
+<p><a class="reference external" href="http://www.htslib.org/doc/bcftools.html#common_options">Parameters:</a></p>
+<p><code class="docutils literal notranslate"><span class="pre">mpileup</span></code>:</p>
+<ul class="simple">
+<li><p>-Ou: output type u -&gt; uncompressed <code class="docutils literal notranslate"><span class="pre">bcf</span></code> file</p></li>
+<li><p>-f: skip sites where FILTER column does not contain any of the strings listed in LIST
+call:</p></li>
+<li><p>-v: variants only as output</p></li>
+<li><p>-c: how to treat records with duplicate positions and defines compatible records</p></li>
+</ul>
+<p>!!! Hint “Tip”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Typically, one would create pipe with the vcf file as a direct result. As the `.bcf` file is not
+needed.  For better comparability among the different jobs, this was not done here.
+</pre></div>
+</div>
+<section id="combine-all-steps-into-a-batch-job-file-to-be-submitted-on-the-hpc-cluster">
+<h4>Combine all steps into a batch job file to be submitted on the HPC cluster<a class="headerlink" href="#combine-all-steps-into-a-batch-job-file-to-be-submitted-on-the-hpc-cluster" title="Permalink to this heading">#</a></h4>
+<p>Three examples are shown <strong>Example a)</strong> analysis of the one sample as above in one
+batch job <strong>Example b)</strong> all five files analyzed sequentially in one batch job
+<strong>Example c)</strong> all five files analyzed in parallel in one batch job.
+The commands need to be saved in a .sh file.
+Either create the .sh file while you are on the login node
+and save it in staphylococcus folder or create the .sh file locally and upload it using the
+sftp commands <span class="xref myst">described above</span>.
+The .sh file can also be in your <code class="docutils literal notranslate"><span class="pre">/home</span></code> directory not in the temporary workspace,
+as long as you specify within the script where the data is located and
+you have activated the virtual environment with the required software.
+You may also specify the directory of input and result files within the script.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># starting the job:
+marie@login$ sbatch snp_calling_script.sh
+</pre></div>
+</div>
+<p>??? Important “<strong>Hint</strong>”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>With submitting a batch job, your analysis will run on a compute node.
+The Slurm manager will allocate the resources according to your request.
+</pre></div>
+</div>
+<p>!!! Warning “<strong>Attention:</strong>”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Pay attention to the environment activation.
+Previously we have used `$ mamba activate SNP_detection`,
+but within a batch job script, we have to define the source of the environment
+with: `$ source activate  /data/horse/ws/marie-example_SNPs/env/SNP_detection`
+</pre></div>
+</div>
+<p>??? Note “<strong>Example a)</strong>”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```
+#!/bin/bash
+
+# Name of the job
+#SBATCH -J &quot;SNP_detection_staphylococcus_1_sample&quot;
+
+# maximum duration day-hour:minutes:seconds
+#SBATCH --time=1:00:00
+
+# out file(stdout) %J will be replaced by the job ID.
+# You may replace &#39;outfile-&#39; with an identifying name, e.g. &#39;staphylo_snps_out&#39;
+#SBATCH -o outfile-%J
+
+# file for error messages (stderr)
+# same as for the outfile, e.g. &#39;staphylo_snps_err&#39;
+#SBATCH -e errfile-%J
+
+# request 4 cores
+#SBATCH -n 4
+
+# all cores are on one node
+#SBATCH -N 1
+
+## script:
+# change directory to our data within the workspace
+cd /data/horse/ws/marie-example_SNPs/staphylococcus_data
+
+# activate the environment, we have to provide the directory of the environment
+source activate  /data/horse/ws/marie-example_SNPs/env/SNP_detection
+
+# start of the analysis steps
+bowtie2-build rg_staphylococcus_aureus.fna staphylo_index
+mkdir bowtie_results
+samtools faidx rg_staphylococcus_aureus.fna
+bowtie2 -t -p 4 -x staphylo_index -1 SRR13995561_pass_1.fastq.gz -2 SRR13995561_pass_2.fastq.gz -S bowtie_results/SRR13995561.sam
+
+samtools view -b -S -o bowtie_results/SRR13995561.bam bowtie_results/SRR13995561.sam
+samtools sort bowtie_results/SRR13995561.bam -o SRR13995561.sorted.bam
+samtools index SRR13995561.sorted.bam
+bcftools mpileup -Ou -f rg_staphylococcus_aureus.fna SRR13995561.sorted.bam -o variants_SRR13995561.bcf
+bcftools call --ploidy 1 -mv -Ob -o -c variants_SRR13995561.bcf
+bcftools view variants_SRR13995561.bcf | vcfutils.pl varFilter &gt; variants_SRR13995561.vcf
+```
+</pre></div>
+</div>
+<p>??? Note “<strong>Example b)</strong>”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```
+#!/bin/bash
+
+# Name of the job
+#SBATCH -J &quot;SNP_detection_staphylococcus_sequential&quot;
+
+# maximum run time day-hour:minutes:seconds
+#SBATCH --time=1:00:00
+
+# standard out file %J will be replaced by the Job-ID
+# You may replace &#39;outfile-&#39; with an identifying name, e.g. &#39;staphylo_snps_seq_out&#39;
+#SBATCH -o outfile-%J
+# file for the error messages
+#SBATCH -e errfile-%J
+# request 4 cores
+#SBATCH -n 4
+# all cores are on one node
+#SBATCH -N 1
+
+
+## script:
+# change directory to our data within the workspace
+cd /data/horse/ws/marie-example_SNPs/staphylococcus_data
+
+# activate the environment, we have to provide the directory of the environment
+source activate  /data/horse/ws/marie-example_SNPs/env/SNP_detection
+bowtie2-build rg_staphylococcus_aureus.fna staphylo_index
+mkdir bowtie_results
+samtools faidx rg_staphylococcus_aureus.fna
+
+bowtie2 -t -p 4 -x staphylo_index -1 SRR13995561_pass_1.fastq.gz -2 SRR13995561_pass_2.fastq.gz -S bowtie_results/SRR13995561.sam
+samtools view -b -S -o bowtie_results/SRR13995561.bam bowtie_results/SRR13995561.sam
+samtools sort bowtie_results/SRR13995561.bam -o SRR13995561.sorted.bam
+samtools index SRR13995561.sorted.bam
+bcftools mpileup -Ou -f rg_staphylococcus_aureus.fna SRR13995561.sorted.bam -o variants_SRR13995561.bcf
+bcftools call --ploidy 1 -mv -Ob -o -c variants_SRR13995561.bcf
+bcftools view variants_SRR13995561.bcf | vcfutils.pl varFilter &gt; variants_SRR13995561.vcf
+
+bowtie2 -t -p 4 -x staphylo_index -1 SRR13995562_pass_1.fastq.gz -2 SRR13995562_pass_2.fastq.gz -S bowtie_results/SRR13995562.sam
+samtools view -b -S -o bowtie_results/SRR13995562.bam bowtie_results/SRR13995562.sam
+samtools sort bowtie_results/SRR13995562.bam -o SRR13995562.sorted.bam
+samtools index SRR13995562.sorted.bam
+bcftools mpileup -Ou -f rg_staphylococcus_aureus.fna SRR13995562.sorted.bam -o variants_SRR13995562.bcf
+bcftools call --ploidy 1 -mv -Ob -o -c variants_SRR13995562.bcf
+bcftools view variants_SRR13995562.bcf | vcfutils.pl varFilter &gt; variants_SRR13995562.vcf
+
+bowtie2 -t -p 4 -x staphylo_index -1 SRR13995563_pass_1.fastq.gz -2 SRR13995563_pass_2.fastq.gz -S bowtie_results/SRR13995563.sam
+samtools view -b -S -o bowtie_results/SRR13995563.bam bowtie_results/SRR13995563.sam
+samtools sort bowtie_results/SRR13995563.bam -o SRR13995563.sorted.bam
+samtools index SRR13995563.sorted.bam
+bcftools mpileup -Ou -f rg_staphylococcus_aureus.fna SRR13995563.sorted.bam -o variants_SRR13995563.bcf
+bcftools call --ploidy 1 -mv -Ob -o -c variants_SRR13995563.bcf
+bcftools view variants_SRR13995563.bcf | vcfutils.pl varFilter &gt; variants_SRR13995563.vcf
+
+bowtie2 -t -p 4 -x staphylo_index -1 SRR13995564_pass_1.fastq.gz -2 SRR13995564_pass_2.fastq.gz -S bowtie_results/SRR13995564.sam
+samtools view -b -S -o bowtie_results/SRR13995564.bam bowtie_results/SRR13995564.sam
+samtools sort bowtie_results/SRR13995564.bam -o SRR13995564.sorted.bam
+samtools index SRR13995564.sorted.bam
+bcftools mpileup -Ou -f rg_staphylococcus_aureus.fna SRR13995564.sorted.bam -o variants_SRR13995564.bcf
+bcftools call --ploidy 1 -mv -Ob -o -c variants_SRR13995564.bcf
+bcftools view variants_SRR13995564.bcf | vcfutils.pl varFilter &gt; variants_SRR13995564.vcf
+
+bowtie2 -t -p 4 -x staphylo_index -1 SRR13995565_pass_1.fastq.gz -2 SRR13995565_pass_2.fastq.gz -S bowtie_results/SRR13995565.sam
+samtools view -b -S -o bowtie_results/SRR13995565.bam bowtie_results/SRR13995565.sam
+samtools sort bowtie_results/SRR13995565.bam -o SRR13995565.sorted.bam
+samtools index SRR13995565.sorted.bam
+bcftools mpileup -Ou -f rg_staphylococcus_aureus.fna SRR13995565.sorted.bam -o variants_SRR13995565.bcf
+bcftools call --ploidy 1 -mv -Ob -o -c variants_SRR13995565.bcf
+bcftools view variants_SRR13995565.bcf | vcfutils.pl varFilter &gt; variants_SRR13995565.vcf
+```
+</pre></div>
+</div>
+<p>??? Note “<strong>Example c)</strong>”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```
+#!/bin/bash
+
+# Name of the job
+#SBATCH -J &quot;SNP_detection_staphylococcus_parallel&quot;
+
+# maximum run time day-hour:minutes:seconds
+#SBATCH --time=1:00:00
+
+# standard out file %J will be replaced by the Job-ID
+# Replace &#39;outfile-&#39; with an identifying name, e.g. &#39;staphylo_snps_par_out&#39;. This way you can distinguish the outfiles for each job you ran.
+#SBATCH -o outfile-%J
+
+# file for the error messages
+#SBATCH -e errfile-%J
+
+# request 8 cores
+#SBATCH -n 8
+
+# all cores are on one node
+#SBATCH -N 1
+
+## script:
+# change directory to our data within the workspace
+cd /data/horse/ws/marie-example_SNPs/staphylococcus_data
+
+# activate the environment, we have to provide the directory of the environment
+source activate  /data/horse/ws/marie-example_SNPs/env/SNP_detection
+
+bowtie2-build rg_staphylococcus_aureus.fna staphylo_index
+mkdir bowtie_results
+samtools faidx rg_staphylococcus_aureus.fna
+
+command() {
+
+    echo &quot;Executing Command ...$1&quot;
+    bowtie2 -t -p 4 -x staphylo_index -1 $1_pass_1.fastq.gz -2 $1_pass_2.fastq.gz -S bowtie_results/$1.sam
+    samtools view -b -S -o bowtie_results/$1.bam bowtie_results/$1.sam
+    samtools sort bowtie_results/$1.bam -o $1.sorted.bam
+    samtools index $1.sorted.bam
+    bcftools mpileup -Ou -f rg_staphylococcus_aureus.fna $1.sorted.bam -o variants_$1.bcf
+    bcftools call --ploidy 1 -mv -Ob -o -c variants_$1.bcf
+    bcftools view variants_$1.bcf | vcfutils.pl varFilter &gt; variants_$1.vcf
+    echo &quot;Command $1 completed.&quot;
+
+}
+
+# Run commands in parallel
+command SRR13995561 &amp;
+command SRR13995562 &amp;
+command SRR13995563 &amp;
+command SRR13995564 &amp;
+command SRR13995565 &amp;
+
+# Wait for all background processes to finish
+wait
+
+echo &quot;All commands completed.&quot;
+```
+</pre></div>
+</div>
+<p>!!! Important “What is there to know about your job?”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Do you want to know how efficient your job was? Visit [PIKA](https://pika.zih.tu-dresden.de)
+to explore your jobs. [More details and explanations about PIKA](../software/pika.md).
+</pre></div>
+</div>
+</section>
+</section>
+<section id="copy-results-to-local-computer">
+<h3>9. Copy results to local computer<a class="headerlink" href="#copy-results-to-local-computer" title="Permalink to this heading">#</a></h3>
+<p>!!! caution “”</p>
+<p>In case you are working on a Windows computer be aware of the way you determine the directory.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#login to the sftp server, enter password. provide the directory of the results
+ file to be copied and then the target directory.
+sftp$ marie@dataport1.hpc.tu-dresden.de
+password:
+sftp$ get /data/horse/ws/marie-example_SNPs/staphylococcus_data/variants_SRR13995561.vcf
+ /home/path/to/folder/staphylococcus_data/
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/example_workflow"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#content">
+   Content
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dataset">
+     1. Dataset
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#download-the-data">
+       Download the data
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#hpc-infrastructure">
+     2. HPC infrastructure
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#directories-within-the-filesystem-differ-in-capacity-duration-and-functionality">
+       Directories within the filesystem differ in capacity, duration and functionality
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#workflow-steps">
+     3. Workflow steps
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#login-to-cluster-with-windows">
+     4. Login to cluster with windows
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#create-a-workspace">
+     5. Create a workspace
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#create-environment-and-install-required-modules">
+     6. Create environment and install required modules
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#copy-data-to-the-hpc-filesystem">
+     7. Copy data to the HPC filesystem
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#conduct-analysis">
+     8. Conduct analysis
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#combine-all-steps-into-a-batch-job-file-to-be-submitted-on-the-hpc-cluster">
+       Combine all steps into a batch job file to be submitted on the HPC cluster
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#copy-results-to-local-computer">
+     9. Copy results to local computer
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-23.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

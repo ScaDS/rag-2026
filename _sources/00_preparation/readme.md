@@ -36,7 +36,7 @@ conda activate rag26
 
 And install all requirements
 ```
-pip install llama-index llama-index-llms-openai-like openai jupyterlab voila pandas stackview vision-embedding-space-travelling llama-index-llms-ollama llama-index-llms-openai-like llama-index-embeddings-huggingface transformers scikit-learn umap-learn kagglehub
+pip install llama-index llama-index-llms-openai-like openai jupyterlab voila pandas stackview vision-embedding-space-travelling llama-index-llms-ollama llama-index-llms-openai-like llama-index-embeddings-huggingface transformers scikit-learn umap-learn kagglehub python-dotenv
 ```
 
 You can then explore the notebooks using:

@@ -1,0 +1,1092 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Utilities &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/utilities';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Preparation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../00_preparation/readme.html">Preparation of the session</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/utilities.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../../../../_sources/04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software/utilities.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Utilities</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#tmux">
+   Tmux
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#best-practices">
+     Best Practices
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#basic-usage">
+     Basic Usage
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#using-a-more-recent-version">
+     Using a More Recent Version
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#error-protocol-version-mismatch">
+     Error: Protocol Version Mismatch
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#using-tmux-on-compute-nodes">
+     Using Tmux on Compute Nodes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#where-is-my-tmux-session">
+     Where Is My Tmux Session?
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#architecture-information-lstopo">
+   Architecture Information (lstopo)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#working-with-large-archives-and-compressed-files">
+   Working with Large Archives and Compressed Files
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#parallel-gzip-decompression">
+     Parallel Gzip Decompression
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#direct-archive-access-without-extraction-using-ratarmount">
+     Direct Archive Access Without Extraction Using Ratarmount
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#example-workflow">
+       Example Workflow
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="utilities">
+<h1>Utilities<a class="headerlink" href="#utilities" title="Permalink to this heading">#</a></h1>
+<p>This page provides tools and utilities that make your life on ZIH systems more comfortable.</p>
+<section id="tmux">
+<h2>Tmux<a class="headerlink" href="#tmux" title="Permalink to this heading">#</a></h2>
+<section id="best-practices">
+<h3>Best Practices<a class="headerlink" href="#best-practices" title="Permalink to this heading">#</a></h3>
+<p>Terminal multiplexers are particularly well-suited for aiding you as a computer scientist in your
+daily trade. We generally favor <em>tmux</em> as it’s newer than certain others and allows for better
+customization.</p>
+<p>As there is already plenty of documentation on how to use tmux, we won’t repeat that here. But
+instead, we would like to point you to those documents:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://manpages.org/tmux">Tmux man page</a></p></li>
+<li><p><a class="reference external" href="https://tmuxguide.readthedocs.io/en/latest/tmux/tmux.html#tmux-conf">Tmux customization</a></p></li>
+<li><p><a class="reference external" href="https://tao-of-tmux.readthedocs.io/en/latest/">Tao of Tmux</a></p></li>
+<li><p><a class="reference external" href="https://tmuxcheatsheet.com/">Tmux Cheat Sheet</a></p></li>
+</ul>
+</section>
+<section id="basic-usage">
+<h3>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this heading">#</a></h3>
+<p>Tmux is a terminal multiplexer. It lets you switch easily between several programs in one
+terminal, detach them (they keep running in the background), and reattach them to a different
+terminal.</p>
+<p>The huge advantage is, that as long as your tmux session is running, you can connect to it and your
+settings (e.g., loaded modules, current working directory, …) are in place. This is
+beneficial when working within an unstable network with connection losses (e.g., traveling by the
+train in Germany), but also speed-ups your workflow in the daily routine.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@compute$ </span>tmux<span class="w"> </span>new-session<span class="w"> </span>-s<span class="w"> </span>marie_is_testing<span class="w"> </span>-d
+<span class="gp">marie@compute$ </span>tmux<span class="w"> </span>attach<span class="w"> </span>-t<span class="w"> </span>marie_is_testing
+<span class="go">  echo &quot;hello world&quot;</span>
+<span class="go">  ls -l</span>
+<span class="go">Ctrl+b &amp; d</span>
+</pre></div>
+</div>
+<p>!!! note</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If you want to jump out of your tmux session, hold the Control key and press &#39;b&#39;. After that,
+release both keys and press &#39;d&#39;. With the first key combination, you address tmux itself, whereas
+&#39;d&#39; is the tmux command to &quot;detach&quot; yourself from it. The tmux session will stay alive and
+running. You can jump into it any time later by just using the aforementioned &quot;tmux attach&quot;
+command again.
+</pre></div>
+</div>
+</section>
+<section id="using-a-more-recent-version">
+<h3>Using a More Recent Version<a class="headerlink" href="#using-a-more-recent-version" title="Permalink to this heading">#</a></h3>
+<p>More recent versions of tmux are available via the module system. Using the well know
+<span class="xref myst">module commands</span>, you can query all available versions, load and unload
+certain versions from your environment, e.g.,</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>module<span class="w"> </span>load<span class="w"> </span>tmux/3.2a
+</pre></div>
+</div>
+</section>
+<section id="error-protocol-version-mismatch">
+<h3>Error: Protocol Version Mismatch<a class="headerlink" href="#error-protocol-version-mismatch" title="Permalink to this heading">#</a></h3>
+<p>When trying to connect to tmux, you might encounter the following error message:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@compute$ </span>tmux<span class="w"> </span>a<span class="w"> </span>-t<span class="w"> </span>juhu
+<span class="go">protocol version mismatch (client 7, server 8)</span>
+</pre></div>
+</div>
+<p>To solve this issue, make sure that the tmux version you invoke
+is the same as the tmux server that is running.
+In particular, you can determine your client’s version with the command <code class="docutils literal notranslate"><span class="pre">tmux</span> <span class="pre">-V</span></code>.
+Try to <span class="xref myst">load the appropriate tmux version</span> to match with your
+client’s tmux server like this:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@compute$ </span>tmux<span class="w"> </span>-V
+<span class="go">tmux 1.8</span>
+<span class="gp">marie@compute$ </span>module<span class="w"> </span>load<span class="w"> </span>tmux/3.2a
+<span class="go">Module tmux/3.2a-GCCcore-11.2.0 and 5 dependencies loaded.</span>
+<span class="gp">marie@compute$ </span>tmux<span class="w"> </span>-V
+<span class="go">tmux 3.2a</span>
+</pre></div>
+</div>
+<p>!!! hint</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>When your client&#39;s version is newer than the server version, the aforementioned approach
+won&#39;t help you. In that case, you need to unload the loaded tmux module to downgrade
+the client to the client version that is supplied with the operating system (which
+should have a lower version number).
+</pre></div>
+</div>
+</section>
+<section id="using-tmux-on-compute-nodes">
+<h3>Using Tmux on Compute Nodes<a class="headerlink" href="#using-tmux-on-compute-nodes" title="Permalink to this heading">#</a></h3>
+<p>At times it might be quite handy to have tmux sessions running inside your computation jobs,
+such that you perform your computations within an interactive tmux session.
+For this purpose, the following shorthand is to be placed inside the
+<span class="xref myst">job file</span>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH [...]</span>
+
+module<span class="w"> </span>load<span class="w"> </span>tmux/3.2a
+tmux<span class="w"> </span>new-session<span class="w"> </span>-s<span class="w"> </span>marie_is_computing<span class="w"> </span>-d
+sleep<span class="w"> </span><span class="m">1</span><span class="p">;</span>
+tmux<span class="w"> </span>wait-for<span class="w"> </span>CHANNEL_NAME_MARIE
+
+srun<span class="w"> </span><span class="o">[</span>...<span class="o">]</span>
+</pre></div>
+</div>
+<p>You can then connect to the tmux session like this:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>ssh<span class="w"> </span>-t<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>squeue<span class="w"> </span>--me<span class="w"> </span>--noheader<span class="w"> </span>--format<span class="o">=</span><span class="s2">&quot;%N&quot;</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">             </span><span class="s2">&quot;source /etc/profile.d/10_modules.sh; module load tmux/3.2a; tmux attach&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="where-is-my-tmux-session">
+<h3>Where Is My Tmux Session?<a class="headerlink" href="#where-is-my-tmux-session" title="Permalink to this heading">#</a></h3>
+<p>Please note that, as there are thousands of compute nodes available, there are also multiple login
+nodes. Thus, try checking the other login nodes as well:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login3$ </span>tmux<span class="w"> </span>ls
+<span class="go">failed to connect to server</span>
+<span class="gp">marie@login3$ </span>ssh<span class="w"> </span>login4<span class="w"> </span>tmux<span class="w"> </span>ls
+<span class="go">marie_is_testing: 1 windows (created Tue Mar 29 19:06:26 2022) [105x32]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="architecture-information-lstopo">
+<h2>Architecture Information (lstopo)<a class="headerlink" href="#architecture-information-lstopo" title="Permalink to this heading">#</a></h2>
+<p>The page <a class="reference internal" href="../jobs_and_resources/overview.html"><span class="doc std std-doc">HPC Resource Overview</span></a> holds a general and fast
+overview about the available HPC resources at ZIH.
+Sometime a closer look and deeper understanding of a particular architecture is needed. This is
+where the tool <code class="docutils literal notranslate"><span class="pre">lstopo</span></code> comes into play.</p>
+<p>The tool <a class="reference external" href="https://linux.die.net/man/1/lstopo">lstopo</a> displays the topology of a system in a variety
+of output formats.</p>
+<p><code class="docutils literal notranslate"><span class="pre">lstopo</span></code> and <code class="docutils literal notranslate"><span class="pre">lstopo-no-graphics</span></code> are available from the <code class="docutils literal notranslate"><span class="pre">hwloc</span></code> modules, e.g.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>module<span class="w"> </span>load<span class="w"> </span>hwloc/2.5.0-GCCcore-11.2.0
+<span class="gp">marie@login$ </span>lstopo
+</pre></div>
+</div>
+<p>The topology map is displayed in a graphical window if the <code class="docutils literal notranslate"><span class="pre">DISPLAY</span></code> environment variable is set.
+Otherwise, a text summary is displayed. The displayed topology levels and granularity can be
+controlled using the various options of <code class="docutils literal notranslate"><span class="pre">lstopo</span></code>. Please refer to the corresponding man page and
+help message (<code class="docutils literal notranslate"><span class="pre">lstopo</span> <span class="pre">--help</span></code>).</p>
+<p>It is also possible to run this command using a job file to retrieve the topology of a compute nodes.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="c1">#SBATCH --job-name=topo_node</span>
+<span class="c1">#SBATCH --ntasks=1</span>
+<span class="c1">#SBATCH --cpus-per-task=1</span>
+<span class="c1">#SBATCH --mem-per-cpu=300m</span>
+<span class="c1">#SBATCH --time=00:05:00</span>
+<span class="c1">#SBATCH --output=get_topo.out</span>
+<span class="c1">#SBATCH --error=get_topo.err</span>
+
+module<span class="w"> </span>purge
+module<span class="w"> </span>load<span class="w"> </span>hwloc/2.5.0-GCCcore-11.2.0
+
+srun<span class="w"> </span>lstopo
+</pre></div>
+</div>
+</section>
+<section id="working-with-large-archives-and-compressed-files">
+<h2>Working with Large Archives and Compressed Files<a class="headerlink" href="#working-with-large-archives-and-compressed-files" title="Permalink to this heading">#</a></h2>
+<section id="parallel-gzip-decompression">
+<h3>Parallel Gzip Decompression<a class="headerlink" href="#parallel-gzip-decompression" title="Permalink to this heading">#</a></h3>
+<p>There is a plethora of <code class="docutils literal notranslate"><span class="pre">gzip</span></code> tools but none of them can fully utilize multiple cores.
+The fastest single-core decoder is <code class="docutils literal notranslate"><span class="pre">igzip</span></code> from the
+<a class="reference external" href="https://github.com/intel/isa-l.git">Intelligent Storage Acceleration Library</a>.
+In tests, it can reach ~500 MB/s compared to ~200 MB/s for the system-default <code class="docutils literal notranslate"><span class="pre">gzip</span></code>.
+If you have very large files and need to decompress them even faster, you can use
+<a class="reference external" href="https://github.com/mxmlnkn/rapidgzip">rapidgzip</a>.
+Currently, it can reach ~1.5 GB/s using a 12-core processor in the above-mentioned tests.</p>
+<p><a class="reference external" href="https://github.com/mxmlnkn/rapidgzip">rapidgzip</a> is available on PyPI and can be installed via pip.
+It is recommended to install it inside a
+<a class="reference internal" href="python_virtual_environments.html"><span class="doc std std-doc">Python virtual environment</span></a>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@compute$ </span>pip<span class="w"> </span>install<span class="w"> </span>rapidgzip
+</pre></div>
+</div>
+<p>It can also be installed from its C++ source code.
+If you prefer that over the version on PyPI, then you can build it like this:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@compute$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/mxmlnkn/rapidgzip.git
+<span class="gp">marie@compute$ </span><span class="nb">cd</span><span class="w"> </span>rapidgzip
+<span class="gp">marie@compute$ </span>mkdir<span class="w"> </span>build
+<span class="gp">marie@compute$ </span><span class="nb">cd</span><span class="w"> </span>build
+<span class="gp">marie@compute$ </span>cmake<span class="w"> </span>..
+<span class="gp">marie@compute$ </span>cmake<span class="w"> </span>--build<span class="w"> </span>.<span class="w"> </span>rapidgzip
+<span class="gp">marie@compute$ </span>src/tools/rapidgzip<span class="w"> </span>--help
+</pre></div>
+</div>
+<p>The built binary can then be used directly or copied inside a folder that is available in your
+<code class="docutils literal notranslate"><span class="pre">PATH</span></code> environment variable.</p>
+<p>Rapidgzip can be used like this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>marie@compute$<span class="w"> </span>rapidgzip<span class="w"> </span>-d<span class="w"> </span>&lt;file_to_decompress&gt;
+</pre></div>
+</div>
+<p>For example, if you want to decompress a file called <code class="docutils literal notranslate"><span class="pre">data.gz</span></code>, use:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@compute$ </span>rapidgzip<span class="w"> </span>-d<span class="w"> </span>data.gz
+</pre></div>
+</div>
+<p>Furthermore, you can use it to speed up extraction of a file <code class="docutils literal notranslate"><span class="pre">my-archive.tar.gz</span></code> like this:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@compute$ </span>tar<span class="w"> </span>--use-compress-program<span class="o">=</span>rapidgzip<span class="w"> </span>-xf<span class="w"> </span>my-archive.tar.gz
+</pre></div>
+</div>
+<p>Rapidgzip is still in development, so if it crashes or if it is slower than the system <code class="docutils literal notranslate"><span class="pre">gzip</span></code>,
+please <a class="reference external" href="https://github.com/mxmlnkn/rapidgzip/issues">open an issue</a> on GitHub.</p>
+</section>
+<section id="direct-archive-access-without-extraction-using-ratarmount">
+<h3>Direct Archive Access Without Extraction Using Ratarmount<a class="headerlink" href="#direct-archive-access-without-extraction-using-ratarmount" title="Permalink to this heading">#</a></h3>
+<p>In some cases of archives with millions of small files, it might not be feasible to extract the
+whole archive to a filesystem.
+The known <code class="docutils literal notranslate"><span class="pre">archivemount</span></code> tool has performance problems with such archives even if they are simply
+uncompressed TAR files.
+Furthermore, with <code class="docutils literal notranslate"><span class="pre">archivemount</span></code> the archive would have to be reanalyzed whenever a new job is started.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Ratarmount</span></code> is an alternative that solves these performance issues.
+The archive will be analyzed and then can be accessed via a FUSE mountpoint showing the internal
+folder hierarchy.
+Access to files is consistently fast no matter the archive size while <code class="docutils literal notranslate"><span class="pre">archivemount</span></code> might take
+minutes per file access.
+Furthermore, the analysis results of the archive will be stored in a sidecar file alongside the
+archive or in your home directory if the archive is in a non-writable location.
+Subsequent mounts instantly load that sidecar file instead of reanalyzing the archive.
+You will find further information on the <a class="reference external" href="https://github.com/mxmlnkn/ratarmount">Ratarmount GitHub page</a>.</p>
+<section id="example-workflow">
+<h4>Example Workflow<a class="headerlink" href="#example-workflow" title="Permalink to this heading">#</a></h4>
+<p>The software Ratarmount is installed system-wide on the HPC system.</p>
+<p>The first step is to create a tar archive to bundle your small files in a single file.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># On your local machine</span>
+marie@local$<span class="w"> </span>tar<span class="w"> </span>cf<span class="w"> </span>dataset.tar<span class="w"> </span>folder_containing_my_small_files
+
+<span class="c1"># If your small files are already on the HPC system</span>
+marie@login$<span class="w"> </span>dttar<span class="w"> </span>cf<span class="w"> </span>dataset.tar<span class="w"> </span>folder_containing_my_small_files
+</pre></div>
+</div>
+<p>For the latter, please make sure that you are on a <a class="reference internal" href="../data_transfer/datamover.html"><span class="doc std std-doc">Datamover node</span></a>
+and <strong>not</strong> on a login node.
+Depending on the number of files, the tar bundle process may take some time.</p>
+<p>We do not recommend to compress (e.g. Gzip) the archive, as this can decrease the read performance substantially
+e.g. for images, audio and video files.</p>
+<p>Once the tar archive has been created, you can mount it on the compute node using `ratarmount’.
+All files in the mount points can be accessed as normal files or directories
+in the filesystem without any special treatment.
+Note that the tar archive must be mounted on every compute node in your job.</p>
+<p>!!! note</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Mounting an archive for the first time can take some time  because Ratarmount has to create an index of its contents to access it efficiently.
+The index, named `.&lt;name_of_the_archive&gt;.index.sqlite`, will be placed
+in the same directory as the archive if the directory is writable,
+otherwise ratarmount will try to place the index in your home directory.
+This indexing step could be done in a separate job to save resources.
+It also prevents conflicting indexing by more than one process at the same time.
+
+```bash
+# create index
+sbatch --ntasks=1 --mem=10G --time=5:00:00 ratarmount dataset.tar
+```
+</pre></div>
+</div>
+<p>!!! example “Example job script using Ratarmount”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```bash
+#!/bin/bash
+
+#SBATCH --ntasks=3
+#SBATCH --nodes=2
+#SBATCH --time=00:05:00
+
+
+# mount the dataset on every node one time
+DATASET=/tmp/${SLURM_JOB_ID}
+srun --ntasks-per-node=1 mkdir ${DATASET}
+srun --ntasks-per-node=1 ratarmount dataset.tar ${DATASET}
+
+# now it can be accessed like a normal directory
+srun --ntasks=1 ls ${DATASET}
+
+# start the application
+srun ./my_application --input-directory ${DATASET}
+
+# unmount it after all work is done
+srun --ntasks-per-node=1 ratarmount -u ${DATASET}
+```
+</pre></div>
+</div>
+<p>!!! hint</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If you are starting many processes per node, Ratarmount could benefit from
+having individual mount points for each process, rather than just one per node.
+</pre></div>
+</div>
+<p>In case of Ratarmount issues
+please <a class="reference external" href="https://github.com/mxmlnkn/ratarmount/issues">open an issue</a> on GitHub.</p>
+<p>There also is a library interface called
+<a class="reference external" href="https://github.com/mxmlnkn/ratarmount/tree/master/core#example">ratarmountcore</a> that works
+fully without FUSE, which might make access to files from Python even faster.</p>
+</section>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/software"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#tmux">
+   Tmux
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#best-practices">
+     Best Practices
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#basic-usage">
+     Basic Usage
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#using-a-more-recent-version">
+     Using a More Recent Version
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#error-protocol-version-mismatch">
+     Error: Protocol Version Mismatch
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#using-tmux-on-compute-nodes">
+     Using Tmux on Compute Nodes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#where-is-my-tmux-session">
+     Where Is My Tmux Session?
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#architecture-information-lstopo">
+   Architecture Information (lstopo)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#working-with-large-archives-and-compressed-files">
+   Working with Large Archives and Compressed Files
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#parallel-gzip-decompression">
+     Parallel Gzip Decompression
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#direct-archive-access-without-extraction-using-ratarmount">
+     Direct Archive Access Without Extraction Using Ratarmount
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#example-workflow">
+       Example Workflow
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-23.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

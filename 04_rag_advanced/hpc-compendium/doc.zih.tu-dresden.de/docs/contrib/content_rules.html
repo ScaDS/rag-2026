@@ -1,0 +1,1639 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Content Rules &#8212; Navigating in Latent Space and Retrieval-Augmented Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/contrib/content_rules';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../00_preparation/readme.html">
+                        Preparation of the session
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
+                        Visualizing text embeddings
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
+                        Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">
+                        Interactive slicing throug sub-sets of embedded image data
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
+                        Ask about the HPC compendium
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
+                        License CC-BY 4.0
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../imprint.html">
+                        Imprint
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../../../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../../../../_static/logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../../intro.html">
+                    Navigating in Latent Space and Retrieval-Augmented Generation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Preparation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../00_preparation/readme.html">Preparation of the session</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../chat-with-hpc-compendium.html">Ask about the HPC compendium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../imprint.html">Imprint</a></li>
+
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/ScaDS/rag-2026" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/ScaDS/rag-2026/issues/new?title=Issue%20on%20page%20%2F04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/contrib/content_rules.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../../../../_sources/04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/contrib/content_rules.md" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Content Rules</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#motivation-and-rationale">
+   Motivation and Rationale
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#responsibility-and-license">
+   Responsibility and License
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#quick-overview">
+   Quick Overview
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#detailed-overview">
+   Detailed Overview
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#writing-style">
+     Writing Style
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pages-structure-and-new-page">
+     Pages Structure and New Page
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#outdated-pages">
+     Outdated Pages
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#markdown">
+     Markdown
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#brief-how-to-on-markdown">
+       Brief How-To on Markdown
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#attachments">
+       Attachments
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#graphics-and-videos">
+       Graphics and Videos
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#resizing-and-alignment-of-graphics">
+         Resizing and Alignment of Graphics
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#special-feature-admonitions">
+       Special Feature: Admonitions
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#spelling-and-technical-wording">
+     Spelling and Technical Wording
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#code-blocks-and-command-prompts">
+     Code Blocks and Command Prompts
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#code-blocks-and-syntax-highlighting">
+       Code Blocks and Syntax Highlighting
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#data-privacy-and-generic-names">
+       Data Privacy and Generic Names
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#placeholders">
+       Placeholders
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#mark-omissions">
+       Mark Omissions
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#code-styling-rules">
+       Code Styling Rules
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#list-of-prompts">
+       List of Prompts
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#long-options">
+       Long Options
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#equal-signs-in-command-line-options">
+       Equal Signs in Command-Line Options
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#customize-search">
+     Customize Search
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="content-rules">
+<h1>Content Rules<a class="headerlink" href="#content-rules" title="Permalink to this heading">#</a></h1>
+<p>!!! cite “George Bernard Shaw”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The golden rule is that there are no golden rules.
+</pre></div>
+</div>
+<section id="motivation-and-rationale">
+<h2>Motivation and Rationale<a class="headerlink" href="#motivation-and-rationale" title="Permalink to this heading">#</a></h2>
+<p>This page holds rules regarding the layout, content, and writing of this
+documentation. The goals are to provide a comprehensive, consistent and well-written
+documentation that is pure joy to read and use. It shall help to find answers and provide knowledge
+instead of being the bottleneck and a great annoyance. Therefore, we set up some rules which
+are outlined in the following.</p>
+<p>!!! tip</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Following these rules when contributing speeds up the review process. Furthermore, your
+changes will not be blocked by the automatic checks implemented in the CI pipeline.
+</pre></div>
+</div>
+</section>
+<section id="responsibility-and-license">
+<h2>Responsibility and License<a class="headerlink" href="#responsibility-and-license" title="Permalink to this heading">#</a></h2>
+<p>This documentation and the repository have two licenses (cf. <a class="reference internal" href="../legal_notice.html"><span class="doc std std-doc">Legal Notice</span></a>):</p>
+<ul class="simple">
+<li><p>All documentation is licensed under <a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</p></li>
+<li><p>All software components are licensed under <a class="reference download internal" download="" href="../../../../../_downloads/01768816dfd2991b10c701b0b034eebf/license_mit.txt"><span class="xref download myst">MIT license</span></a>.</p></li>
+</ul>
+<p>These licenses also apply to your contributions.</p>
+<p>!!! note</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If you contribute, you are fully and solely responsible for the content you create and have to
+ensure that you have the right to create it under the laws which apply.
+</pre></div>
+</div>
+<p>If you are in doubt, please contact us either via
+<a class="reference external" href="https://gitlab.hrz.tu-chemnitz.de/zih/hpcsupport/hpc-compendium/-/issues">GitLab Issue</a>
+or via <a class="reference external" href="mailto:hpc-support&#37;&#52;&#48;tu-dresden&#46;de">e-mail</a>.</p>
+</section>
+<section id="quick-overview">
+<h2>Quick Overview<a class="headerlink" href="#quick-overview" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>All documentation is written in <span class="xref myst">Markdown</span>.</p></li>
+<li><p>Use spaces (not tabs) both in Markdown files and in <code class="docutils literal notranslate"><span class="pre">mkdocs.yml</span></code>.</p></li>
+<li><p>Respect the line length limit of 100 characters (exception: links).</p></li>
+<li><p>Do not add large binary files or high-resolution images to the repository (cf.
+<span class="xref myst">adding images and attachments</span>).</p></li>
+<li><p><span class="xref myst">Admonitions</span> may be actively used for longer code examples,
+warnings, tips, important information, etc.</p></li>
+<li><p>Respect the <span class="xref myst">writing style</span> and the rules for
+<span class="xref myst">spelling and technical wording</span>.</p></li>
+<li><p>For code blocks:</p>
+<ul>
+<li><p>Use <span class="xref myst">syntax highlighting and appropriate prompts</span>.</p></li>
+<li><p>Respect <span class="xref myst">data privacy</span>.</p></li>
+<li><p>Stick to the <span class="xref myst">rules on optional and required arguments</span>.</p></li>
+</ul>
+</li>
+<li><p>Save attachments, graphics and videos within the respective <code class="docutils literal notranslate"><span class="pre">misc</span></code> subdirectory.</p></li>
+</ul>
+</section>
+<section id="detailed-overview">
+<h2>Detailed Overview<a class="headerlink" href="#detailed-overview" title="Permalink to this heading">#</a></h2>
+<section id="writing-style">
+<h3>Writing Style<a class="headerlink" href="#writing-style" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Assume that a future reader is eager to start typing commands. Thus, encourage the reader by
+addressing him/her directly:</p>
+<ul>
+<li><p>Example: Use “You can/should …” instead of “Users can/should …”</p></li>
+<li><p>Example: Use “Your contribution is highly welcome” instead of “Contributions from user-side
+are highly welcome”</p></li>
+</ul>
+</li>
+<li><p>Be brief! Provide the main idea/commands first, and special cases later. If it is not necessary to
+know how a special piece of software works, don’t explain it.</p></li>
+<li><p>Provide the often-used commands first.</p></li>
+<li><p>Use active over passive voice</p>
+<ul>
+<li><p>Write with confidence. This confidence should be reflected in the documentation so that
+the readers trust and follow it.</p></li>
+<li><p>Example: “We recommend something” instead of “Something is recommended.”</p></li>
+</ul>
+</li>
+<li><p>Capitalize headings, e.g. <em>Exclusive Reservation of Hardware</em></p></li>
+<li><p>Give keywords in link texts, e.g. <span class="xref myst">Code Blocks</span> is more
+descriptive than <span class="xref myst">this subsection</span></p></li>
+<li><p>Avoid using tabs both in Markdown files and in <code class="docutils literal notranslate"><span class="pre">mkdocs.yaml</span></code>. Type spaces instead.</p></li>
+</ul>
+</section>
+<section id="pages-structure-and-new-page">
+<h3>Pages Structure and New Page<a class="headerlink" href="#pages-structure-and-new-page" title="Permalink to this heading">#</a></h3>
+<p>The documentation and pages structure is defined in the configuration file
+<a class="reference external" href="https://gitlab.hrz.tu-chemnitz.de/zih/hpcsupport/hpc-compendium/-/blob/main/doc.zih.tu-dresden.de/mkdocs.yml"><code class="docutils literal notranslate"><span class="pre">mkdocs.yml</span></code></a>:</p>
+<div class="highlight-Markdown notranslate"><div class="highlight"><pre><span></span>nav:
+<span class="w">  </span><span class="k">-</span><span class="w"> </span>Home: index.md
+<span class="w">  </span><span class="k">-</span><span class="w"> </span>Application for Login and Resources:
+<span class="w">    </span><span class="k">-</span><span class="w"> </span>Overview: application/overview.md
+<span class="w">    </span><span class="k">-</span><span class="w"> </span>Terms of Use: application/terms_of_use.md
+<span class="w">    </span><span class="k">-</span><span class="w"> </span>Request for Resources: application/request_for_resources.md
+<span class="w">    </span><span class="k">-</span><span class="w"> </span>Project Request Form: application/project_request_form.md
+<span class="w">    </span><span class="k">-</span><span class="w"> </span>Project Management: application/project_management.md
+<span class="w">    </span><span class="k">-</span><span class="w"> </span>Acknowledgement: application/acknowledgement.md
+<span class="w">  </span><span class="k">-</span><span class="w"> </span>Access to ZIH Systems:
+<span class="w">    </span><span class="k">-</span><span class="w"> </span>Overview: access/overview.md
+  [...]
+</pre></div>
+</div>
+<p>Follow these two steps to <strong>add a new page</strong> to the documentation:</p>
+<ol class="arabic simple">
+<li><p>Create a new Markdown file under <code class="docutils literal notranslate"><span class="pre">docs/subdir/file_name.md</span></code> and put the documentation inside.
+The sub-directory structure represents different topics of the documentation. Try to fit the
+contribution into the existing structure. The file name should reflect the title of the
+documentation page, i. e. <code class="docutils literal notranslate"><span class="pre">shortened_page_heading.md</span></code>.</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">subdir/file_name.md</span></code> to the configuration file <code class="docutils literal notranslate"><span class="pre">mkdocs.yml</span></code> by updating the navigation
+section. Yes, the order of files is crucial and defines the structure of the content. Thus,
+carefully consider the right spot and section for the new page.</p></li>
+</ol>
+<p>Make sure that the new page <strong>is not floating</strong>, i.e., it can be reached directly from
+the documentation structure.</p>
+</section>
+<section id="outdated-pages">
+<h3>Outdated Pages<a class="headerlink" href="#outdated-pages" title="Permalink to this heading">#</a></h3>
+<p>Sometimes, whole pages become irrelevant, e. g., a page that describes hardware of a cluster that
+is switched off. In such cases, move the page to the archive, using the following steps:</p>
+<ol class="arabic">
+<li><p>Move the file to directory <code class="docutils literal notranslate"><span class="pre">archive</span></code>.</p></li>
+<li><p>In the moved file, add the following to the beginning of the file:</p>
+<div class="highlight-Markdown notranslate"><div class="highlight"><pre><span></span>---
+search:
+<span class="gu">  boost: 0.00001</span>
+<span class="gu">---</span>
+</pre></div>
+</div>
+<p>If the file already has a similar header, just update the number.</p>
+</li>
+<li><p>Append <code class="docutils literal notranslate"><span class="pre">(Outdated)</span></code> to the topmost heading in the file.</p></li>
+<li><p>Update links to the moved file in all other files.</p></li>
+<li><p>Update links in the moved file to other files.</p></li>
+<li><p>Move the corresponding navigation entry in <code class="docutils literal notranslate"><span class="pre">mkdocs.yml</span></code> somewhere below the <code class="docutils literal notranslate"><span class="pre">Archive</span></code> entry.</p></li>
+</ol>
+</section>
+<section id="markdown">
+<h3>Markdown<a class="headerlink" href="#markdown" title="Permalink to this heading">#</a></h3>
+<p>All documentation is written in Markdown. Please keep things simple, i.e., avoid using fancy
+Markdown dialects.</p>
+<section id="brief-how-to-on-markdown">
+<h4>Brief How-To on Markdown<a class="headerlink" href="#brief-how-to-on-markdown" title="Permalink to this heading">#</a></h4>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Purpose</p></th>
+<th class="head"><p>Markdown</p></th>
+<th class="head"><p>Rendered HTML</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Bold text</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">**Bold</span> <span class="pre">Text**</span></code></p></td>
+<td><p><strong>Bold Text</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>Italic text</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">*Italic</span> <span class="pre">Text*</span></code></p></td>
+<td><p><em>Italic Text</em></p></td>
+</tr>
+<tr class="row-even"><td><p>Headings</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">Level</span> <span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">##</span> <span class="pre">Level</span> <span class="pre">2</span></code>, <code class="docutils literal notranslate"><span class="pre">###</span> <span class="pre">Level</span> <span class="pre">3</span></code>, …</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>External link</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[website</span> <span class="pre">of</span> <span class="pre">TU</span> <span class="pre">Dresden](https://tu-dresden.de)</span></code></p></td>
+<td><p><a class="reference external" href="https://tu-dresden.de">website of TU Dresden</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Internal link</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[Slurm</span> <span class="pre">page](../jobs_and_resources/slurm.md)</span></code></p></td>
+<td><p><a class="reference internal" href="../jobs_and_resources/slurm.html"><span class="doc std std-doc">Slurm page</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Internal link to section</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[section</span> <span class="pre">on</span> <span class="pre">batch</span> <span class="pre">jobs](../jobs_and_resources/slurm.md#batch-jobs)</span></code></p></td>
+<td><p><span class="xref myst">section on batch jobs</span></p></td>
+</tr>
+</tbody>
+</table>
+<p>Further tips can be found on this
+<a class="reference external" href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">cheat sheet</a>.</p>
+</section>
+<section id="attachments">
+<h4>Attachments<a class="headerlink" href="#attachments" title="Permalink to this heading">#</a></h4>
+<p>Of course, you can provide attachments in sections and pages.
+Such attachment documents may contain information that are more detailed and go far beyond the
+scope of the compendium, e.g. user manuals for application-specific software.</p>
+<p>Save attachments within the <code class="docutils literal notranslate"><span class="pre">misc</span></code> subdirectory of the corresponding section.</p>
+<p>!!! note “Syntax for attachments”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The syntax for attachments is the very same as for links. As the attachment is within the `misc`
+subdirectory, you can refer to it as local file.
+
+```markdown
+[&lt;description&gt;](misc/&lt;attachment_file_name&gt;)
+```
+
+Since the `&lt;description&gt;` is rendered as link text, you should choose a clear and precise text:
+
+```markdown
+[slides of HPC introduction](misc/HPC-Introduction.pdf)
+```
+</pre></div>
+</div>
+</section>
+<section id="graphics-and-videos">
+<h4>Graphics and Videos<a class="headerlink" href="#graphics-and-videos" title="Permalink to this heading">#</a></h4>
+<p>Please use graphics and videos for illustration purposes and to improve comprehensibility.
+All graphics and attachments are saved within <code class="docutils literal notranslate"><span class="pre">misc</span></code> directory of the respective subdirectory in
+<code class="docutils literal notranslate"><span class="pre">docs</span></code>.
+For video attachments please use either webm or mp4 format. We make use of the
+<a class="reference external" href="https://github.com/soulless-viewer/mkdocs-video">mkdocs-video extension</a>.</p>
+<p>!!! note “Syntax for graphics and videos”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The syntax to insert a **graphic** into a page is
+
+```markdown
+![Alternative text](misc/graphics_file.png)
+```
+
+The syntax to insert a **video** attachment into a page is
+
+```html
+![type:video](misc/terminate-virtual-desktop-dcv.mp4)
+```
+</pre></div>
+</div>
+<p>It is possible to add captions for tables and figures using <code class="docutils literal notranslate"><span class="pre">{:</span> <span class="pre">summary=&quot;This</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">table</span> <span class="pre">caption&quot;}</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">summary</span></code> and <code class="docutils literal notranslate"><span class="pre">align</span></code> parameters can be combined as well:
+<code class="docutils literal notranslate"><span class="pre">{:</span> <span class="pre">summary=&quot;This</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">table</span> <span class="pre">caption&quot;</span> <span class="pre">align=&quot;top&quot;}</span></code>.</p>
+<section id="resizing-and-alignment-of-graphics">
+<h5>Resizing and Alignment of Graphics<a class="headerlink" href="#resizing-and-alignment-of-graphics" title="Permalink to this heading">#</a></h5>
+<p>In general, graphics and images should be added to the repository with the desired size.</p>
+<p>!!! warning</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Do not add large binary files or high-resolution images to the repository. See this valuable
+document for [image optimization](https://web.dev/fast/#optimize-your-images).
+</pre></div>
+</div>
+<p>We recommend the well-know Linux package <a class="reference external" href="https://imagemagick.org/">ImageMagick</a> for resizing
+graphics.</p>
+<p>!!! example “Resize image using ImageMagick”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The command
+
+```console
+marie@local$ magick cluster.jpeg -resize 600 cluster_600.jpeg
+```
+
+will resize the graphic `cluster.jpeg` to a width of 600 pixels keeping the aspect ratio.
+Depending on the resolution of the original file, the resulting file can be way smaller in terms
+of memory foot print.
+</pre></div>
+</div>
+<p>Nevertheless you can explicitly specify the size a graphic. The syntax is as follows</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>![<span class="nt">Alternative text</span>](<span class="na">misc/graphics_file.png</span>){: style=&quot;width:150px&quot;}
+</pre></div>
+</div>
+<p>By default, graphics are left-aligned. In most cases, this is not elegant and you probably wish to
+center-align your graphics. <strong>Alignment</strong> of graphics can be controlled via the <code class="docutils literal notranslate"><span class="pre">{:</span> <span class="pre">align=&lt;value&gt;}</span></code>
+attribute. Possible values are <code class="docutils literal notranslate"><span class="pre">left</span></code>, <code class="docutils literal notranslate"><span class="pre">right</span></code> and <code class="docutils literal notranslate"><span class="pre">center</span></code>. <strong>Note:</strong> It is crucial to
+have <code class="docutils literal notranslate"><span class="pre">{:</span> <span class="pre">align=center}</span></code> on a new line and the value without quotation marks.</p>
+<p>Resize and alignment specification can be combined as depicted in the following example.</p>
+<p>!!! example “Resize image to 150px width and specify alignment”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The three tabs show the Markdown syntax to resize the image of the beautiful
+[cluster `Barnard`](../jobs_and_resources/hardware_overview.md#barnard) to a height of 150
+pixels keeping the aspect ratio and left, center and right-align it, respectively.
+
+=== &quot;Scale and default-align&quot;
+
+    ```markdown
+    ![Beauty Barnard](misc/barnard.jpeg){: style=&quot;height:150px&quot;}
+    ```
+
+    ![Beauty Barnard](misc/barnard.jpeg){: style=&quot;height:150px&quot;}
+
+=== &quot;Scale and center-align&quot;
+
+    ```markdown
+    ![Beauty Barnard](misc/barnard.jpeg){: style=&quot;height:150px&quot;}
+    {: align=&quot;center&quot;}
+    ```
+
+    ![Beauty Barnard](misc/barnard.jpeg){: style=&quot;height:150px&quot;}
+    {: align=&quot;center&quot;}
+
+=== &quot;Scale and right-align&quot;
+
+    ```markdown
+    ![Beauty Barnard](misc/barnard.jpeg){: style=&quot;height:150px&quot;}
+    {: align=&quot;right&quot;}
+    ```
+
+    ![Alternative text](misc/barnard.jpeg){: style=&quot;height:150px&quot;}
+    {: align=&quot;right&quot;}
+</pre></div>
+</div>
+</section>
+</section>
+<section id="special-feature-admonitions">
+<h4>Special Feature: Admonitions<a class="headerlink" href="#special-feature-admonitions" title="Permalink to this heading">#</a></h4>
+<p><a class="reference external" href="https://squidfunk.github.io/mkdocs-material/reference/admonitions/">Admonitions</a>, also known as
+call-outs, may be actively used to highlight examples, warnings, tips, important information, etc.
+Admonitions are an excellent choice for including side content without significantly interrupting
+the document flow.</p>
+<p>Several different admonitions are available within the used
+<a class="reference external" href="https://squidfunk.github.io/mkdocs-material/">material theme</a>, e.g., <code class="docutils literal notranslate"><span class="pre">note</span></code>, <code class="docutils literal notranslate"><span class="pre">info</span></code>, <code class="docutils literal notranslate"><span class="pre">example</span></code>,
+<code class="docutils literal notranslate"><span class="pre">tip</span></code>, <code class="docutils literal notranslate"><span class="pre">warning</span></code>, and <code class="docutils literal notranslate"><span class="pre">cite</span></code>. Please refer to the
+<a class="reference external" href="https://squidfunk.github.io/mkdocs-material/reference/admonitions/#supported-types">documentation page</a>
+for a comprehensive overview.</p>
+<p>!!! example “Syntax”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>All admonitions blocks start with `!!! &lt;type&gt;` and the following content block is indented by
+(exactly) four spaces.
+If no title is provided, the title corresponds to the admonition type.
+
+```markdown
+!!! note &quot;Descriptive title&quot;
+
+    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+    tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
+    vero eos et accusam et justo duo dolores et ea rebum.
+```
+</pre></div>
+</div>
+<p>!!! note Folding</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Admonitions can be made foldable by using `???` instead of `!!!`. A small toggle on the right
+side is displayed. The block is open by default if `???+` is used. Long code examples should be
+folded by default.
+</pre></div>
+</div>
+</section>
+</section>
+<section id="spelling-and-technical-wording">
+<h3>Spelling and Technical Wording<a class="headerlink" href="#spelling-and-technical-wording" title="Permalink to this heading">#</a></h3>
+<p>To provide consistent and high-quality documentation, and help users to find the right pages,
+there is a list of conventions w.r.t. spelling and technical wording.</p>
+<ul class="simple">
+<li><p>Language settings: en_us</p></li>
+</ul>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Do</p></th>
+<th class="head"><p>Don’t</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>I/O</p></td>
+<td><p>IO</p></td>
+</tr>
+<tr class="row-odd"><td><p>Slurm</p></td>
+<td><p>SLURM</p></td>
+</tr>
+<tr class="row-even"><td><p>filesystem(s)</p></td>
+<td><p>file system(s)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ZIH system(s)</p></td>
+<td><p>Taurus, HRSK II, our HPC systems, etc.</p></td>
+</tr>
+<tr class="row-even"><td><p>workspace</p></td>
+<td><p>work space</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p>HPC-DA</p></td>
+</tr>
+<tr class="row-even"><td><p>cluster <code class="docutils literal notranslate"><span class="pre">romeo</span></code></p></td>
+<td><p>ROMEO cluster, romeo cluster, <code class="docutils literal notranslate"><span class="pre">romeo</span></code> cluster, “romeo” cluster, etc.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="code-blocks-and-command-prompts">
+<h3>Code Blocks and Command Prompts<a class="headerlink" href="#code-blocks-and-command-prompts" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Use ticks to mark code blocks and commands, not an italic font.</p></li>
+<li><p>Specify language for code blocks (<span class="xref myst">see below</span>).</p></li>
+<li><p>All code blocks and commands should be runnable from a login node or a node within a specific
+cluster (e.g., <code class="docutils literal notranslate"><span class="pre">alpha</span></code>).</p></li>
+<li><p>It should be clear from the <span class="xref myst">prompt</span>, where the command is run (e.g., local
+machine, login node, or specific cluster).</p></li>
+</ul>
+<section id="code-blocks-and-syntax-highlighting">
+<h4>Code Blocks and Syntax Highlighting<a class="headerlink" href="#code-blocks-and-syntax-highlighting" title="Permalink to this heading">#</a></h4>
+<p>Providing code blocks and snippets is the meat and bones of this documentation.
+Code blocks and command examples should give the general idea of invocation and be as precise as
+possible, i.e., allowing for copy-and-paste. Please mark replaceable code parts and optional and
+required arguments as outlined in the section <span class="xref myst">required and optional arguments</span>
+below. Long, non-meaningful output should be omitted.</p>
+<p>We make use of the extension
+<a class="reference external" href="https://squidfunk.github.io/mkdocs-material/reference/code-blocks/">pymdownx.highlight</a> for syntax
+highlighting. There is a complete list of supported
+<a class="reference external" href="https://pygments.org/docs/lexers/">language short codes</a>.</p>
+<p>??? note “Syntax for command line”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>For normal commands executed in the terminal, use the language short code `console`.
+
+````markdown
+```console
+marie@login$ module list
+[...]
+```
+````
+</pre></div>
+</div>
+<p>??? note “Syntax for job files and scripts”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Use the language short code `bash` for job files and shell scripts.
+
+````markdown
+```bash
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --time=01:00:00
+#SBATCH --output=slurm-%j.out
+
+module load foss
+
+srun a.out
+```
+````
+</pre></div>
+</div>
+<p>??? note “Syntax for Python”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>`python` for Python source code:
+
+````markdown
+```python
+from time import gmtime, strftime
+print(strftime(&quot;%Y-%m-%d %H:%M:%S&quot;, gmtime()))
+```
+````
+
+And `pycon` for Python console:
+
+````markdown
+```pycon
+&gt;&gt;&gt; from time import gmtime, strftime
+&gt;&gt;&gt; print(strftime(&quot;%Y-%m-%d %H:%M:%S&quot;, gmtime()))
+2021-08-03 07:20:33
+```
+````
+</pre></div>
+</div>
+<p>??? note “Line numbers”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>More sugar can be applied by adding line numbers.
+
+````markdown
+```bash linenums=&quot;1&quot;
+#!/bin/bash
+
+#SBATCH --nodes=1
+#SBATCH --ntasks=23
+#SBATCH --time=02:10:00
+
+srun a.out
+```
+````
+
+_Result_:
+
+![lines](misc/lines.png)
+
+Specific Lines can be highlighted by using
+
+````markdown
+```bash hl_lines=&quot;2 3&quot;
+#!/bin/bash
+
+#SBATCH --nodes=1
+#SBATCH --ntasks=23
+#SBATCH --time=02:10:00
+
+srun a.out
+```
+````
+
+_Result_:
+
+![lines](misc/highlight_lines.png)
+</pre></div>
+</div>
+</section>
+<section id="data-privacy-and-generic-names">
+<h4>Data Privacy and Generic Names<a class="headerlink" href="#data-privacy-and-generic-names" title="Permalink to this heading">#</a></h4>
+<p>Where possible, replace login, project name, and other private data with clearly recognizable
+placeholders. In particular, use the generic placeholders depicted in the following table.
+The table also holds a second placeholder, if, e.g., you need a second login to formulate an example.</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Description</p></th>
+<th class="head"><p>Placeholder</p></th>
+<th class="head"><p>2nd Placeholder</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Username</p></td>
+<td><p>Marie</p></td>
+<td><p>Martin</p></td>
+</tr>
+<tr class="row-odd"><td><p>Login</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">marie</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">martin</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>E-mail</p></td>
+<td><p><a class="reference external" href="mailto:marie&#37;&#52;&#48;tu-dresden&#46;de">marie<span>&#64;</span>tu-dresden<span>&#46;</span>de</a></p></td>
+<td><p><a class="reference external" href="mailto:martin&#37;&#52;&#48;tu-dresden&#46;de">martin<span>&#64;</span>tu-dresden<span>&#46;</span>de</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Project title</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">p_number_crunch</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">p_long_computations</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Workspace title</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">number_crunch</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">long_computations</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Job ID</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">123456</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">456789</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>{: summary=”Generic placeholders”, align=”bottom”}</p></td>
+<td><p></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p>!!! example “Output of <code class="docutils literal notranslate"><span class="pre">ls</span></code> command”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The following code listing depicts the usage of the generic user names and projects as well as
+recognizable placeholders for files and directory names.
+
+```console
+marie@login$ ls -l
+drwxr-xr-x   3 marie p_number_crunch      4096 Jan 24  2020 code
+drwxr-xr-x   3 marie p_number_crunch      4096 Feb 12  2020 data
+-rw-rw----   1 marie p_number_crunch      4096 Jan 24  2020 readme.md
+```
+</pre></div>
+</div>
+<p>!!! info “Marie”</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>We choose *marie* as generic login and placeholder. There is no magic story on this decision.
+Feel free to associate this generic login for example with
+physicist and chemist [Marie Curie](https://en.wikipedia.org/wiki/Marie_Curie),
+and [Marianne](https://en.wikipedia.org/wiki/Marianne), symbol of France standing for liberty,
+equality and fraternity.
+
+The very same holds for the generic login *martin*.
+</pre></div>
+</div>
+</section>
+<section id="placeholders">
+<h4>Placeholders<a class="headerlink" href="#placeholders" title="Permalink to this heading">#</a></h4>
+<p>Placeholders represent arguments or code parts that can be adapted to the user’s needs. Use them to
+give a general idea of how a command or code snippet can be used, e. g. to explain the meaning of
+some command argument:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>marie@login$<span class="w"> </span>sacct<span class="w"> </span>-j<span class="w"> </span>&lt;job<span class="w"> </span>id&gt;
+</pre></div>
+</div>
+<p>Here, a placeholder explains the intention better than just a specific value:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>sacct<span class="w"> </span>-j<span class="w"> </span><span class="m">4041337</span>
+</pre></div>
+</div>
+<p>Please be aware, that a reader often understands placeholders easier if you also give an example.
+Therefore, always add an example!</p>
+</section>
+<section id="mark-omissions">
+<h4>Mark Omissions<a class="headerlink" href="#mark-omissions" title="Permalink to this heading">#</a></h4>
+<p>If showing only a snippet of a long output, omissions are marked with <code class="docutils literal notranslate"><span class="pre">[...]</span></code>.</p>
+</section>
+<section id="code-styling-rules">
+<h4>Code Styling Rules<a class="headerlink" href="#code-styling-rules" title="Permalink to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Stick to the Unix rules on optional and required arguments, and selection of item sets:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;required</span> <span class="pre">argument</span> <span class="pre">or</span> <span class="pre">value&gt;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">[optional</span> <span class="pre">argument</span> <span class="pre">or</span> <span class="pre">value]</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{choice1|choice2|choice3}</span></code></p></li>
+</ul>
+</li>
+<li><p>Please use following style guidelines while writing code blocks:</p>
+<ul>
+<li><p>Shell: <a class="reference external" href="https://google.github.io/styleguide/shellguide.html">Shell style guide</a></p></li>
+<li><p>Python: <a class="reference external" href="https://peps.python.org/pep-0008/">PEP-0008 style guide</a></p></li>
+<li><p>MATLAB: <a class="reference external" href="https://www.researchgate.net/publication/316479241_Best_practices_for_scientific_computing_and_MATLAB_programming_style_guidelines">MATLAB programming style guide</a></p></li>
+<li><p>R: <a class="reference external" href="https://google.github.io/styleguide/Rguide.html">R style guide</a></p></li>
+<li><p>C++: <a class="reference external" href="https://google.github.io/styleguide/cppguide.html">C++ style guide</a></p></li>
+<li><p>Java: <a class="reference external" href="https://google.github.io/styleguide/javaguide.html">Java style guide</a></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="list-of-prompts">
+<h4>List of Prompts<a class="headerlink" href="#list-of-prompts" title="Permalink to this heading">#</a></h4>
+<p>We follow these rules regarding prompts to make clear where a certain command or example is executed.
+This should help to avoid errors.</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Host/Partition</p></th>
+<th class="head"><p>Prompt</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Localhost</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">marie&#64;local$</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Login nodes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">marie&#64;login$</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Arbitrary compute node</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">marie&#64;compute$</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Compute node <code class="docutils literal notranslate"><span class="pre">Capella</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">marie&#64;capella$</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Login node <code class="docutils literal notranslate"><span class="pre">Capella</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">marie&#64;login.capella$</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Compute node <code class="docutils literal notranslate"><span class="pre">Barnard</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">marie&#64;barnard$</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Login node <code class="docutils literal notranslate"><span class="pre">Barnard</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">marie&#64;login.barnard$</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Compute node <code class="docutils literal notranslate"><span class="pre">Alpha</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">marie&#64;alpha$</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Login node <code class="docutils literal notranslate"><span class="pre">Alpha</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">marie&#64;login.alpha$</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Node <code class="docutils literal notranslate"><span class="pre">Julia</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">marie&#64;julia$</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Compute node <code class="docutils literal notranslate"><span class="pre">Romeo</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">marie&#64;romeo$</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Login node <code class="docutils literal notranslate"><span class="pre">Romeo</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">marie&#64;login.romeo$</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Partition <code class="docutils literal notranslate"><span class="pre">dcv</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">marie&#64;dcv$</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p><strong>Always use a prompt</strong>, even if there is no output provided for the shown command.</p></li>
+<li><p>All code blocks which specify some general command templates, e.g. containing <code class="docutils literal notranslate"><span class="pre">&lt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>
+(see <span class="xref myst">placeholders</span> and <span class="xref myst">Code Styling Rules</span>), should use
+<code class="docutils literal notranslate"><span class="pre">bash</span></code> for the code block. Additionally, an example invocation, perhaps with output, should be
+given with the normal <code class="docutils literal notranslate"><span class="pre">console</span></code> code block. See also
+<span class="xref myst">Code Block description below</span>.</p></li>
+<li><p>Using some magic, the prompt as well as the output is identified and will not be copied!</p></li>
+<li><p>Stick to the <span class="xref myst">generic user name</span> <code class="docutils literal notranslate"><span class="pre">marie</span></code>.</p></li>
+</ul>
+</section>
+<section id="long-options">
+<h4>Long Options<a class="headerlink" href="#long-options" title="Permalink to this heading">#</a></h4>
+<p>The general rule is to provide long over short parameter names where possible to ease
+understanding. This holds especially for Slurm options, but also other commands.</p>
+<p>??? example</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>| Do | Don&#39;t |
+|----|-------|
+| `srun --nodes=2 --ntasks-per-node=4 [...]`| `srun -N 2 -n 4 [...]` |
+| `module load [...]` | `ml [...]` |
+</pre></div>
+</div>
+</section>
+<section id="equal-signs-in-command-line-options">
+<h4>Equal Signs in Command-Line Options<a class="headerlink" href="#equal-signs-in-command-line-options" title="Permalink to this heading">#</a></h4>
+<p>Some tools with CLI (command-line interface) prefer specification of the argument with an equal
+sign (<code class="docutils literal notranslate"><span class="pre">=</span></code>) between the option name and the value, e.g. <code class="docutils literal notranslate"><span class="pre">--long_option=value</span></code>. Others prefer a
+whitespace, e.g. <code class="docutils literal notranslate"><span class="pre">--long_option</span> <span class="pre">value</span></code>. We respect the design decisions of the tool
+developers and document the desired mimic for <span class="xref myst">long options</span>. If you are in doubt,
+calling <code class="docutils literal notranslate"><span class="pre">tool</span> <span class="pre">--help</span></code> might provide the answer.</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Tool</p></th>
+<th class="head"><p>Preference</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Slurm</p></td>
+<td><p>w/ Equal sign</p></td>
+</tr>
+<tr class="row-odd"><td><p>HPC-Workspace</p></td>
+<td><p>w/o equal sign</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="customize-search">
+<h3>Customize Search<a class="headerlink" href="#customize-search" title="Permalink to this heading">#</a></h3>
+<p>The
+<a class="reference external" href="https://squidfunk.github.io/mkdocs-material/setup/setting-up-site-search/">documentation for the search plugin</a>
+of the material theme is quite comprehensive. The search is realized as client-side search using the
+open-source tool on <a class="reference external" href="https://lunrjs.com/">lunr</a>. The ranking of pages in search results bases on
+so-called scoring. Please refer to
+<a class="reference external" href="https://lunrjs.com/guides/searching.html#scoring">lunrjs documentation</a> for details.</p>
+<p>From time to time it might be necessary to <strong>tweak the search priority of certain pages</strong>.
+For example, pages from the archive section should be ranked very low in search results. This can be
+achieved by adding the front matter <code class="docutils literal notranslate"><span class="pre">search.boost</span></code> property added to the top of the Markdown file of
+interest:</p>
+<div class="highlight-Markdown notranslate"><div class="highlight"><pre><span></span>---
+search:
+<span class="gu">  boost: 2</span>
+<span class="gu">---</span>
+
+<span class="gh"># Document Title</span>
+
+[...]
+</pre></div>
+</div>
+<p>The documentation of this plugin gives no range for the boost values. We recommend to use this
+feature carefully starting with low values.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./04_rag_advanced/hpc-compendium/doc.zih.tu-dresden.de/docs/contrib"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#motivation-and-rationale">
+   Motivation and Rationale
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#responsibility-and-license">
+   Responsibility and License
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#quick-overview">
+   Quick Overview
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#detailed-overview">
+   Detailed Overview
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#writing-style">
+     Writing Style
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pages-structure-and-new-page">
+     Pages Structure and New Page
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#outdated-pages">
+     Outdated Pages
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#markdown">
+     Markdown
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#brief-how-to-on-markdown">
+       Brief How-To on Markdown
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#attachments">
+       Attachments
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#graphics-and-videos">
+       Graphics and Videos
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#resizing-and-alignment-of-graphics">
+         Resizing and Alignment of Graphics
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#special-feature-admonitions">
+       Special Feature: Admonitions
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#spelling-and-technical-wording">
+     Spelling and Technical Wording
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#code-blocks-and-command-prompts">
+     Code Blocks and Command Prompts
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#code-blocks-and-syntax-highlighting">
+       Code Blocks and Syntax Highlighting
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#data-privacy-and-generic-names">
+       Data Privacy and Generic Names
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#placeholders">
+       Placeholders
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#mark-omissions">
+       Mark Omissions
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#code-styling-rules">
+       Code Styling Rules
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#list-of-prompts">
+       List of Prompts
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#long-options">
+       Long Options
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#equal-signs-in-command-line-options">
+       Equal Signs in Command-Line Options
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#customize-search">
+     Customize Search
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Haase
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on 2026-06-23.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>
+Copyright: Licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a> unless mentioned otherwise. 
+Contributions and feedback are welcome.
+</p>
+
+</div>
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

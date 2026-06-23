@@ -18,7 +18,7 @@ voila chat-with-hpc-compendium.ipynb
 To rebuild this exercise with most recent contents of the HPC compendium, remove the folder and run this command:
 
 ```
-!git clone https://gitlab.hrz.tu-chemnitz.de/zih/hpcsupport/hpc-compendium.git
+git clone https://gitlab.hrz.tu-chemnitz.de/zih/hpcsupport/hpc-compendium.git
 ```
 
 To make the rest of this notebook work, ensure that the specified folder below exists.
