@@ -184,6 +184,13 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://doi.org/10.5281/zenodo.20825670">
+                        Slides
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
                         License CC-BY 4.0
                       </a>
@@ -317,6 +324,13 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://doi.org/10.5281/zenodo.20825670">
+                        Slides
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-external" href="https://creativecommons.org/licenses/by/4.0/">
                         License CC-BY 4.0
                       </a>
@@ -420,6 +434,7 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Links</span></p>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://doi.org/10.5281/zenodo.20825670">Slides</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">License CC-BY 4.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../imprint.html">Imprint</a></li>
 
@@ -660,15 +675,15 @@ title="Print to PDF"
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;household-products.md&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-    <span class="n">all_code_snippets</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="n">all_product_descriptions</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">splits</span> <span class="o">=</span> <span class="n">all_code_snippets</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="p">[</span><span class="n">show</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">splits</span><span class="p">[:</span><span class="mi">10</span><span class="p">]];</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">splits</span> <span class="o">=</span> <span class="n">all_product_descriptions</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="p">[</span><span class="n">show</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">splits</span><span class="p">[:</span><span class="mi">5</span><span class="p">]];</span>
 </pre></div>
 </div>
 </div>
@@ -688,21 +703,6 @@ title="Print to PDF"
 <ul class="simple">
 <li><p>Zapoven - A microwave oven for reheating meals and drinks quickly. Useful for leftovers and quick snacks.</p></li>
 </ul>
-<ul class="simple">
-<li><p>Toastling - A toaster that browns bread, bagels, and waffles. It is small enough for most counters.</p></li>
-</ul>
-<ul class="simple">
-<li><p>Blendalf - A blender for smoothies, sauces, and soups. It turns soft ingredients into smooth mixes.</p></li>
-</ul>
-<ul class="simple">
-<li><p>Brewbloom - A coffee maker that brews hot coffee at home. It is handy for morning routines.</p></li>
-</ul>
-<ul class="simple">
-<li><p>Kettlekob - An electric kettle that boils water quickly. Use it for tea, coffee, noodles, and oatmeal.</p></li>
-</ul>
-<ul class="simple">
-<li><p>Dishsprite - A dishwasher that cleans plates, cups, and utensils. It saves time after meals.</p></li>
-</ul>
 </div>
 </div>
 <section id="vector-embeddings">
@@ -716,7 +716,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "cb72108a26af46679e92ed4e2b4355ca", "version_major": 2, "version_minor": 0}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c99505cb5de54077ad4e906869b66b20", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -759,13 +759,12 @@ title="Print to PDF"
         <span class="n">single_vector</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">get_text_embedding</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
         
         <span class="c1"># Step 1: Compute Euclidean distances</span>
-        <span class="n">distances</span> <span class="o">=</span> <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">single_vector</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">vector</span><span class="p">)),</span> <span class="n">vector</span><span class="p">)</span> <span class="k">for</span> <span class="n">vector</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_store</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">single_vector</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">vector</span><span class="p">)),</span> <span class="n">vector</span><span class="p">)</span> 
+                     <span class="k">for</span> <span class="n">vector</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_store</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
 
-        <span class="c1"># Step 2: Sort distances and get the three vectors with the shortest distances</span>
+        <span class="c1"># Step 2: Sort distances and get the n vectors with the shortest distances</span>
         <span class="n">distances</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>  <span class="c1"># Sort based on the first element in the tuple (distance)</span>
-        <span class="n">closest_vectors</span> <span class="o">=</span> <span class="p">[</span><span class="n">vec</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">vec</span> <span class="ow">in</span> <span class="n">distances</span><span class="p">[:</span><span class="n">n_best_results</span><span class="p">]]</span>  <span class="c1"># Extract only the vectors</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">distances</span> <span class="o">=</span> <span class="n">distances</span>
+        <span class="n">closest_vectors</span> <span class="o">=</span> <span class="p">[</span><span class="n">vec</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">vec</span> <span class="ow">in</span> <span class="n">distances</span><span class="p">[:</span><span class="n">n_best_results</span><span class="p">]]</span>
         
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_store</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">v</span><span class="p">)]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">closest_vectors</span><span class="p">]</span>
     
@@ -813,8 +812,8 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">related_code_snippets</span> <span class="o">=</span> <span class="n">vectore_store</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">question</span><span class="p">)</span>
-<span class="n">show</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">related_code_snippets</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">related_products</span> <span class="o">=</span> <span class="n">vectore_store</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">question</span><span class="p">)</span>
+<span class="n">show</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">related_products</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -845,7 +844,7 @@ title="Print to PDF"
         
     <span class="c1"># setup connection to the LLM-server</span>
     <span class="n">client</span> <span class="o">=</span> <span class="n">openai</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://llm.scads.ai/v1&quot;</span><span class="p">,</span> 
-                          <span class="n">api_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SCADSAI_API_KEY&#39;</span><span class="p">))</span>
+                           <span class="n">api_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SCADSAI_API_KEY&#39;</span><span class="p">))</span>
     
     <span class="c1"># submit prompt</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
@@ -869,7 +868,7 @@ title="Print to PDF"
 <p>We can then assemble selected product descriptions and question to a prompt.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">context</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">related_code_snippets</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">context</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">related_products</span><span class="p">)</span>
 
 <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">Answer the question by the very end and consider given product descriptions. </span>
@@ -916,10 +915,13 @@ What product can I buy for brushing teeth?
 </div>
 </div>
 <div class="cell_output docutils container">
-<p>Based on the given product descriptions, there are two products related to brushing teeth: Brushwick and SugarBrush.</p>
-<p>Brushwick is an electric toothbrush that helps clean teeth with powered bristles, making daily brushing easier. On the other hand, SugarBrush is a toothbrush made of pure sugar, which may not be a practical or hygienic option for brushing teeth.</p>
-<p>Considering the functionality and purpose of brushing teeth, Brushwick is the more suitable option.</p>
-<p>You can buy Brushwick for brushing teeth.</p>
+<p>To brush your teeth, you can consider the following products from the list:</p>
+<ol class="arabic simple">
+<li><p>Brushwick - An electric toothbrush that helps clean teeth with powered bristles, making daily brushing easier.</p></li>
+<li><p>SugarBrush - A toothbrush made of pure sugar, for the extra sweet smile.</p></li>
+</ol>
+<p>Between these two options, Brushwick seems like a more practical and hygienic choice for brushing teeth, as it uses powered bristles for cleaning and is designed for daily brushing. SugarBrush, being made of pure sugar, might not be the best option for oral hygiene due to the potential for sugar to contribute to tooth decay.</p>
+<p>Therefore, the product you can buy for brushing teeth is Brushwick.</p>
 </div>
 </div>
 </section>
@@ -946,15 +948,15 @@ What product can I buy for brushing teeth?
 <li><p>Fluoride toothpaste: helps prevent tooth decay and strengthen tooth enamel.</p></li>
 <li><p>Whitening toothpaste: contains mild abrasives to help remove surface stains and whiten teeth.</p></li>
 <li><p>Sensitive toothpaste: designed for people with sensitive teeth and gums.</p></li>
-<li><p>Natural toothpaste: made with natural ingredients and free from artificial additives.</p></li>
+<li><p>Natural toothpaste: made with natural ingredients and often free from harsh chemicals.</p></li>
 </ul>
 </li>
-<li><p><strong>Toothbrush heads</strong> (for electric toothbrushes): You can buy replacement heads for your electric toothbrush, which come in different sizes and types (e.g., soft, medium, or hard bristles).</p></li>
-<li><p><strong>Interdental brushes</strong>: These small brushes are designed to clean between teeth and around bridges, implants, and orthodontic appliances.</p></li>
-<li><p><strong>Dental floss</strong>: A thread or tape used to remove food particles and plaque from between teeth and under the gumline.</p></li>
-<li><p><strong>Mouthwash</strong>: An optional product that can help kill bacteria, freshen breath, and reduce plaque and gingivitis.</p></li>
+<li><p><strong>Toothbrush heads</strong> (for electric toothbrushes): You can buy replacement heads for your electric toothbrush, which come in different sizes and types (e.g., standard, compact, or specialized for specific oral care needs).</p></li>
+<li><p><strong>Interdental brushes</strong>: These small brushes are designed to clean between teeth and around dental work, such as bridges and implants.</p></li>
+<li><p><strong>Dental floss</strong>: Used to remove food particles and plaque from between teeth and under the gumline.</p></li>
+<li><p><strong>Mouthwash</strong>: An optional product that can help kill bacteria, freshen breath, and provide additional protection against tooth decay and gum disease.</p></li>
 </ol>
-<p>When choosing a product, consider your oral health needs, preferences, and any recommendations from your dentist or hygienist.</p>
+<p>When choosing a product, consider your oral care needs, preferences, and any recommendations from your dentist or hygienist.</p>
 </div>
 </div>
 </section>
@@ -1085,7 +1087,7 @@ By Robert Haase
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on 2026-06-23.<br>
+Last updated on 2026-06-24.<br>
 </p>
   </div>
   
