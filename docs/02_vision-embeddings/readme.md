@@ -14,6 +14,8 @@ or
 vest data.csv --image-path ./images
 ```
 
+Alternatively, you can also run a similar [demo on the web](https://livinglab.scadsai.uni-leipzig.de/vest/) without the need to install anything on your computer.
+
 ![](https://github.com/ScaDS/vest/raw/main/docs/images/vest-butterflies-small.gif?raw=true)
 
 ## Behind the scenes
