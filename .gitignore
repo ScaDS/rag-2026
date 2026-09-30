@@ -27,3 +27,6 @@ notebooks/generate_link_lists.py
 dist/
 
 .env
+
+docs/02_vision-embeddings/images/*
+docs/02_vision-embeddings/images2/*
