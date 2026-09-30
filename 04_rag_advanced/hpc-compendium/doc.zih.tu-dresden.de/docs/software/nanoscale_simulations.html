@@ -142,6 +142,20 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/01_generate.html">
+                        Behind the scenes: Generating texts
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/02_compute_embeddings.html">
+                        Computing embeddings and dimensionality reduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
                         Visualizing text embeddings
                       </a>
@@ -151,6 +165,25 @@ const thebe_selector_output = ".output, .cell_output"
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
                         Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/download.html">
+                        Download Butterfly images
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/vision_embeddings_umap.html">
+                        Image Embeddings and UMAP Generation
                       </a>
                     </li>
                 
@@ -168,12 +201,7 @@ const thebe_selector_output = ".output, .cell_output"
                       </a>
                     </li>
                 
-            <div class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    More
-                </button>
-                <div class="dropdown-menu">
-                    
+
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
                         Ask about the HPC compendium
@@ -282,6 +310,20 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/01_generate.html">
+                        Behind the scenes: Generating texts
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/02_compute_embeddings.html">
+                        Computing embeddings and dimensionality reduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
                         Visualizing text embeddings
                       </a>
@@ -291,6 +333,25 @@ const thebe_selector_output = ".output, .cell_output"
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
                         Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/download.html">
+                        Download Butterfly images
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/vision_embeddings_umap.html">
+                        Image Embeddings and UMAP Generation
                       </a>
                     </li>
                 
@@ -308,12 +369,7 @@ const thebe_selector_output = ".output, .cell_output"
                       </a>
                     </li>
                 
-            <div class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    More
-                </button>
-                <div class="dropdown-menu">
-                    
+
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
                         Ask about the HPC compendium
@@ -418,11 +474,15 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/01_generate.html">Behind the scenes: Generating texts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/02_compute_embeddings.html">Computing embeddings and dimensionality reduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/download.html">Download Butterfly images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/vision_embeddings_umap.html">Image Embeddings and UMAP Generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
@@ -773,7 +833,7 @@ However hereafter we have an example on how that might look like for Gaussian:</
 ## good default on Barnard: set mem = 4000 (for gaussian executable) + cpus-per-task * 4000 (for gaussian data)
 
 # Adjust the path to where your input file is located
-INPUTFILE=&quot;/path/to/my/inputfile.gjf&quot;
+INPUTFILE="/path/to/my/inputfile.gjf"
 
 # Unexpected errors result in instant script termination
 set -e
@@ -784,8 +844,8 @@ module load release/23.10
 module load Gaussian/16.C.01
 
 # Check existance of input file
-if test ! -f &quot;${INPUTFILE}&quot;; then
-   echo &quot;Error: could not find the input file ${INPUTFILE}&quot;
+if test ! -f "${INPUTFILE}"; then
+   echo "Error: could not find the input file ${INPUTFILE}"
    exit 1
 fi
 
@@ -795,28 +855,28 @@ export GAUSS_SCRDIR=$(ws_allocate --name ${COMPUTE_WS} --duration 7)
 echo ${GAUSS_SCRDIR}
 
 # Check if workspace allocation was successful
-if [ ! -d &quot;${GAUSS_SCRDIR}&quot; ]; then
-   echo &quot;Error: cannot allocate workspace ${COMPUTE_WS}&quot;
+if [ ! -d "${GAUSS_SCRDIR}" ]; then
+   echo "Error: cannot allocate workspace ${COMPUTE_WS}"
    exit 1
 fi
 
 # Check consistency of resource allocation (memory &amp; cores). The Slurm and Gaussian configuration should match.
-if grep -i -m 3 -e &quot;%mem&quot; -e &quot;%cpu&quot; -e &quot;%nprocshared&quot; &quot;${INPUTFILE}&quot;; then
-   echo &quot;Info: are the above parameters in your input file within your Slurm job parameters SLURM_CPUS_PER_TASK=${SLURM_CPUS_PER_TASK} and SLURM_MEM_PER_NODE=${SLURM_MEM_PER_NODE}?&quot;
+if grep -i -m 3 -e "%mem" -e "%cpu" -e "%nprocshared" "${INPUTFILE}"; then
+   echo "Info: are the above parameters in your input file within your Slurm job parameters SLURM_CPUS_PER_TASK=${SLURM_CPUS_PER_TASK} and SLURM_MEM_PER_NODE=${SLURM_MEM_PER_NODE}?"
 fi
 
 # Change to workspace directory and execute application
-cp &quot;${INPUTFILE}&quot; ${GAUSS_SCRDIR}/inputfile.gjf
+cp "${INPUTFILE}" ${GAUSS_SCRDIR}/inputfile.gjf
 cd ${GAUSS_SCRDIR}
 # m -4000 ensures that gaussian binary and runtime itself fits into memory
 if ! g16 -p=${SLURM_CPUS_PER_TASK} -m=$(( ${SLURM_MEM_PER_NODE} - 4000 ))MB &lt;./inputfile.gjf &gt;logfile.log; then
-   echo &quot;Error: gaussian terminated with error code $?&quot;
+   echo "Error: gaussian terminated with error code $?"
 fi
 
 # Move compressed result files to user home
 if ! bzip2 --compress --stdout logfile.log &gt;${HOME}/gaussian_job-${SLURM_JOB_ID}.bz2; then
-   echo &quot;Error: compression of results failed!&quot;
-   echo &quot;Please check ${GAUSS_SCRDIR} for uncompressed results.&quot;
+   echo "Error: compression of results failed!"
+   echo "Please check ${GAUSS_SCRDIR} for uncompressed results."
    exit 1
 fi
 
@@ -1117,7 +1177,7 @@ By Robert Haase
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on 2026-06-25.<br>
+Last updated on 2026-09-30.<br>
 </p>
   </div>
   

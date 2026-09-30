@@ -142,6 +142,20 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/01_generate.html">
+                        Behind the scenes: Generating texts
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/02_compute_embeddings.html">
+                        Computing embeddings and dimensionality reduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
                         Visualizing text embeddings
                       </a>
@@ -151,6 +165,25 @@ const thebe_selector_output = ".output, .cell_output"
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
                         Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/download.html">
+                        Download Butterfly images
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/vision_embeddings_umap.html">
+                        Image Embeddings and UMAP Generation
                       </a>
                     </li>
                 
@@ -168,12 +201,7 @@ const thebe_selector_output = ".output, .cell_output"
                       </a>
                     </li>
                 
-            <div class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    More
-                </button>
-                <div class="dropdown-menu">
-                    
+
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
                         Ask about the HPC compendium
@@ -282,6 +310,20 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/01_generate.html">
+                        Behind the scenes: Generating texts
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/02_compute_embeddings.html">
+                        Computing embeddings and dimensionality reduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
                         Visualizing text embeddings
                       </a>
@@ -291,6 +333,25 @@ const thebe_selector_output = ".output, .cell_output"
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
                         Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/download.html">
+                        Download Butterfly images
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/vision_embeddings_umap.html">
+                        Image Embeddings and UMAP Generation
                       </a>
                     </li>
                 
@@ -308,12 +369,7 @@ const thebe_selector_output = ".output, .cell_output"
                       </a>
                     </li>
                 
-            <div class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    More
-                </button>
-                <div class="dropdown-menu">
-                    
+
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
                         Ask about the HPC compendium
@@ -418,11 +474,15 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/01_generate.html">Behind the scenes: Generating texts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/02_compute_embeddings.html">Computing embeddings and dimensionality reduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/download.html">Download Butterfly images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/vision_embeddings_umap.html">Image Embeddings and UMAP Generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
@@ -781,7 +841,7 @@ marie@login$ sbatch batch-Rot-modell-BenjaminGroeger.sh      # Slurm will provid
 ```
 4. Control the status of the job
 ```
-marie@login$ squeue --me     # in column &quot;ST&quot; (Status) you will find a R=Running or P=Pending (waiting for resources)
+marie@login$ squeue --me     # in column "ST" (Status) you will find a R=Running or P=Pending (waiting for resources)
 ```
 </pre></div>
 </div>
@@ -874,7 +934,7 @@ unset SLURM_GTIDS              # Odd, but necessary!
 # e.g.
 module load ANSYS/2020R2
 
-runwb2 -B -F Workbench_Taurus.wbpj -E &#39;Project.Update&#39; -E &#39;Save(Overwrite=True)&#39;
+runwb2 -B -F Workbench_Taurus.wbpj -E 'Project.Update' -E 'Save(Overwrite=True)'
 #or, if you wish to use a workbench replay file, replace the -E parameters with: -R mysteps.wbjn
 ```
 </pre></div>
@@ -933,7 +993,7 @@ module<span class="w"> </span>load<span class="w"> </span>ANSYS/2021R2
 
 <span class="c1"># -smp use shared memory parallel version</span>
 <span class="c1"># -b (batch mode)</span>
-<span class="c1"># -np specify number of cpu&#39;s to use</span>
+<span class="c1"># -np specify number of cpu's to use</span>
 <span class="c1"># -j jobname</span>
 
 mapdl<span class="w"> </span>-smp<span class="w"> </span>-b<span class="w"> </span>-np<span class="w"> </span><span class="si">${</span><span class="nv">SLURM_NTASKS</span><span class="si">}</span><span class="w"> </span>-j<span class="w"> </span>solution<span class="w"> </span>-i<span class="w"> </span>&lt;input-file&gt;
@@ -955,7 +1015,7 @@ line option.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">marie@login$ </span>srun<span class="w"> </span>--nodes<span class="w"> </span><span class="m">4</span><span class="w"> </span>--ntasks-per-node<span class="o">=</span><span class="m">4</span><span class="w"> </span>--time<span class="o">=</span><span class="m">0</span>:20:00<span class="w"> </span>--mem-per-cpu<span class="o">=</span><span class="m">1700</span><span class="w"> </span>--pty<span class="w"> </span>bash<span class="w"> </span>-l
 
 <span class="gp"># </span>generate<span class="w"> </span>node<span class="w"> </span>list
-<span class="gp">marie@node$ NODELIST=$</span><span class="o">(</span><span class="k">for</span><span class="w"> </span>node<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span><span class="w"> </span>scontrol<span class="w"> </span>show<span class="w"> </span>hostnames<span class="w"> </span><span class="si">${</span><span class="nv">SLURM_JOB_NODELIST</span><span class="si">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>uniq<span class="w"> </span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">node</span><span class="si">}</span><span class="s2">:</span><span class="si">${</span><span class="nv">SLURM_NTASKS_PER_NODE</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">done</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">&#39;s/:$//&#39;</span><span class="o">)</span>
+<span class="gp">marie@node$ NODELIST=$</span><span class="o">(</span><span class="k">for</span><span class="w"> </span>node<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span><span class="w"> </span>scontrol<span class="w"> </span>show<span class="w"> </span>hostnames<span class="w"> </span><span class="si">${</span><span class="nv">SLURM_JOB_NODELIST</span><span class="si">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>uniq<span class="w"> </span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">node</span><span class="si">}</span><span class="s2">:</span><span class="si">${</span><span class="nv">SLURM_NTASKS_PER_NODE</span><span class="si">}</span><span class="s2">:"</span><span class="p">;</span><span class="w"> </span><span class="k">done</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">'s/:$//'</span><span class="o">)</span>
 
 <span class="gp">marie@node$ </span><span class="nv">KMP_AFFINITY</span><span class="o">=</span>none<span class="w"> </span>mapdl<span class="w"> </span>-machines<span class="w"> </span><span class="si">${</span><span class="nv">NODELIST</span><span class="si">}</span>
 </pre></div>
@@ -975,7 +1035,7 @@ module<span class="w"> </span>purge
 module<span class="w"> </span>load<span class="w"> </span>ANSYS/2021R2
 
 <span class="c1"># generate node list</span>
-<span class="nv">NODELIST</span><span class="o">=</span><span class="k">$(for</span><span class="w"> </span>node<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span><span class="w"> </span>scontrol<span class="w"> </span>show<span class="w"> </span>hostnames<span class="w"> </span><span class="si">${</span><span class="nv">SLURM_JOB_NODELIST</span><span class="si">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>uniq<span class="w"> </span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">node</span><span class="si">}</span><span class="s2">:</span><span class="si">${</span><span class="nv">SLURM_NTASKS_PER_NODE</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">done</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">&#39;s/:$//&#39;</span><span class="k">)</span>
+<span class="nv">NODELIST</span><span class="o">=</span><span class="k">$(for</span><span class="w"> </span>node<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span><span class="w"> </span>scontrol<span class="w"> </span>show<span class="w"> </span>hostnames<span class="w"> </span><span class="si">${</span><span class="nv">SLURM_JOB_NODELIST</span><span class="si">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>uniq<span class="w"> </span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">node</span><span class="si">}</span><span class="s2">:</span><span class="si">${</span><span class="nv">SLURM_NTASKS_PER_NODE</span><span class="si">}</span><span class="s2">:"</span><span class="p">;</span><span class="w"> </span><span class="k">done</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">'s/:$//'</span><span class="k">)</span>
 
 <span class="c1"># -b (batch mode)</span>
 <span class="c1"># -machines xxx   specify machines list for distributed Ansys</span>
@@ -1050,7 +1110,7 @@ marie@login$ start_comsol.sh
 </pre></div>
 </div>
 <p>=== “customized startup”</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If you&#39;d like to work interactively using COMSOL, you can request for an interactive job with,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If you'd like to work interactively using COMSOL, you can request for an interactive job with,
 e.g., 4 cores and 2500 MB RAM for 8 hours and X11 forwarding to open the COMSOL GUI:
 
 ```console
@@ -1275,7 +1335,7 @@ By Robert Haase
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on 2026-06-25.<br>
+Last updated on 2026-09-30.<br>
 </p>
   </div>
   

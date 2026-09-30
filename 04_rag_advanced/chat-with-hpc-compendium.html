@@ -144,6 +144,20 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../01_text-embeddings/01_generate.html">
+                        Behind the scenes: Generating texts
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../01_text-embeddings/02_compute_embeddings.html">
+                        Computing embeddings and dimensionality reduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../01_text-embeddings/03_plot.html">
                         Visualizing text embeddings
                       </a>
@@ -153,6 +167,25 @@ const thebe_selector_output = ".output, .cell_output"
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../02_vision-embeddings/readme.html">
                         Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../02_vision-embeddings/download.html">
+                        Download Butterfly images
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../02_vision-embeddings/vision_embeddings_umap.html">
+                        Image Embeddings and UMAP Generation
                       </a>
                     </li>
                 
@@ -170,12 +203,7 @@ const thebe_selector_output = ".output, .cell_output"
                       </a>
                     </li>
                 
-            <div class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    More
-                </button>
-                <div class="dropdown-menu">
-                    
+
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="#">
                         Ask about the HPC compendium
@@ -284,6 +312,20 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../01_text-embeddings/01_generate.html">
+                        Behind the scenes: Generating texts
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../01_text-embeddings/02_compute_embeddings.html">
+                        Computing embeddings and dimensionality reduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../01_text-embeddings/03_plot.html">
                         Visualizing text embeddings
                       </a>
@@ -293,6 +335,25 @@ const thebe_selector_output = ".output, .cell_output"
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../02_vision-embeddings/readme.html">
                         Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../02_vision-embeddings/download.html">
+                        Download Butterfly images
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../02_vision-embeddings/vision_embeddings_umap.html">
+                        Image Embeddings and UMAP Generation
                       </a>
                     </li>
                 
@@ -310,12 +371,7 @@ const thebe_selector_output = ".output, .cell_output"
                       </a>
                     </li>
                 
-            <div class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    More
-                </button>
-                <div class="dropdown-menu">
-                    
+
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="#">
                         Ask about the HPC compendium
@@ -420,11 +476,15 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../01_text-embeddings/01_generate.html">Behind the scenes: Generating texts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../01_text-embeddings/02_compute_embeddings.html">Computing embeddings and dimensionality reduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_vision-embeddings/download.html">Download Butterfly images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_vision-embeddings/vision_embeddings_umap.html">Image Embeddings and UMAP Generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
@@ -649,7 +709,7 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Settings</span><span class="o">.</span><span class="n">embed_model</span> <span class="o">=</span> <span class="n">HuggingFaceEmbedding</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;intfloat/multilingual-e5-large-instruct&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Settings</span><span class="o">.</span><span class="n">embed_model</span> <span class="o">=</span> <span class="n">HuggingFaceEmbedding</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">"intfloat/multilingual-e5-large-instruct"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -658,13 +718,13 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Settings</span><span class="o">.</span><span class="n">llm</span> <span class="o">=</span> <span class="n">OpenAILike</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;meta-llama/Llama-3.3-70B-Instruct&quot;</span><span class="p">,</span> 
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Settings</span><span class="o">.</span><span class="n">llm</span> <span class="o">=</span> <span class="n">OpenAILike</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">"meta-llama/Llama-3.3-70B-Instruct"</span><span class="p">,</span> 
                           <span class="n">streaming</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                           <span class="n">request_timeout</span><span class="o">=</span><span class="mf">120.0</span><span class="p">,</span> 
                           <span class="n">context_window</span><span class="o">=</span><span class="mi">128000</span><span class="p">,</span>
                           <span class="n">max_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span>
-                          <span class="n">api_base</span><span class="o">=</span><span class="s2">&quot;https://llm.scads.ai/v1&quot;</span><span class="p">,</span> 
-                          <span class="n">api_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SCADSAI_API_KEY&#39;</span><span class="p">))</span>
+                          <span class="n">api_base</span><span class="o">=</span><span class="s2">"https://llm.scads.ai/v1"</span><span class="p">,</span> 
+                          <span class="n">api_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'SCADSAI_API_KEY'</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -672,12 +732,12 @@ title="Print to PDF"
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Chat</span><span class="p">:</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">persist_base_dir</span><span class="o">=</span><span class="s2">&quot;./vector_stores&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">persist_base_dir</span><span class="o">=</span><span class="s2">"./vector_stores"</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">former_folder</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">persist_base_dir</span> <span class="o">=</span> <span class="n">persist_base_dir</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_persist_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
-        <span class="n">safe_name</span> <span class="o">=</span> <span class="s2">&quot;data&quot;</span>
+        <span class="n">safe_name</span> <span class="o">=</span> <span class="s2">"data"</span>
         <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">persist_base_dir</span><span class="p">,</span> <span class="n">safe_name</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
@@ -689,7 +749,7 @@ title="Print to PDF"
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_documents</span> <span class="o">=</span> <span class="n">SimpleDirectoryReader</span><span class="p">(</span>
             <span class="n">folder</span><span class="p">,</span>
-            <span class="n">required_exts</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;.md&quot;</span><span class="p">],</span>
+            <span class="n">required_exts</span><span class="o">=</span><span class="p">[</span><span class="s2">".md"</span><span class="p">],</span>
             <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
 
@@ -704,7 +764,7 @@ title="Print to PDF"
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">count_documents</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">count_documents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">([</span><span class="n">d</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;file_name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_documents</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">([</span><span class="n">d</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"file_name"</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_documents</span><span class="p">]))</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_query_engine</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">question</span><span class="p">)</span>
@@ -715,21 +775,21 @@ title="Print to PDF"
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create user interface</span>
-<span class="n">docs_input</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">&quot;hpc-compendium/doc.zih.tu-dresden.de/docs/&quot;</span><span class="p">,</span> <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Enter a directory here&quot;</span><span class="p">)</span>
-<span class="n">load_button</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Load&quot;</span><span class="p">)</span>
+<span class="n">docs_input</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">"hpc-compendium/doc.zih.tu-dresden.de/docs/"</span><span class="p">,</span> <span class="n">placeholder</span><span class="o">=</span><span class="s2">"Enter a directory here"</span><span class="p">)</span>
+<span class="n">load_button</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">"Load"</span><span class="p">)</span>
 
-<span class="n">output_label</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">HTML</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="n">output_label</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">HTML</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span>
 
-<span class="n">text_input</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Enter a question here&quot;</span><span class="p">)</span>
-<span class="n">submit_button</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Submit&quot;</span><span class="p">)</span>
+<span class="n">text_input</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">placeholder</span><span class="o">=</span><span class="s2">"Enter a question here"</span><span class="p">)</span>
+<span class="n">submit_button</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">"Submit"</span><span class="p">)</span>
 
 <span class="n">chat</span> <span class="o">=</span> <span class="n">Chat</span><span class="p">()</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">on_load</span><span class="p">(</span><span class="n">e</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>    
     <span class="n">number_of_documents</span> <span class="o">=</span> <span class="n">chat</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">docs_input</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-    <span class="n">output_label</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">    &lt;div style=&#39;text-align:left; color: darkgrey; font-size: 20px&#39;&gt;</span><span class="si">{</span><span class="n">number_of_documents</span><span class="si">}</span><span class="s2"> documents loaded.&lt;/div&gt;</span>
-<span class="s2">    &quot;&quot;&quot;</span>
+    <span class="n">output_label</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"""</span>
+<span class="s2">    &lt;div style='text-align:left; color: darkgrey; font-size: 20px'&gt;</span><span class="si">{</span><span class="n">number_of_documents</span><span class="si">}</span><span class="s2"> documents loaded.&lt;/div&gt;</span>
+<span class="s2">    """</span>
     <span class="k">if</span> <span class="n">number_of_documents</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">submit_button</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="kc">False</span>
 
@@ -737,16 +797,16 @@ title="Print to PDF"
     <span class="n">question</span> <span class="o">=</span> <span class="n">text_input</span><span class="o">.</span><span class="n">value</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">question</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span>
-    <span class="n">text_input</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">text_input</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s2">""</span>
 
     <span class="c1"># submit prompt to LLM</span>
     <span class="n">answer</span> <span class="o">=</span> <span class="n">chat</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">question</span><span class="p">)</span>
 
     <span class="c1"># Append question and answer to the existing HTML content</span>
-    <span class="n">output_label</span><span class="o">.</span><span class="n">value</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">    &lt;div style=&#39;text-align:right; color: blue; font-size: 20px&#39;&gt;</span><span class="si">{</span><span class="n">question</span><span class="si">}</span><span class="s2">&lt;/div&gt;</span>
-<span class="s2">    &lt;div style=&#39;text-align:left; color: darkgreen; font-size: 20px&#39;&gt;</span><span class="si">{</span><span class="n">answer</span><span class="si">}</span><span class="s2">&lt;/div&gt;</span>
-<span class="s2">    &quot;&quot;&quot;</span>
+    <span class="n">output_label</span><span class="o">.</span><span class="n">value</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"""</span>
+<span class="s2">    &lt;div style='text-align:right; color: blue; font-size: 20px'&gt;</span><span class="si">{</span><span class="n">question</span><span class="si">}</span><span class="s2">&lt;/div&gt;</span>
+<span class="s2">    &lt;div style='text-align:left; color: darkgreen; font-size: 20px'&gt;</span><span class="si">{</span><span class="n">answer</span><span class="si">}</span><span class="s2">&lt;/div&gt;</span>
+<span class="s2">    """</span>
 
 <span class="c1"># Attach the event handler to the text field and the button</span>
 <span class="n">docs_input</span><span class="o">.</span><span class="n">continuous_update</span> <span class="o">=</span> <span class="kc">False</span>
@@ -865,7 +925,7 @@ By Robert Haase
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on 2026-06-25.<br>
+Last updated on 2026-09-30.<br>
 </p>
   </div>
   

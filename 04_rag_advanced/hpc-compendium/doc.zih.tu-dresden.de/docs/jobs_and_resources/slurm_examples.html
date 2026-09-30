@@ -142,6 +142,20 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/01_generate.html">
+                        Behind the scenes: Generating texts
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/02_compute_embeddings.html">
+                        Computing embeddings and dimensionality reduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
                         Visualizing text embeddings
                       </a>
@@ -151,6 +165,25 @@ const thebe_selector_output = ".output, .cell_output"
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
                         Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/download.html">
+                        Download Butterfly images
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/vision_embeddings_umap.html">
+                        Image Embeddings and UMAP Generation
                       </a>
                     </li>
                 
@@ -168,12 +201,7 @@ const thebe_selector_output = ".output, .cell_output"
                       </a>
                     </li>
                 
-            <div class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    More
-                </button>
-                <div class="dropdown-menu">
-                    
+
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
                         Ask about the HPC compendium
@@ -282,6 +310,20 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/01_generate.html">
+                        Behind the scenes: Generating texts
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/02_compute_embeddings.html">
+                        Computing embeddings and dimensionality reduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
                         Visualizing text embeddings
                       </a>
@@ -291,6 +333,25 @@ const thebe_selector_output = ".output, .cell_output"
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
                         Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/download.html">
+                        Download Butterfly images
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/vision_embeddings_umap.html">
+                        Image Embeddings and UMAP Generation
                       </a>
                     </li>
                 
@@ -308,12 +369,7 @@ const thebe_selector_output = ".output, .cell_output"
                       </a>
                     </li>
                 
-            <div class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    More
-                </button>
-                <div class="dropdown-menu">
-                    
+
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
                         Ask about the HPC compendium
@@ -418,11 +474,15 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/01_generate.html">Behind the scenes: Generating texts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/02_compute_embeddings.html">Computing embeddings and dimensionality reduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/download.html">Download Butterfly images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/vision_embeddings_umap.html">Image Embeddings and UMAP Generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
@@ -741,9 +801,9 @@ srun --exclusive --ntasks=1 ./path/to/binary &amp;
 #sleep 5
 srun --exclusive --ntasks=1 ./path/to/binary &amp;
 
-echo &quot;Waiting for parallel job steps to complete...&quot;
+echo "Waiting for parallel job steps to complete..."
 wait
-echo &quot;All parallel job steps completed!&quot;
+echo "All parallel job steps completed!"
 ```
 </pre></div>
 </div>
@@ -839,7 +899,7 @@ name specific to the job:</p>
 #SBATCH --mail-type=end
 #SBATCH --mail-user=&lt;your.email&gt;@tu-dresden.de
 
-echo &quot;Hi, I am step $SLURM_ARRAY_TASK_ID in this array job $SLURM_ARRAY_JOB_ID&quot;
+echo "Hi, I am step $SLURM_ARRAY_TASK_ID in this array job $SLURM_ARRAY_JOB_ID"
 ```
 </pre></div>
 </div>
@@ -900,7 +960,7 @@ down at <span class="xref myst">job pipelines</span>.</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>JOBID=$(sbatch --parsable $1)
 shift
 
-for jobfile in &quot;$@&quot; ; do
+for jobfile in "$@" ; do
     JOBID=$(sbatch --parsable --dependency=afterok:$JOBID $jobfile)
 done
 ```
@@ -912,10 +972,10 @@ done
 The job files provided as arguments to the script will be run one after another in the order as
 you provide them.
 
-??? example &quot;Explanation&quot;
-    The first job (part) has no dependency and is thus launched directly. It&#39;s Slurm job ID is
+??? example "Explanation"
+    The first job (part) has no dependency and is thus launched directly. It's Slurm job ID is
     captured in the variable `JOBID`. The next job is launched with this dependency, i.e. will
-    wait for the previous job to complete. It&#39;s job ID is captured as a dependency for the
+    wait for the previous job to complete. It's job ID is captured as a dependency for the
     next job, and so on. The condition, here `afterok` may be changed according to your needs
     (see [Slurm documentation](https://slurm.schedmd.com/sbatch.html#OPT_dependency)).
 </pre></div>
@@ -925,7 +985,7 @@ you provide them.
 #!/bin/bash</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>jobfile=/path/to/slurm_jobfile.sh
 
-# launch first job and get it&#39;s job-id
+# launch first job and get it's job-id
 JOBID=$(sbatch --parsable --ntasks=4 $jobfile)
 
 # launch following jobs consecutively
@@ -941,7 +1001,7 @@ done
 This script will launch the same jobfile to be run one after another, but with a different
 number of cores each time, according to what is specified.
 
-??? example &quot;Explanation&quot;
+??? example "Explanation"
     The `jobfile` specified in this launch script is used to run the same workload multiple
     times, but with a different number of cores each time to be run one after another.
 
@@ -964,7 +1024,7 @@ post-processing (CPU). The subsequently called scripts are as follows.</p>
 #SBATCH --time=00:02:00
 
 # first script must be launched on the correct/corresponding login node
-echo &quot;This pre-processing job script is executed on:&quot;
+echo "This pre-processing job script is executed on:"
 srun hostname
 
 # launch main part on GPU cluster
@@ -981,7 +1041,7 @@ For an example Slurm configuration including GPUs, please refer to
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#SBATCH --partition=capella
 #SBATCH [...]
 
-echo &quot;This main GPU job script is executed on:&quot;
+echo "This main GPU job script is executed on:"
 srun hostname
 
 # launch post-processing on romeo CPU cluster
@@ -999,7 +1059,7 @@ ssh -q -o StrictHostKeyChecking=no login1.romeo.hpc.tu-dresden.de \
 #SBATCH --cpus-per-task=1
 #SBATCH --time=00:02:00
 
-echo &quot;This post-processing job script is executed on:&quot;
+echo "This post-processing job script is executed on:"
 srun hostname
 ```
 </pre></div>
@@ -1018,12 +1078,12 @@ each other. Therefore, workflows that use different clusters, e.g. splitting GPU
 computation to be conducted on the corresponding cluster have to be realized in a different
 way.</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The trick is to initiate the follow-up part to be conducted on a different
-cluster at the end of a regular job script, because at this time we know that the main job&#39;s
+cluster at the end of a regular job script, because at this time we know that the main job's
 compute has completed.
 To send jobs to a different cluster, we can use the command `ssh &lt;hostname&gt; sbatch
 &lt;jobfile.sh&gt;`.
-The `-o StrictHostKeyChecking=no` option prevents ssh from asking &quot;Are
-you sure you want to continue connecting (yes/no/[fingerprint])?&quot;, which cannot be answered
+The `-o StrictHostKeyChecking=no` option prevents ssh from asking "Are
+you sure you want to continue connecting (yes/no/[fingerprint])?", which cannot be answered
 interactively since the command is issued in batch mode.
 </pre></div>
 </div>
@@ -1167,7 +1227,7 @@ By Robert Haase
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on 2026-06-25.<br>
+Last updated on 2026-09-30.<br>
 </p>
   </div>
   

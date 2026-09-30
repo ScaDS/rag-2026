@@ -142,6 +142,20 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/01_generate.html">
+                        Behind the scenes: Generating texts
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/02_compute_embeddings.html">
+                        Computing embeddings and dimensionality reduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
                         Visualizing text embeddings
                       </a>
@@ -151,6 +165,25 @@ const thebe_selector_output = ".output, .cell_output"
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
                         Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/download.html">
+                        Download Butterfly images
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/vision_embeddings_umap.html">
+                        Image Embeddings and UMAP Generation
                       </a>
                     </li>
                 
@@ -168,12 +201,7 @@ const thebe_selector_output = ".output, .cell_output"
                       </a>
                     </li>
                 
-            <div class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    More
-                </button>
-                <div class="dropdown-menu">
-                    
+
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
                         Ask about the HPC compendium
@@ -282,6 +310,20 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/01_generate.html">
+                        Behind the scenes: Generating texts
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/02_compute_embeddings.html">
+                        Computing embeddings and dimensionality reduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../../01_text-embeddings/03_plot.html">
                         Visualizing text embeddings
                       </a>
@@ -291,6 +333,25 @@ const thebe_selector_output = ".output, .cell_output"
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/readme.html">
                         Vision Embedding Space Travelling
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/download.html">
+                        Download Butterfly images
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../02_vision-embeddings/vision_embeddings_umap.html">
+                        Image Embeddings and UMAP Generation
                       </a>
                     </li>
                 
@@ -308,12 +369,7 @@ const thebe_selector_output = ".output, .cell_output"
                       </a>
                     </li>
                 
-            <div class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    More
-                </button>
-                <div class="dropdown-menu">
-                    
+
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../chat-with-hpc-compendium.html">
                         Ask about the HPC compendium
@@ -418,11 +474,15 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Text embeddings</span></p>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/01_generate.html">Behind the scenes: Generating texts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/02_compute_embeddings.html">Computing embeddings and dimensionality reduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../01_text-embeddings/03_plot.html">Visualizing text embeddings</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Vision embeddings</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/readme.html">Vision Embedding Space Travelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/download.html">Download Butterfly images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings/vision_embeddings_umap.html">Image Embeddings and UMAP Generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../02_vision-embeddings-slides/sliceplot.html">Interactive slicing throug sub-sets of embedded image data</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Retrieval-augmented Generation</span></p>
@@ -683,7 +743,7 @@ Jobs that directly request too many cores per GPU will be denied with the error 
 <p>Similar it is not allowed to start CPU-only jobs on the GPU cluster.
 I.e. you must request at least one GPU there, or you will get this error message:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">srun: error: QOSMinGRES</span>
-<span class="go">srun: error: Unable to allocate resources: Job violates accounting/QOS policy (job submit limit, user&#39;s size and/or time limits)</span>
+<span class="go">srun: error: Unable to allocate resources: Job violates accounting/QOS policy (job submit limit, user's size and/or time limits)</span>
 </pre></div>
 </div>
 </section>
@@ -748,9 +808,9 @@ srun --exclusive --gres=gpu:1 --ntasks=1 --cpus-per-task=4 --gpus-per-task=1 --m
 srun --exclusive --gres=gpu:1 --ntasks=1 --cpus-per-task=4 --gpus-per-task=1 --mem-per-cpu=1443 some-gpu-application &amp;
 srun --exclusive --gres=gpu:1 --ntasks=1 --cpus-per-task=4 --gpus-per-task=1 --mem-per-cpu=1443 some-gpu-application &amp;
 
-echo &quot;Waiting for all job steps to complete...&quot;
+echo "Waiting for all job steps to complete..."
 wait
-echo &quot;All jobs completed!&quot;
+echo "All jobs completed!"
 ```
 </pre></div>
 </div>
@@ -798,9 +858,9 @@ saturate floating-point performance, will experience performance degradation due
 ./some-gpu-application &amp;
 ./some-other-gpu-application &amp;
 
-echo &quot;Waiting for all job steps to complete...&quot;
+echo "Waiting for all job steps to complete..."
 wait
-echo &quot;All jobs completed!&quot;
+echo "All jobs completed!"
 ```
 </pre></div>
 </div>
@@ -909,7 +969,7 @@ By Robert Haase
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on 2026-06-25.<br>
+Last updated on 2026-09-30.<br>
 </p>
   </div>
   
